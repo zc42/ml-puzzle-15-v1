@@ -3,7 +3,7 @@
 // utils/GameUtils.ts
 import { Action } from './Action';
 import { Pair } from './utils/Pair';
-import { ConsoleUtils } from './ConsoleUtils';
+import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class GameUtils {
 

@@ -6,24 +6,24 @@ import { StateShuffle } from './StateShuffle';
 import { Environment } from './Environment';
 import { EnvironmentState } from './EnvironmentState';
 import { Action } from './Action';
-import { ConsoleUtils } from './ConsoleUtils';
 import { GameUtils } from './GameUtils';
 import { QTableUpdater } from './QTableUpdater';
 import { Utils } from './utils/Utils';
+import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class QTableGenerator {
 
-    public static train(): void {
+    public static async train() {
         const filePath = "qTable.ser";
         const qTable = this.loadQTable(filePath);
-        Trainer.train(qTable, filePath, 10);
+        await Trainer.train(qTable, 10);
     }
 
-    public static test(): void {
+    public static async test() {
         const filePath = "qTable.ser";
         const qTable = this.loadQTable(filePath);
         while (true) {
-            this.testQTable(qTable);
+            await this.testQTable(qTable);
         }
     }
 
@@ -55,7 +55,7 @@ export class QTableGenerator {
         return stats;
     }
 
-    public static testQTable(qTable: Map<number, QTableRow>): void {
+    public static async testQTable(qTable: Map<number, QTableRow>) {
         Utils.prnt("********************* test q table **********************");
         Utils.prnt("********************* test q table **********************");
         Utils.prnt("********************* test q table **********************");
@@ -75,7 +75,7 @@ export class QTableGenerator {
         let reverseAction: Action | null = null;
 
         while (!gameOver && step < 200) {
-            this.sleep(1000 / 2).then();
+            await Utils.sleep(1000 / 2);
             ConsoleUtils.clearScreen();
 
             step++;
@@ -109,7 +109,7 @@ export class QTableGenerator {
 
         const isTerminalSuccess = Environment.isTerminalSuccess(state);
         Utils.prnt(`success: ${isTerminalSuccess}`);
-        this.sleep(3000).then();
+        await Utils.sleep(3000);
     }
 
     private static prntState(state: EnvironmentState): void {
@@ -132,9 +132,7 @@ export class QTableGenerator {
             : Action.D;
     }
 
-    private static sleep(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
+
 }
 
 class Stats {

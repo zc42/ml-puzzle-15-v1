@@ -6,18 +6,19 @@ import { QTableGenerator } from './QTableGenerator';
 import { QTableUpdater } from './QTableUpdater';
 import { Action } from './Action';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
+import { Utils } from './utils/Utils';
 
 export class EpisodeRunner {
     private static experience: Set<ExperienceRecord> = new Set();
 
-    public static runEpisode(
+    public static async runEpisode(
         stateProducer: StateProducer,
         qTable: Map<number, QTableRow>,
         // random: Random,
         discount: number,
         learningRate: number,
         episode: number
-    ): void {
+    ) {
         const random = new Random();
         const environment = new Environment(stateProducer);
         environment.reset();
@@ -39,10 +40,10 @@ export class EpisodeRunner {
             }
 
             if (random.nextDouble() < epsilon) { // Explore
-                console.log("\nrndm move");
+                Utils.prnt("\nrndm move");
                 action = QTableGenerator.getRandomAction(possibleActions);
             } else { // Exploit
-                console.log("\nqTable move");
+                Utils.prnt("\nqTable move");
                 action = QTableGenerator.getAction(qTable, state0, environment.reverseAction);
 
                 if (!possibleActions.includes(action)) {
@@ -50,8 +51,8 @@ export class EpisodeRunner {
                 }
             }
 
-            console.log("\n--------------------------------------------------------");
-            console.log("\naction: " + action);
+            Utils.prnt("\n--------------------------------------------------------");
+            Utils.prnt("\naction: " + action);
 
             if (!possibleActions.includes(action)) {
                 // throw new Error("!possibleActions.contains(action)");
@@ -77,8 +78,9 @@ export class EpisodeRunner {
 
         const count = Array.from(qTable.values()).reduce((acc, e) => acc + e.qValues.size, 0);
         const message = `Episode ${episode} done, states count: ${count}, experience size: ${EpisodeRunner.experience.size}`;
-        console.log(message);
-        console.log("");
+        Utils.prnt(message);
+        Utils.prnt("");
+        await Utils.sleep(1000);
     }
 
     public static replayExperience(

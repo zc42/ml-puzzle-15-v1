@@ -1,10 +1,10 @@
-// import * as fs from 'fs';
+import { ConsoleUtils } from './ConsoleUtils';
 
 export class Utils {
   private static emptyString = '                                           ';
 
-  public static prnt(o: any): void {
-    console.log(o);
+  public static prnt(o: any, color = 'color: black;'): void {
+    ConsoleUtils.prnt(o, color);
   }
 
   public static str(o: any, len: number): string {
@@ -39,20 +39,6 @@ export class Utils {
     return (t: T, _: T) => t;
   }
 
-  // public static writeTextToFile(fileName: string, content: string): void {
-  //   try {
-  //     fs.writeFileSync(fileName, content, 'utf8');
-  //   } catch (error) {
-  //     console.error('Error writing to file:', error);
-  //   }
-  // }
-
-  // public static _prnt(o: any): void {
-  //   process.stdout.write(String(o));
-  // }
-
-
-
   public static equalArrays<T>(array: T[], array2: T[]): boolean {
     // First, check if the lengths of both arrays are equal
     if (array.length !== array2.length) {
@@ -72,6 +58,29 @@ export class Utils {
   public static shuffleArray<T>(array: T[]): T[] {
     return array.sort(() => Math.random() - 0.5);
   }
+
+  private static _sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  public static async sleep(ms: number) {
+    // Utils.prnt('Start');
+    await this._sleep(ms); // Pauses for 2 seconds
+    // Utils.prnt('End after 2 seconds');
+  }
+
+
+
+  // public static _sleep(ms: number): Promise<void> {
+  //   return new Promise(resolve => setTimeout(resolve, ms));
+  // }
+
+  // public static async sleep(ms: number) {
+  //   Utils.prnt('Start');
+  //   this._sleep(ms).then(() => {
+  //     Utils.prnt('End after 2 seconds');
+  //   });
+  // }
 }
 
 // Helper type for collections (similar to Java's Collection interface)
