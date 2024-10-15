@@ -13,25 +13,20 @@ export class ConsoleUtils {
     }
 
     public static clearScreen() {
-        this.prnt("clearScrn ... ", "color: orange;");
+        const consoleDiv = document.getElementById('console');
+        if (consoleDiv) { consoleDiv.innerHTML = ''; }
     }
 
     public static prnt(message: string, style: string = ""): void {
         const consoleDiv = document.getElementById('console');
         if (consoleDiv) {
-            // Create a new div element for each message
             const messageElement = document.createElement('div');
             messageElement.textContent = message;
-
-            // Apply custom styles if provided
             if (style) {
                 messageElement.style.cssText = style;
             }
 
-            // Append the message to the custom Utils.prnt
             consoleDiv.appendChild(messageElement);
-
-            // Scroll to the bottom of the Utils.prnt to show the latest message
             consoleDiv.scrollTop = consoleDiv.scrollHeight;
         }
     }

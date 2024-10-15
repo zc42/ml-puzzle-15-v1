@@ -7,6 +7,7 @@ import { QTableUpdater } from './QTableUpdater';
 import { Action } from './Action';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
 import { Utils } from './utils/Utils';
+import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class EpisodeRunner {
     private static experience: Set<ExperienceRecord> = new Set();
@@ -81,6 +82,7 @@ export class EpisodeRunner {
         Utils.prnt(message);
         Utils.prnt("");
         await Utils.sleep(1000);
+        ConsoleUtils.clearScreen();
     }
 
     public static replayExperience(
