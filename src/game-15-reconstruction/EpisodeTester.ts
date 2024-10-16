@@ -10,13 +10,19 @@ import { Utils } from './utils/Utils';
 import { ConsoleUtils } from './utils/ConsoleUtils';
 import { QTableGenerator } from './QTableGenerator';
 import { Semaphore } from './utils/Semaphore';
+import { QTableActions } from './QTableActions';
 
 export class EpisodeTester {
 
     public static semaphore: Semaphore = new Semaphore();
     private semaphoreId: number | null = null;
+    public static usePreloadedActions: boolean = true;
+    private static actionMap: Map<string, Action> | null = null;
 
     public async test() {
+        if (EpisodeTester.usePreloadedActions && EpisodeTester.actionMap === null)
+            EpisodeTester.actionMap = await QTableActions.getQTableActions();
+
         this.semaphoreId = EpisodeTester.semaphore.enable();
         //-------------some hack------------
         if (!EpisodeTester.semaphore.goodToGo(this.semaphoreId)) return;
@@ -69,15 +75,9 @@ export class EpisodeTester {
             if (!EpisodeTester.semaphore.goodToGo(this.semaphoreId)) return;
             //----------------------------------
             step++;
-            const state0Hash = state.getHashCodeV2();
 
-            QTableUpdater.addStateWithZeroValuesToQTableIfStateNotExist(qTable, state);
-
-            const qTableRow = qTable.get(state0Hash);
-            const action = qTableRow ? qTableRow.getActionWithMaxValue(reverseAction) : Action.D;
-
+            let action = this.getAction(qTable, state, reverseAction);
             reverseAction = GameUtils.getReverseAction(action);
-
             const newState = GameUtils.makeMove(state.getState(), action);
             const isTerminal = Environment._isTerminalSuccess(newState, goals);
 
@@ -103,6 +103,38 @@ export class EpisodeTester {
         const isTerminalSuccess = Environment.isTerminalSuccess(state);
         Utils.prnt(`success: ${isTerminalSuccess}`);
         await Utils.sleep(3000);
+    }
+
+
+    // AAAAAAAAAAAAAAAAA   aaaaa   ... sream all u want .. there is no sound in vacume 
+    private getAction(
+        qTable: Map<number, QTableRow>,
+        state: EnvironmentState,
+        reverseAction: Action | null
+    ): Action {
+
+        if (EpisodeTester.usePreloadedActions
+            && EpisodeTester.actionMap !== null
+            && EpisodeTester.actionMap.size > 0) {
+
+            let key = QTableActions.getHashCodeV3__(state);
+            if (EpisodeTester.actionMap?.has(key)) {
+                let action = EpisodeTester.actionMap.get(key);
+                if (!GameUtils.zenGardenOn) Utils.prnt('no action found');
+                return action === undefined
+                    ? GameUtils.getFirstPossibleActionOrD(state, reverseAction)
+                    : action;
+            }
+        }
+
+        const state0Hash = state.getHashCodeV2();
+        QTableUpdater.addStateWithZeroValuesToQTableIfStateNotExist(qTable, state);
+        const qTableRow = qTable.get(state0Hash);
+        if (qTableRow) return qTableRow.getActionWithMaxValue(reverseAction);
+        else {
+            if (!GameUtils.zenGardenOn) Utils.prnt('no action found');
+            return GameUtils.getFirstPossibleActionOrD(state, reverseAction);
+        }
     }
 
     private static prntState(state: EnvironmentState): void {

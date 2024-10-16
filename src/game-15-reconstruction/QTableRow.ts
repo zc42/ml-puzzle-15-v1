@@ -1,7 +1,6 @@
 import { Action } from './Action';
 import { Environment } from './Environment';
 import { EnvironmentState } from './EnvironmentState';
-// import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class QTableRow {
     private state: EnvironmentState;
@@ -24,13 +23,17 @@ export class QTableRow {
         this.qValues.set(action, qValue);
     }
 
+    public getState(): EnvironmentState {
+        return this.state;
+    }
+
     public getValue(action: Action): number {
         return this.qValues.get(action) || 0;
     }
 
-    public getActionWithMaxValue(lastAction: Action | null): Action {
-        const possibleActions = Environment.getPossibleActions(this.state).filter(action => action !== lastAction);
-        const actionOption = lastAction === null ? null : this.getAction(lastAction);
+    public getActionWithMaxValue(reverseAction: Action | null): Action {
+        const possibleActions = Environment.getPossibleActions(this.state).filter(action => action !== reverseAction);
+        const actionOption = reverseAction === null ? null : this.getAction(reverseAction);
 
         if (actionOption === null || actionOption === undefined) {
             // ConsoleUtils.warn("WARNING: no action found");

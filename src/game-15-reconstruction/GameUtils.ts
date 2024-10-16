@@ -147,4 +147,9 @@ export class GameUtils {
             ? possibleActions[Math.floor(Math.random() * possibleActions.length)]
             : Action.D;
     }
+
+    public static getFirstPossibleActionOrD(state: EnvironmentState, reverseAction: Action | null): Action {
+        const possibleActions = Environment.getPossibleActions(state).filter(action => action !== reverseAction);
+        return possibleActions.length > 0 ? possibleActions[0] : Action.D; // Default action
+    }
 }
