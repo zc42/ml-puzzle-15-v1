@@ -1,23 +1,35 @@
-import { QTableRow } from './QTableRow'; // Adjust the import according to your project structure
-// import { SerializedObjectSaver } from './utils/SerializedObjectSaver'; // Adjust the import according to your project structure
-import { StateProducer } from './StateProducer'; // Adjust the import according to your project structure
-import { EpisodeRunner } from './EpisodeRunner'; // Adjust the import according to your project structure
+import { QTableRow } from './QTableRow';
+import { StateProducer } from './StateProducer';
+import { EpisodeRunner } from './EpisodeRunner';
 import { Utils } from './utils/Utils';
+import { Semaphore } from './utils/Semaphore';
 
 export class Trainer {
-    public static async train(qTable: Map<number, QTableRow>, n: number) {
+
+    private episodeRunner: EpisodeRunner = new EpisodeRunner();
+    public static semaphore: Semaphore = new Semaphore();
+    private semaphoreId: number | null = null;
+
+    public async train(qTable: Map<number, QTableRow>, n: number) {
+        this.semaphoreId = Trainer.semaphore.enable();
+
+        //-------------some hack------------
+        if (!Trainer.semaphore.goodToGo(this.semaphoreId)) return;
+        //----------------------------------
+
         const discount = 0.9;
         const learningRate = 0.1;
-
         const lessons = StateProducer.generateLessons();
 
-        const episodeRunner = async (stateProducer: StateProducer, episode: number, trainerInfo: string): Promise<void> => {
-            await EpisodeRunner.runEpisode(stateProducer, qTable, discount, learningRate, episode, trainerInfo);
+        const episodeRunnerF = async (stateProducer: StateProducer, trainerInfo: string): Promise<void> => {
+            await this.episodeRunner.runEpisode(stateProducer, qTable, discount, learningRate, trainerInfo, this.semaphoreId);
         };
 
         const stateProducerConsumer = async (stateProducer: StateProducer, trainerInfo: string): Promise<void> => {
-            for (let episode = 0; episode < stateProducer.getEpisodesToTrain(); episode++) {
-                await episodeRunner(stateProducer, episode, trainerInfo);
+            let episodesCount = stateProducer.getEpisodesToTrain();
+            for (let episode = 0; episode < episodesCount; episode++) {
+                let infoMessage = "Episode: " + (episode + 1) + " of " + episodesCount + "\n" + trainerInfo;
+                await episodeRunnerF(stateProducer, infoMessage);
             }
         };
 
@@ -27,5 +39,9 @@ export class Trainer {
         }
 
         Utils.prnt("training done");
+    }
+
+    public stop(): void {
+        Trainer.semaphore.disable();
     }
 }

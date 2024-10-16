@@ -1,8 +1,8 @@
-
-
-// utils/GameUtils.ts
-import { Action } from './Action';
 import { Pair } from './utils/Pair';
+import { QTableRow } from './QTableRow';
+import { Environment } from './Environment';
+import { EnvironmentState } from './EnvironmentState';
+import { Action } from './Action';
 import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class GameUtils {
@@ -104,5 +104,21 @@ export class GameUtils {
                 : action === Action.L ? Action.R
                     : action === Action.R ? Action.L
                         : null;
+    }
+
+
+    public static getAction(qTable: Map<number, QTableRow>, currentState: EnvironmentState, lastAction: Action | null): Action {
+        const hash = currentState.getHashCodeV2();
+        let possibleActions = Environment.getPossibleActions(currentState);
+        possibleActions = possibleActions.filter(action => action !== lastAction);
+        return qTable.has(hash)
+            ? qTable.get(hash)?.getActionWithMaxValue(lastAction) || Action.D
+            : this.getRandomAction(possibleActions);
+    }
+
+    public static getRandomAction(possibleActions: Action[]): Action {
+        return possibleActions.length > 0
+            ? possibleActions[Math.floor(Math.random() * possibleActions.length)]
+            : Action.D;
     }
 }

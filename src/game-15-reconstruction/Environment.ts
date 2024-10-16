@@ -100,18 +100,19 @@ export class Environment {
     }
 
     public prntInfo(): void {
-        Utils.prnt("\n\n================================================\n");
+        Utils.prnt("\n\n---------------------------------------------------\n");
 
         const state = this.state.getState();
         const io = state.indexOf(-1);
         const xy = GameUtils.getXY(io);
-        Utils.prnt(xy);
-        const indx = GameUtils.getIndex(xy.getKey(), xy.getValue());  // Assuming getXY returns a tuple
+        Utils.prnt(xy.getKey() + ' - ' + xy.getValue());
+        const indx = GameUtils.getIndex(xy.getKey(), xy.getValue());
         Utils.prnt(`${io} - ${indx}`);
         const moves = GameUtils._getValidMoves(io);
         Utils.prnt(moves);
         const r = this.getReward(state, this.goals);
-        Utils.prnt(r);
+        Utils.prnt('reward: ' + r);
+        Utils.prnt('\n');
         GameUtils.prntState(state, this.goals);
     }
 

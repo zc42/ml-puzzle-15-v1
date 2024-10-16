@@ -2,27 +2,28 @@ import { QTableRow } from './QTableRow';
 import { Environment } from './Environment';
 import { StateProducer } from './StateProducer';
 import { ExperienceRecord } from './ExperienceRecord';
-import { QTableGenerator } from './QTableGenerator';
 import { QTableUpdater } from './QTableUpdater';
 import { Action } from './Action';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
 import { Utils } from './utils/Utils';
 import { ConsoleUtils } from './utils/ConsoleUtils';
+import { GameUtils } from './GameUtils';
+import { Trainer } from './Trainer';
+
 
 export class EpisodeRunner {
-    public static trainingEnabled: boolean = true;
     private static experience: Set<ExperienceRecord> = new Set();
 
-    public static async runEpisode(
+    public async runEpisode(
         stateProducer: StateProducer,
         qTable: Map<number, QTableRow>,
         discount: number,
         learningRate: number,
-        episode: number,
-        trainerInfo: string
+        trainerInfo: string,
+        semaphoreId: number | null
     ) {
         //-------------some hack------------
-        if (!EpisodeRunner.trainingEnabled) return;
+        if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
         //----------------------------------
 
         const random = new Random();
@@ -37,7 +38,7 @@ export class EpisodeRunner {
 
         while (!isTerminal && step < 50) {
             //-------------some hack------------
-            if (!EpisodeRunner.trainingEnabled) return;
+            if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
             //----------------------------------
 
             step++;
@@ -51,17 +52,17 @@ export class EpisodeRunner {
 
             if (random.nextDouble() < epsilon) { // Explore
                 Utils.prnt("\nrndm move");
-                action = QTableGenerator.getRandomAction(possibleActions);
+                action = GameUtils.getRandomAction(possibleActions);
             } else { // Exploit
                 Utils.prnt("\nqTable move");
-                action = QTableGenerator.getAction(qTable, state0, environment.reverseAction);
+                action = GameUtils.getAction(qTable, state0, environment.reverseAction);
 
                 if (!possibleActions.includes(action)) {
-                    action = QTableGenerator.getAction(qTable, state0, environment.reverseAction);
+                    action = GameUtils.getAction(qTable, state0, environment.reverseAction);
                 }
             }
 
-            Utils.prnt("\n--------------------------------------------------------");
+            Utils.prnt("\n\n---------------------------------------------------\n");
             Utils.prnt("\naction: " + action);
 
             const result: EnvironmentActionResult = environment.executeAction(state0, action);
@@ -83,7 +84,7 @@ export class EpisodeRunner {
         EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, 1000);
 
         const count = Array.from(qTable.values()).reduce((acc, e) => acc + e.qValues.size, 0);
-        const message = `Episode ${episode} done, states count: ${count}, experience size: ${EpisodeRunner.experience.size}`;
+        const message = `\nStates count: ${count}, experience size: ${EpisodeRunner.experience.size}`;
 
         Utils.prnt(message);
         Utils.prnt(trainerInfo);

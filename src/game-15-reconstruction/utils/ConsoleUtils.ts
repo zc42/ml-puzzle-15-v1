@@ -14,25 +14,34 @@ export class ConsoleUtils {
 
     public static clearScreen() {
         const consoleDiv = document.getElementById('console');
-        if (consoleDiv) { consoleDiv.innerHTML = ''; }
+        if (consoleDiv) {
+            console.log('clearScreen');
+            consoleDiv.innerHTML = '';
+        }
     }
 
-    // public static _prnt(message: string, style: string = ""): void {
-    //     this.prntBase(message, style, 'span');
-    // }
-
-    public static prnt(message: string, style: string = "color:black;"): void {
-        this.prntBase(message, style);
+    public static prntTestStep(text: string) {
+        this.addElementToConsoleDiv('testGameStep', text);
     }
 
-    private static prntBase(message: string, style: string = "", docElement: string = "div"): void {
+    public static prntTestState(state: string) {
+        this.addElementToConsoleDiv('testGameState', state);
+    }
+
+    private static addElementToConsoleDiv(id: string, text: string) {
+        const elementDiv = document.getElementById(id);
+        if (!elementDiv) this.prnt(text, 'color:black;', id)
+        else elementDiv.innerHTML = text;
+    }
+
+    public static prnt(message: string, style: string = "color:black;", elementId: string | null = null): void {
         const consoleDiv = document.getElementById('console');
         if (consoleDiv) {
-            const messageElement = document.createElement(docElement);
-            messageElement.innerHTML = "<div>" + message + "</div>";
-            if (style) {
-                messageElement.style.cssText = style;
-            }
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = message;
+
+            if (style) messageElement.style.cssText = style;
+            if (elementId !== null) messageElement.id = elementId;
 
             consoleDiv.appendChild(messageElement);
             consoleDiv.scrollTop = consoleDiv.scrollHeight;
