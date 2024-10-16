@@ -12,7 +12,7 @@
             font-family: monospace;
             padding: 10px;
             border-radius: 5px;
-            max-height: 1000px;
+            max-height: 880px;
             overflow-y: auto;
             white-space: pre-wrap;
             /* Preserve formatting */

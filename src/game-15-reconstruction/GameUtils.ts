@@ -81,7 +81,7 @@ export class GameUtils {
             const o = state[e];
 
             if (o === -1) v = ConsoleUtils.blue("*");
-            else if (goals.includes(o)) v = ConsoleUtils.color(o.toString(), 100);
+            else if (goals.includes(o)) v = ConsoleUtils.red(o.toString());
             else if (goals.includes(e + 1)) v = ConsoleUtils.green(o.toString());
             else v = o.toString();
 
@@ -93,11 +93,16 @@ export class GameUtils {
         }).join('');
     }
 
+    public static prntState(state: number[], goals: number[]): void {
+        let s = this.stateAsString(state, goals);
+        ConsoleUtils.prnt(s);
+    }
+
     public static getReverseAction(action: Action): Action | null {
         return action === Action.D ? Action.U
             : action === Action.U ? Action.D
-            : action === Action.L ? Action.R
-            : action === Action.R ? Action.L
-            : null;
+                : action === Action.L ? Action.R
+                    : action === Action.R ? Action.L
+                        : null;
     }
 }

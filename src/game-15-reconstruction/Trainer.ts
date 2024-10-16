@@ -11,18 +11,19 @@ export class Trainer {
 
         const lessons = StateProducer.generateLessons();
 
-        const episodeRunner = async (stateProducer: StateProducer, episode: number): Promise<void> => {
-            await EpisodeRunner.runEpisode(stateProducer, qTable, discount, learningRate, episode);
+        const episodeRunner = async (stateProducer: StateProducer, episode: number, trainerInfo: string): Promise<void> => {
+            await EpisodeRunner.runEpisode(stateProducer, qTable, discount, learningRate, episode, trainerInfo);
         };
 
-        const stateProducerConsumer = async (stateProducer: StateProducer): Promise<void> => {
+        const stateProducerConsumer = async (stateProducer: StateProducer, trainerInfo: string): Promise<void> => {
             for (let episode = 0; episode < stateProducer.getEpisodesToTrain(); episode++) {
-                await episodeRunner(stateProducer, episode);
+                await episodeRunner(stateProducer, episode, trainerInfo);
             }
         };
 
         for (let i = 0; i < n; i++) {
-            await Promise.all(lessons.map(stateProducerConsumer));
+            let trainerInfo = "Running training batch: " + (i + 1) + " of " + n;
+            await Promise.all(lessons.map(e => stateProducerConsumer(e, trainerInfo)));
         }
 
         Utils.prnt("training done");

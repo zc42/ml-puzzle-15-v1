@@ -1,4 +1,3 @@
-// import { SerializedObjectLoader } from './utils/SerializedObjectLoader';
 import { Trainer } from './Trainer';
 import { QTableRow } from './QTableRow';
 import { StateProducer } from './StateProducer';
@@ -12,35 +11,20 @@ import { Utils } from './utils/Utils';
 import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class QTableGenerator {
+    public static qTable = new Map<number, QTableRow>();
 
     public static async train() {
-        const filePath = "qTable.ser";
-        const qTable = this.loadQTable(filePath);
-        await Trainer.train(qTable, 10);
+        await Trainer.train(QTableGenerator.qTable, 10);
     }
 
     public static async test() {
-        const filePath = "qTable.ser";
-        const qTable = this.loadQTable(filePath);
-        while (true) {
-            await this.testQTable(qTable);
-        }
-    }
-
-    public static loadQTable(filePath: string): Map<number, QTableRow> {
-        let qTable = new Map<number, QTableRow>();
-        try {
-            // qTable = SerializedObjectLoader.load(filePath).then();
-            Utils.prnt(filePath);
-            Utils.prnt('qTable not loaded .. newwd to implement .. use some local storage ');
-        } catch (error) {
-            Utils.prnt(error);
-        }
-
+        const qTable = QTableGenerator.qTable
         const stats = this.getStatistics(qTable);
         Utils.prnt(stats);
 
-        return qTable;
+        while (true) {
+            await this.testQTable(qTable);
+        }
     }
 
     private static getStatistics(qTable: Map<number, QTableRow>): Stats {
@@ -113,8 +97,7 @@ export class QTableGenerator {
     }
 
     private static prntState(state: EnvironmentState): void {
-        const s = GameUtils.stateAsString(state.getState(), state.getGoals());
-        Utils.prnt(s);
+        GameUtils.prntState(state.getState(), state.getGoals());
     }
 
     public static getAction(qTable: Map<number, QTableRow>, currentState: EnvironmentState, lastAction: Action | null): Action {

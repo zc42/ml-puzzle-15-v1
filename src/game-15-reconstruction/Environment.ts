@@ -1,10 +1,10 @@
 import { Pair } from './utils/Pair';
-import { Action } from './Action';  // Assuming Action is defined elsewhere
-import { EnvironmentState } from './EnvironmentState';  // Assuming EnvironmentState is defined elsewhere
-import { StateProducer } from './StateProducer';  // Assuming StateProducer is defined elsewhere
-import { EnvironmentActionResult } from './EnvironmentActionResult';  // Assuming EnvironmentActionResult is defined elsewhere
-import { GameUtils } from './GameUtils';  // Assuming GameUtils is defined elsewhere
-import { Utils } from './utils/Utils';  // Assuming Utils is defined elsewhere
+import { Action } from './Action';
+import { EnvironmentState } from './EnvironmentState';
+import { StateProducer } from './StateProducer';
+import { EnvironmentActionResult } from './EnvironmentActionResult';
+import { GameUtils } from './GameUtils';
+import { Utils } from './utils/Utils';
 
 export class Environment {
     private state: EnvironmentState;
@@ -112,10 +112,7 @@ export class Environment {
         Utils.prnt(moves);
         const r = this.getReward(state, this.goals);
         Utils.prnt(r);
-        // prnt("\n");
-
-        const stateAsString = GameUtils.stateAsString(state, this.goals);
-        Utils.prnt(stateAsString);
+        GameUtils.prntState(state, this.goals);
     }
 
     private getReward(state: number[], goals: number[]): number {

@@ -1,7 +1,7 @@
 import { Action } from './Action';
 import { Environment } from './Environment';
 import { EnvironmentState } from './EnvironmentState';
-import { ConsoleUtils } from './utils/ConsoleUtils';
+// import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class QTableRow {
     private state: EnvironmentState;
@@ -18,7 +18,7 @@ export class QTableRow {
             moves.forEach(e => this.qValues.set(e, 0));
         }
         if (!moves.includes(action)) {
-            ConsoleUtils.warn("WARNING: !moves.includes(action)");
+            // ConsoleUtils.warn("WARNING: !moves.includes(action)");
             return;
         }
         this.qValues.set(action, qValue);
@@ -33,7 +33,7 @@ export class QTableRow {
         const actionOption = lastAction === null ? null : this.getAction(lastAction);
 
         if (actionOption === null || actionOption === undefined) {
-            ConsoleUtils.warn("WARNING: no action found");
+            // ConsoleUtils.warn("WARNING: no action found");
             return possibleActions.length > 0 ? possibleActions[0] : Action.D; // Default action
         } else {
             return actionOption;

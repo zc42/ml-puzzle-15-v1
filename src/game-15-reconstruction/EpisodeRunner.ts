@@ -15,10 +15,10 @@ export class EpisodeRunner {
     public static async runEpisode(
         stateProducer: StateProducer,
         qTable: Map<number, QTableRow>,
-        // random: Random,
         discount: number,
         learningRate: number,
-        episode: number
+        episode: number,
+        trainerInfo: string
     ) {
         const random = new Random();
         const environment = new Environment(stateProducer);
@@ -55,10 +55,6 @@ export class EpisodeRunner {
             Utils.prnt("\n--------------------------------------------------------");
             Utils.prnt("\naction: " + action);
 
-            if (!possibleActions.includes(action)) {
-                // throw new Error("!possibleActions.contains(action)");
-            }
-
             const result: EnvironmentActionResult = environment.executeAction(state0, action);
             const state1 = result.state;
             environment.prntInfo();
@@ -79,9 +75,11 @@ export class EpisodeRunner {
 
         const count = Array.from(qTable.values()).reduce((acc, e) => acc + e.qValues.size, 0);
         const message = `Episode ${episode} done, states count: ${count}, experience size: ${EpisodeRunner.experience.size}`;
+        
         Utils.prnt(message);
-        Utils.prnt("");
-        await Utils.sleep(1000);
+        Utils.prnt(trainerInfo);
+
+        await Utils.sleep(500);
         ConsoleUtils.clearScreen();
     }
 

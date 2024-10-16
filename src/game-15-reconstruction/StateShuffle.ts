@@ -27,7 +27,7 @@ export class StateShuffle {
   }
 
   private static prntState(state: number[], goals: number[]): void {
-    Utils.prnt(GameUtils.stateAsString(state, goals));
+    GameUtils.prntState(state, goals);
   }
 
   static makeRandomMove(state: number[], fixedStateIndexes: number[]): number[] {

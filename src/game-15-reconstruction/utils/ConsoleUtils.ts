@@ -1,15 +1,15 @@
 export class ConsoleUtils {
 
     public static blue(text: string): string {
-        return `\x1b[34m${text}\x1b[0m`; // Blue text
+        return '<span style="color: blue;">' + text + '</span>'; // Blue text
     }
 
     public static green(text: string): string {
-        return `\x1b[32m${text}\x1b[0m`; // Green text
+        return '<span style="color: green;">' + text + '</span>'; // Green text
     }
 
-    public static color(text: string, colorCode: number): string {
-        return `\x1b[${colorCode}m${text}\x1b[0m`; // Color by code
+    public static red(text: string): string {
+        return '<span style="color: red;">' + text + '</span>'; // Color by red
     }
 
     public static clearScreen() {
@@ -17,11 +17,19 @@ export class ConsoleUtils {
         if (consoleDiv) { consoleDiv.innerHTML = ''; }
     }
 
-    public static prnt(message: string, style: string = ""): void {
+    // public static _prnt(message: string, style: string = ""): void {
+    //     this.prntBase(message, style, 'span');
+    // }
+
+    public static prnt(message: string, style: string = "color:black;"): void {
+        this.prntBase(message, style);
+    }
+
+    private static prntBase(message: string, style: string = "", docElement: string = "div"): void {
         const consoleDiv = document.getElementById('console');
         if (consoleDiv) {
-            const messageElement = document.createElement('div');
-            messageElement.textContent = message;
+            const messageElement = document.createElement(docElement);
+            messageElement.innerHTML = "<div>" + message + "</div>";
             if (style) {
                 messageElement.style.cssText = style;
             }
