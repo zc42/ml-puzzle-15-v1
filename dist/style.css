@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
     font-family: "JetBrains Sans";
     src: url("fonts/JetBrainsSans-Regular.woff2");
 }
@@ -128,12 +128,10 @@ button {
 }
 
 button:hover {
-    background-image: radial-gradient(
-            farthest-corner at 77% 83%,
+    background-image: radial-gradient(farthest-corner at 77% 83%,
             rgba(1, 197, 245, 0.5) 2%,
             rgba(1, 126, 254, 0.5) 28%,
-            rgba(25, 25, 28, 0) 70%
-    );
+            rgba(25, 25, 28, 0) 70%);
     border: 1px solid rgba(76, 166, 255, 0.2);
     background-clip: padding-box;
 }
@@ -184,4 +182,15 @@ button:hover {
         margin-right: 0;
         margin-bottom: 15px;
     }
+} */
+
+.console {
+    /* background-color: #1e1e1e; */
+    color: #dcdcdc;
+    font-family: monospace;
+    padding: 10px;
+    border-radius: 5px;
+    max-height: 880px;
+    overflow-y: auto;
+    white-space: pre-wrap;
 }

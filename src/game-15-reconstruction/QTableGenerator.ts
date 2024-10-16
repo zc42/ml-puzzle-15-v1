@@ -12,17 +12,26 @@ import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class QTableGenerator {
     public static qTable = new Map<number, QTableRow>();
+    public static testingEnabled: boolean = false;
 
     public static async train() {
         await Trainer.train(QTableGenerator.qTable, 10);
     }
 
     public static async test() {
+
+        //-------------some hack------------
+        if (!QTableGenerator.testingEnabled) return;
+        //----------------------------------
+
         const qTable = QTableGenerator.qTable
         const stats = this.getStatistics(qTable);
         Utils.prnt(stats);
 
         while (true) {
+            //-------------some hack------------
+            if (!QTableGenerator.testingEnabled) return;
+            //----------------------------------
             await this.testQTable(qTable);
         }
     }
@@ -40,6 +49,10 @@ export class QTableGenerator {
     }
 
     public static async testQTable(qTable: Map<number, QTableRow>) {
+        //-------------some hack------------
+        if (!QTableGenerator.testingEnabled) return;
+        //----------------------------------
+
         Utils.prnt("********************* test q table **********************");
         Utils.prnt("********************* test q table **********************");
         Utils.prnt("********************* test q table **********************");
@@ -59,6 +72,10 @@ export class QTableGenerator {
         let reverseAction: Action | null = null;
 
         while (!gameOver && step < 200) {
+            //-------------some hack------------
+            if (!QTableGenerator.testingEnabled) return;
+            //----------------------------------
+
             await Utils.sleep(1000 / 2);
             ConsoleUtils.clearScreen();
 

@@ -1,7 +1,27 @@
-import { G15EntryPoint } from './G15EntryPoint';
+import { Utils } from './game-15-reconstruction/utils/Utils';
+import { EpisodeRunner } from './game-15-reconstruction/EpisodeRunner';
+import { QTableGenerator } from './game-15-reconstruction/QTableGenerator';
 
-G15EntryPoint.main().then(() => {
-  console.log('G15EntryPoint has completed execution.');
-}).catch(error => {
-  console.error('An error occurred:', error);
-});
+export class ToolBox {
+
+  public static  setupTools() {
+    document.getElementById('startTraining')?.addEventListener('click', () => this.startTraining().then());
+    document.getElementById('startTesting')?.addEventListener('click', () => this.startTesting());
+  }
+
+  private static async startTraining() {
+    Utils.prnt("starting training ... ");
+    await Utils.sleep(0);
+    QTableGenerator.testingEnabled = false;
+    EpisodeRunner.trainingEnabled = true;
+    QTableGenerator.train().then();
+  }
+
+  private static startTesting() {
+    EpisodeRunner.trainingEnabled = false;
+    QTableGenerator.testingEnabled = true;
+    QTableGenerator.test().then();
+  }
+}
+
+ToolBox.setupTools();

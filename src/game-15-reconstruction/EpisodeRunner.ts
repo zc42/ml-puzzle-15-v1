@@ -10,6 +10,7 @@ import { Utils } from './utils/Utils';
 import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class EpisodeRunner {
+    public static trainingEnabled: boolean = true;
     private static experience: Set<ExperienceRecord> = new Set();
 
     public static async runEpisode(
@@ -20,6 +21,10 @@ export class EpisodeRunner {
         episode: number,
         trainerInfo: string
     ) {
+        //-------------some hack------------
+        if (!EpisodeRunner.trainingEnabled) return;
+        //----------------------------------
+
         const random = new Random();
         const environment = new Environment(stateProducer);
         environment.reset();
@@ -31,6 +36,10 @@ export class EpisodeRunner {
         let step = 0;
 
         while (!isTerminal && step < 50) {
+            //-------------some hack------------
+            if (!EpisodeRunner.trainingEnabled) return;
+            //----------------------------------
+
             step++;
             let action: Action;
 
@@ -75,7 +84,7 @@ export class EpisodeRunner {
 
         const count = Array.from(qTable.values()).reduce((acc, e) => acc + e.qValues.size, 0);
         const message = `Episode ${episode} done, states count: ${count}, experience size: ${EpisodeRunner.experience.size}`;
-        
+
         Utils.prnt(message);
         Utils.prnt(trainerInfo);
 
