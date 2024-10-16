@@ -83,11 +83,12 @@ export class EpisodeRunner {
 
         EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, 1000);
 
-        const count = Array.from(qTable.values()).reduce((acc, e) => acc + e.qValues.size, 0);
-        const message = `\nStates count: ${count}, experience size: ${EpisodeRunner.experience.size}`;
+        const statsInfo = `QTable size: ${qTable.size}, experience size: ${EpisodeRunner.experience.size}`;
 
-        Utils.prnt(message);
+        Utils.prnt("\n");
         Utils.prnt(trainerInfo);
+        Utils.prnt(statsInfo);
+        ConsoleUtils.prntStatsInfo(statsInfo);
 
         await Utils.sleep(500);
         ConsoleUtils.clearScreen();

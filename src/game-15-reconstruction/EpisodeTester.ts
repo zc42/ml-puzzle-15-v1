@@ -97,7 +97,7 @@ export class EpisodeTester {
                 goals = stateProducer.getGoals();
                 Utils.prnt(`lesson change: ${lessonNo}`);
                 Utils.prnt(goals);
-                await Utils.sleep(2000);
+                // await Utils.sleep(2000);
                 state = new EnvironmentState(state.getState(), stateProducer);
             }
         }

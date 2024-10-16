@@ -13,7 +13,7 @@ export class ToolBox {
   private static async startTraining() {
     QTableGenerator.stopTester();
     ConsoleUtils.clearScreen();
-    ConsoleUtils.prnt("starting training session ... ");
+    Utils.prnt("starting training session ... ");
     await Utils.sleep(0);
     QTableGenerator.train()
       .then(() => ToolBox.startTesting().then());
@@ -22,7 +22,7 @@ export class ToolBox {
   private static async startTesting() {
     QTableGenerator.stopTrainer();
     ConsoleUtils.clearScreen();
-    ConsoleUtils.prnt("start testing ... ");
+    Utils.prnt("start testing ... ");
     await Utils.sleep(0);
     QTableGenerator.test().then();
   }

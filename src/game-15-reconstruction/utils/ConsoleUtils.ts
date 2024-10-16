@@ -14,18 +14,16 @@ export class ConsoleUtils {
 
     public static clearScreen() {
         const consoleDiv = document.getElementById('console');
-        if (consoleDiv) {
-            console.log('clearScreen');
-            consoleDiv.innerHTML = '';
-        }
+        if (consoleDiv) consoleDiv.innerHTML = '';
     }
 
     public static prntTestStep(text: string) {
         this.addElementToConsoleDiv('testGameStep', text);
     }
 
-    public static prntTestState(state: string) {
-        this.addElementToConsoleDiv('testGameState', state);
+    public static prntStatsInfo(message: string) {
+        const element = document.getElementById('statsInfo');
+        if (element) element.textContent = message.toLowerCase().replace(", ", " | ");
     }
 
     private static addElementToConsoleDiv(id: string, text: string) {

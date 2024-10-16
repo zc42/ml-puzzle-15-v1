@@ -184,6 +184,15 @@ button:hover {
     }
 } */
 
+.stats-info {
+    padding-left: 20px;
+    color: #949292;
+    font-family: monospace;
+    /* padding: 10px; */
+    border-radius: 5px;
+    white-space: pre-wrap;
+}
+
 .console {
     /* background-color: #1e1e1e; */
     color: #dcdcdc;
