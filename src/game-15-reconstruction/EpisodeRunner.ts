@@ -62,7 +62,7 @@ export class EpisodeRunner {
                 }
             }
 
-            Utils.prnt("\n\n---------------------------------------------------\n");
+            Utils.prnt("\n\n------------------------------------------------------------------\n");
             Utils.prnt("\naction: " + action);
 
             const result: EnvironmentActionResult = environment.executeAction(state0, action);

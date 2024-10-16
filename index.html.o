@@ -10,13 +10,14 @@
 
 <body>
     <main id="app">
-        <div>------------------------------------------------------------------------------</div>
+        <div>--------------------------------------------------------------------------------------------------</div>
         <div id=tools>
             <input id="startTraining" type="button" value="train">
             <input id="startTesting" type="button" value="test">
+            <input id="zenGarden" type="button" value="zen garden on">
             <span id="statsInfo" class="stats-info"></span>
         </div>
-        <div>------------------------------------------------------------------------------</div>
+        <div>--------------------------------------------------------------------------------------------------</div>
         <div id="console" class="console"></div>
     </main>
     <script type="module" src="/src/main.ts"></script>

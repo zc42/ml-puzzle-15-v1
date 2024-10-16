@@ -100,7 +100,7 @@ export class Environment {
     }
 
     public prntInfo(): void {
-        Utils.prnt("\n\n---------------------------------------------------\n");
+        Utils.prnt("\n\n------------------------------------------------------------------\n");
 
         const state = this.state.getState();
         const io = state.indexOf(-1);

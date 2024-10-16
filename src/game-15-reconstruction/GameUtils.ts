@@ -6,6 +6,7 @@ import { Action } from './Action';
 import { ConsoleUtils } from './utils/ConsoleUtils';
 
 export class GameUtils {
+    public static zenGardenOn: boolean = false;
 
     public static makeMove(state: number[], action: Action): number[] {
         const hole = -1;
@@ -75,7 +76,13 @@ export class GameUtils {
         return fixedStateIndexes.includes(this.getIndex(x, y));
     }
 
+    
     public static stateAsString(state: number[], goals: number[]): string {
+        if (this.zenGardenOn) return this.getStateAsZenStoneGarden(state, goals);
+        else return this._stateAsString(state, goals);
+    }
+
+    public static _stateAsString(state: number[], goals: number[]): string {
         return Array.from({ length: 16 }, (_, e) => {
             let v: string;
             const o = state[e];
@@ -84,6 +91,25 @@ export class GameUtils {
             else if (goals.includes(o)) v = ConsoleUtils.red(o.toString());
             else if (goals.includes(e + 1)) v = ConsoleUtils.green(o.toString());
             else v = o.toString();
+
+            v += "\t";
+            if (e !== 0 && (e + 1) % 4 === 0) {
+                v += "\n";
+            }
+            return v;
+        }).join('');
+    }
+
+    public static getStateAsZenStoneGarden(state: number[], goals: number[]): string {
+        return Array.from({ length: 16 }, (_, e) => {
+            let v: string;
+            const o = state[e];
+
+            // if (o === -1) v = ".";
+            // else 
+            if (goals.includes(o)) v = "x";
+            else if (goals.includes(e + 1)) v = "o";
+            else v = "";
 
             v += "\t";
             if (e !== 0 && (e + 1) % 4 === 0) {

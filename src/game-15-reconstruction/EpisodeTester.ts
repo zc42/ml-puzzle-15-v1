@@ -57,15 +57,13 @@ export class EpisodeTester {
         let goals = stateProducer.getGoals();
 
         ConsoleUtils.clearScreen();
-        Utils.prnt(`0\n----\n`);
+        if (!GameUtils.zenGardenOn) Utils.prnt(`0\n----\n`);
         EpisodeTester.prntState(state);
 
         let gameOver = false;
         let step = 0;
         let reverseAction: Action | null = null;
 
-        // await Utils.sleep(1000);
-        // ConsoleUtils.clearScreen();
         while (!gameOver && step < 200) {
             //-------------some hack------------
             if (!EpisodeTester.semaphore.goodToGo(this.semaphoreId)) return;
@@ -88,7 +86,7 @@ export class EpisodeTester {
 
             await Utils.sleep(1000 / 2);
             ConsoleUtils.clearScreen();
-            Utils.prnt(`${step}\n----\n`);
+            if (!GameUtils.zenGardenOn) Utils.prnt(`${step}\n----\n`);
             EpisodeTester.prntState(state);
 
             if (isTerminal && !gameOver && lessonNo < lessonCount - 1) {
