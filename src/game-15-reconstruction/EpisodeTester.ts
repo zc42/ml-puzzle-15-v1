@@ -88,10 +88,10 @@ export class EpisodeTester {
                 lessonNo++;
                 stateProducer = lessons[lessonNo];
                 goals = stateProducer.getGoals();
-                if (!GameUtils.zenGardenOn) {
-                    Utils.prnt(`lesson change: ${lessonNo}`);
-                    Utils.prnt(goals);
-                }
+                // if (!GameUtils.zenGardenOn) {
+                //     Utils.prnt(`lesson change: ${lessonNo}`);
+                //     Utils.prnt(goals);
+                // }
                 state = new EnvironmentState(state.getState(), stateProducer);
             }
         }
