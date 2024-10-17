@@ -3,10 +3,11 @@ import { EnvironmentState } from './EnvironmentState';
 
 export class QTableActions {
 
-    public static async getQTableActionsFile(): Promise<string> {
+    //'/public/qTableActions.csv'
+    private static async getQTableActionsFile(filePath: string): Promise<string> {
         let data = '';
         try {
-            const response = await fetch('/public/qTableActions.csv');
+            const response = await fetch(filePath);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -20,7 +21,8 @@ export class QTableActions {
 
 
     public static async getQTableActions(): Promise<Map<string, Action>> {
-        let data = await this.getQTableActionsFile();
+        let data = await this.getQTableActionsFile('/public/qTableActions.csv');
+        data = data === '' ? await this.getQTableActionsFile('dist/qTableActions.csv') : data;
         const lines = data.trim().split('\n');
         const map = new Map<string, Action>();
         lines.forEach((row) => {
