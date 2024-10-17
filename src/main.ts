@@ -43,10 +43,10 @@ export class ToolBox {
     let value = btn?.getAttribute('value');
     if (value !== text + ' off') {
       btn?.setAttribute('value', text + ' off');
-      fn(true);
+      fn(false);
     } else {
       btn?.setAttribute('value', text + ' on');
-      fn(false);
+      fn(true);
     }
   }
 }

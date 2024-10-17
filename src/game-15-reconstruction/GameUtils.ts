@@ -132,7 +132,6 @@ export class GameUtils {
                         : null;
     }
 
-
     public static getAction(qTable: Map<number, QTableRow>, currentState: EnvironmentState, lastAction: Action | null): Action {
         const hash = currentState.getHashCodeV2();
         let possibleActions = Environment.getPossibleActions(currentState);

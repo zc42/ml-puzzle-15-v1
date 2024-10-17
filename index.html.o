@@ -14,8 +14,8 @@
         <div id=tools>
             <input id="startTrainingBtn" type="button" value="train">
             <input id="startTestingBtn" type="button" value="test">
-            <input id="pretrainedBtn" type="button" value="use pretrained off">
-            <input id="zenGardenBtn" type="button" value="zen garden on">
+            <input id="pretrainedBtn" type="button" value="use pretrained on">
+            <input id="zenGardenBtn" type="button" value="zen garden off">
             <span id="statsInfo" class="stats-info"></span>
         </div>
         <div>--------------------------------------------------------------------------------------------------</div>
