@@ -48,11 +48,6 @@ export class EpisodeTester {
         //-------------some hack------------
         if (!EpisodeTester.semaphore.goodToGo(this.semaphoreId)) return;
         //----------------------------------
-        // ConsoleUtils.clearScreen();
-
-        // Utils.prnt("********************* test q table **********************");
-        // Utils.prnt("********************* test q table **********************");
-        // Utils.prnt("********************* test q table **********************");
 
         let lessonNo = 0;
         const lessons = StateProducer.generateLessons();
@@ -93,15 +88,16 @@ export class EpisodeTester {
                 lessonNo++;
                 stateProducer = lessons[lessonNo];
                 goals = stateProducer.getGoals();
-                Utils.prnt(`lesson change: ${lessonNo}`);
-                Utils.prnt(goals);
-                // await Utils.sleep(2000);
+                if (!GameUtils.zenGardenOn) {
+                    Utils.prnt(`lesson change: ${lessonNo}`);
+                    Utils.prnt(goals);
+                }
                 state = new EnvironmentState(state.getState(), stateProducer);
             }
         }
 
         const isTerminalSuccess = Environment.isTerminalSuccess(state);
-        Utils.prnt(`success: ${isTerminalSuccess}`);
+        if (!GameUtils.zenGardenOn) Utils.prnt(`success: ${isTerminalSuccess}`);
         await Utils.sleep(3000);
     }
 

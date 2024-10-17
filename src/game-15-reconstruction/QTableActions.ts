@@ -33,8 +33,7 @@ export class QTableActions {
     public static getHashCodeV3__(envState: EnvironmentState): string {
         const state = envState.getState();
         const goals = envState.getGoals();
-
-        return Array.from({ length: 16 }, (_, e) => {
+        const key = Array.from({ length: 16 }, (_, e) => {
             let v: string;
             const o = state[e];
             if (o === -1) v = '*';
@@ -46,6 +45,7 @@ export class QTableActions {
             if (e !== 0 && (e + 1) % 4 === 0) v += '|';
             return v;
         }).join('');
+        return key.trim();
     }
 
 }
