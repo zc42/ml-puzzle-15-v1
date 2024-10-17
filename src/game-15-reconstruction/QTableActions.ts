@@ -4,8 +4,12 @@ import { EnvironmentState } from './EnvironmentState';
 export class QTableActions {
 
     public static async getQTableActions(): Promise<Map<string, Action>> {
-        let data = await this.getQTableActionsFile('/public/qTableActions.csv');
-        data = data === '' ? await this.getQTableActionsFile('dist/qTableActions.csv') : data;
+
+        const path1 = 'dist/qTableActions.csv';
+        const path2 = '/public/qTableActions.csv';
+
+        let data = await this.getQTableActionsFile(path1);
+        data = data === '' ? await this.getQTableActionsFile(path2) : data;
         const lines = data.trim().split('\n');
         const map = new Map<string, Action>();
         lines.forEach((row) => {
