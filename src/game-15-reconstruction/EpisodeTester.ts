@@ -113,10 +113,10 @@ export class EpisodeTester {
             && EpisodeTester.actionMap !== null
             && EpisodeTester.actionMap.size > 0) {
 
-            let key = QTableActions.getHashCodeV3__(state);
+            let key = QTableActions.getStateActionKey(state);
             if (EpisodeTester.actionMap?.has(key)) {
                 let action = EpisodeTester.actionMap.get(key);
-                if (!GameUtils.zenGardenOn) Utils.prnt('no action found');
+                if (!GameUtils.zenGardenOn && action === undefined) Utils.prnt('no action found');
                 return action === undefined
                     ? GameUtils.getFirstPossibleActionOrD(state, reverseAction)
                     : action;

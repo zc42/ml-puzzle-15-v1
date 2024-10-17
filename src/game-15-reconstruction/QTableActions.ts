@@ -3,23 +3,6 @@ import { EnvironmentState } from './EnvironmentState';
 
 export class QTableActions {
 
-    //'/public/qTableActions.csv'
-    private static async getQTableActionsFile(filePath: string): Promise<string> {
-        let data = '';
-        try {
-            const response = await fetch(filePath);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            data = await response.text();
-        } catch (error) {
-            console.error('Error reading file:', error);
-        } finally {
-            return data;
-        }
-    }
-
-
     public static async getQTableActions(): Promise<Map<string, Action>> {
         let data = await this.getQTableActionsFile('/public/qTableActions.csv');
         data = data === '' ? await this.getQTableActionsFile('dist/qTableActions.csv') : data;
@@ -32,7 +15,22 @@ export class QTableActions {
         return map;
     }
 
-    public static getHashCodeV3__(envState: EnvironmentState): string {
+    private static async getQTableActionsFile(filePath: string): Promise<string> {
+        let data = '';
+        try {
+            const response = await fetch(filePath);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            data = await response.text();
+        } catch (error) {
+            console.error('Error reading file: ' + filePath, error);
+        } finally {
+            return data;
+        }
+    }
+
+    public static getStateActionKey(envState: EnvironmentState): string {
         const state = envState.getState();
         const goals = envState.getGoals();
         const key = Array.from({ length: 16 }, (_, e) => {
