@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>puzzle 15 ml</title>
-    <link rel="stylesheet" href="/public/style.css">
+  <script type="module" crossorigin src="dist/assets/index-DJRQjWmy.js"></script>
+  <link rel="stylesheet" crossorigin href="dist/assets/index-BHoGdfaQ.css">
 </head>
 
 <body>
@@ -21,7 +22,6 @@
         <div>--------------------------------------------------------------------------------------------------</div>
         <div id="console" class="console"></div>
     </main>
-    <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>

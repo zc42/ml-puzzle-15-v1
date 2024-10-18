@@ -12,7 +12,7 @@ import { Trainer } from './Trainer';
 
 
 export class EpisodeRunner {
-    private static experience: Set<ExperienceRecord> = new Set();
+    public static experience: Set<ExperienceRecord> = new Set();
 
     public async runEpisode(
         stateProducer: StateProducer,
@@ -81,7 +81,8 @@ export class EpisodeRunner {
             state0 = result.state;
         }
 
-        EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, 1000);
+        EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, 10000);
+        if (EpisodeRunner.experience.size > 10000) EpisodeRunner.experience.clear();
 
         const statsInfo = `QTable size: ${qTable.size}, experience size: ${EpisodeRunner.experience.size}`;
 

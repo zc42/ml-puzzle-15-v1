@@ -10,7 +10,7 @@ import { Utils } from './utils/Utils';
 import { ConsoleUtils } from './utils/ConsoleUtils';
 import { QTableGenerator } from './QTableGenerator';
 import { Semaphore } from './utils/Semaphore';
-import { QTableActions } from './QTableActions';
+import { PretrainedDataLoader } from './QTableActionsLoader';
 
 export class EpisodeTester {
 
@@ -21,7 +21,7 @@ export class EpisodeTester {
 
     public async test() {
         if (EpisodeTester.usePreloadedActions && EpisodeTester.actionMap === null)
-            EpisodeTester.actionMap = await QTableActions.getQTableActions();
+            EpisodeTester.actionMap = await PretrainedDataLoader.getQTableActionMap();
 
         this.semaphoreId = EpisodeTester.semaphore.enable();
         //-------------some hack------------
@@ -96,8 +96,10 @@ export class EpisodeTester {
             }
         }
 
-        const isTerminalSuccess = Environment.isTerminalSuccess(state);
-        if (!GameUtils.zenGardenOn) Utils.prnt(`success: ${isTerminalSuccess}`);
+        const terminalMessage = Environment.isTerminalSuccess(state)
+            ? 'success'
+            : 'failed';
+        if (!GameUtils.zenGardenOn) Utils.prnt(`----\n${terminalMessage}`);
         await Utils.sleep(3000);
     }
 
@@ -113,7 +115,7 @@ export class EpisodeTester {
             && EpisodeTester.actionMap !== null
             && EpisodeTester.actionMap.size > 0) {
 
-            let key = QTableActions.getStateActionKey(state);
+            let key = PretrainedDataLoader.getStateActionKey(state);
             if (EpisodeTester.actionMap?.has(key)) {
                 let action = EpisodeTester.actionMap.get(key);
                 if (!GameUtils.zenGardenOn && action === undefined) Utils.prnt('no action found');

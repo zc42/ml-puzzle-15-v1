@@ -18,15 +18,10 @@ export class Utils {
     if (!l) {
       return 0;
     }
-
-    // Filter out zeros
     l = l.filter(e => e !== 0);
-
     if (l.length === 0) {
       return 0;
     }
-
-    // Use reduce to sum the list elements
     return l.reduce((acc, curr) => acc + curr, 0);
   }
 
@@ -40,19 +35,16 @@ export class Utils {
   }
 
   public static equalArrays<T>(array: T[], array2: T[]): boolean {
-    // First, check if the lengths of both arrays are equal
     if (array.length !== array2.length) {
-      return false; // Not equal if lengths differ
+      return false;
     }
 
-    // Then, check each corresponding element for equality
     for (let i = 0; i < array.length; i++) {
       if (array[i] !== array2[i]) {
-        return false; // Return false if any action is different
+        return false;
       }
     }
-
-    return true; // Arrays are equal if all checks passed
+    return true;
   }
 
   public static shuffleArray<T>(array: T[]): T[] {
@@ -64,24 +56,8 @@ export class Utils {
   }
 
   public static async sleep(ms: number) {
-    // Utils.prnt('Start');
-    await this._sleep(ms); // Pauses for 2 seconds
-    // Utils.prnt('End after 2 seconds');
+    await this._sleep(ms);
   }
-
-
-
-  // public static _sleep(ms: number): Promise<void> {
-  //   return new Promise(resolve => setTimeout(resolve, ms));
-  // }
-
-  // public static async sleep(ms: number) {
-  //   Utils.prnt('Start');
-  //   this._sleep(ms).then(() => {
-  //     Utils.prnt('End after 2 seconds');
-  //   });
-  // }
 }
 
-// Helper type for collections (similar to Java's Collection interface)
 type Collection<T> = Iterable<T> | ArrayLike<T>;

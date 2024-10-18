@@ -1,15 +1,17 @@
 import { Action } from './Action';
 import { EnvironmentState } from './EnvironmentState';
+import { FileLoader } from './utils/FileLoader';
 
-export class QTableActions {
+export class PretrainedDataLoader {
 
-    public static async getQTableActions(): Promise<Map<string, Action>> {
+    public static async getQTableActionMap(): Promise<Map<string, Action>> {
 
         const path1 = 'dist/qTableActions.csv';
         const path2 = '/public/qTableActions.csv';
 
-        let data = await this.getQTableActionsFile(path1);
-        data = data === '' ? await this.getQTableActionsFile(path2) : data;
+        let data = await FileLoader.getFile(path1);
+        data = data === '' ? await FileLoader.getFile(path2) : data;
+        
         const lines = data.trim().split('\n');
         const map = new Map<string, Action>();
         lines.forEach((row) => {
@@ -17,21 +19,6 @@ export class QTableActions {
             map.set(key, Action[action as keyof typeof Action]);
         });
         return map;
-    }
-
-    private static async getQTableActionsFile(filePath: string): Promise<string> {
-        let data = '';
-        try {
-            const response = await fetch(filePath);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            data = await response.text();
-        } catch (error) {
-            console.error('Error reading file: ' + filePath, error);
-        } finally {
-            return data;
-        }
     }
 
     public static getStateActionKey(envState: EnvironmentState): string {
@@ -51,5 +38,4 @@ export class QTableActions {
         }).join('');
         return key.trim();
     }
-
 }
