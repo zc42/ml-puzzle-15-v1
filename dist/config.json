@@ -1,0 +1,26 @@
+{
+    "version": "~0.13",
+    "use_pretrained_data_while_testing": true,
+    "info": [
+        "----------------------------------------------------------------------------------------------------",
+        "puzzle 15",
+        "about puzzle - https://en.wikipedia.org/wiki/15_puzzle",
+        "project source code - https://github.com/zc42/ml-puzzle-15-v1",
+        "java port - https://github.com/zc42/game_15_java/blob/main/README.md",
+        "python port for kaggle - https://www.kaggle.com/code/zilvinasc/reinforced-learning-qtable-puzzle-15",
+        "development history - https://github.com/zc42/stuff",
+        "----------------------------------------------------------------------------------------------------",
+        "",
+        "",
+        "This configuration is editable.",
+        "",
+        "----------------------------------------------------------------------------------------------------",
+        "You can change the 'use_pretrained_data_while_testing' property value from true to false.",
+        "When set to false, toggle the test button, and the q-table data learned in this session will be used.",
+        "If the value is changed to true, the puzzle will attempt to solve itself, while using pretrained data.",
+        "----------------------------------------------------------------------------------------------------",
+        "Development is in progerss .. ",
+        "More configuration properties and explanations will appear here soon.",
+        "----------------------------------------------------------------------------------------------------"
+    ]
+}

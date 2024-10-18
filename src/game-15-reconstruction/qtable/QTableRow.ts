@@ -1,6 +1,6 @@
-import { Action } from './Action';
-import { Environment } from './Environment';
-import { EnvironmentState } from './EnvironmentState';
+import { Action } from '../environment/Action';
+import { Environment } from '../environment/Environment';
+import { EnvironmentState } from '../environment/EnvironmentState';
 
 export class QTableRow {
     private state: EnvironmentState;

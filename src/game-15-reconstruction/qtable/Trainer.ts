@@ -1,8 +1,8 @@
+import { Utils } from '../utils/Utils';
 import { QTableRow } from './QTableRow';
-import { StateProducer } from './lessons/StateProducer';
+import { Semaphore } from '../utils/Semaphore';
+import { StateProducer } from '../lessons/StateProducer';
 import { EpisodeRunner as EpisodeTrainer } from './EpisodeTrainer';
-import { Utils } from './utils/Utils';
-import { Semaphore } from './utils/Semaphore';
 
 export class Trainer {
 

@@ -1,5 +1,5 @@
-import { EnvironmentState } from './EnvironmentState'; // Adjust the import according to your project structure
-import { Action } from './Action'; // Adjust the import according to your project structure
+import { Action } from '../environment/Action'; 
+import { EnvironmentState } from '../environment/EnvironmentState'; 
 
 export class ExperienceRecord {
     private readonly state: EnvironmentState;
@@ -9,11 +9,11 @@ export class ExperienceRecord {
     private readonly newState: EnvironmentState;
 
     constructor(state: EnvironmentState, action: Action, reward: number, done: boolean, newState: EnvironmentState) {
-        this.state = new EnvironmentState(state); // Assuming a copy constructor exists in TypeScript
+        this.state = new EnvironmentState(state); 
         this.action = action;
         this.reward = reward;
         this.done = done;
-        this.newState = new EnvironmentState(newState); // Assuming a copy constructor exists in TypeScript
+        this.newState = new EnvironmentState(newState); 
     }
 
     public getState(): EnvironmentState {
@@ -42,6 +42,6 @@ export class ExperienceRecord {
     }
 
     public hashCode(): number {
-        return this.state.getHashCodeV2() ^ this.newState.getHashCodeV2(); // Use bitwise XOR for combining hashes
+        return this.state.getHashCodeV2() ^ this.newState.getHashCodeV2(); 
     }
 }

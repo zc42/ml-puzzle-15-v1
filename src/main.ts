@@ -1,9 +1,10 @@
 import { Utils } from './game-15-reconstruction/utils/Utils';
+import { GameUtils } from './game-15-reconstruction/environment/GameUtils';
+import { EpisodeTester } from './game-15-reconstruction/qtable/EpisodeTester';
 import { ConsoleUtils } from './game-15-reconstruction/utils/ConsoleUtils';
-import { QTableGenerator } from './game-15-reconstruction/QTableGenerator';
-import { GameUtils } from './game-15-reconstruction/GameUtils';
-import { EpisodeTester } from './game-15-reconstruction/EpisodeTester';
+import { QTableGenerator } from './game-15-reconstruction/qtable/QTableGenerator';
 import { LessonsEditor } from './game-15-reconstruction/lessons/LessonsEditor';
+import { ConfigEditor } from './game-15-reconstruction/configuration/ConfigEditor';
 
 export class ToolBox {
 
@@ -13,6 +14,7 @@ export class ToolBox {
     document.getElementById('pretrainedBtn')?.addEventListener('click', () => ToolBox.usePretrainedOnOff().then());
     document.getElementById('zenGardenBtn')?.addEventListener('click', () => ToolBox.zenGardenOnOff().then());
     document.getElementById('lessonsBtn')?.addEventListener('click', () => ToolBox.lessonsOnOff().then());
+    document.getElementById('configBtn')?.addEventListener('click', () => ToolBox.configOnOff().then());
     this.startTesting().then();
   }
 
@@ -32,10 +34,17 @@ export class ToolBox {
     await Utils.sleep(0);
     QTableGenerator.test().then();
   }
-  
+
+  private static async configOnOff() {
+
+    this.btnOff('lessonsBtn', 'training lessons', show => LessonsEditor.toggleLessonsDisplay(show));
+    this.btnOnOff('configBtn', 'configuration', show => ConfigEditor.toggleConfigurationDisplay(show));
+  }
+
   private static async lessonsOnOff() {
-    this.btnOnOff('lessonsBtn', 'show training lessons', show => LessonsEditor.toggleLessonsDisplay(show));
-  }  
+    this.btnOff('configBtn', 'configuration', show => ConfigEditor.toggleConfigurationDisplay(show));
+    this.btnOnOff('lessonsBtn', 'training lessons', show => LessonsEditor.toggleLessonsDisplay(show));
+  }
 
   private static async usePretrainedOnOff() {
     this.btnOnOff('pretrainedBtn', 'use pretrained', e => EpisodeTester.usePreloadedActions = e)
@@ -43,6 +52,12 @@ export class ToolBox {
 
   private static async zenGardenOnOff() {
     this.btnOnOff('zenGardenBtn', 'zen garden', e => GameUtils.zenGardenOn = e)
+  }
+
+  private static async btnOff(btnId: string, text: string, fn: (input: boolean) => void) {
+    let btn = document.getElementById(btnId);
+    btn?.setAttribute('value', text + ' off');
+    fn(false);
   }
 
   private static async btnOnOff(btnId: string, text: string, fn: (input: boolean) => void) {

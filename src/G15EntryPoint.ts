@@ -1,4 +1,4 @@
-import { QTableGenerator } from './game-15-reconstruction/QTableGenerator';
+import { QTableGenerator } from './game-15-reconstruction/qtable/QTableGenerator';
 import { Utils } from './game-15-reconstruction/utils/Utils';
 // import { ConsoleUtils } from './utils/ConsoleUtils';
 

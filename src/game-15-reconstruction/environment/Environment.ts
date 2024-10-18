@@ -1,10 +1,10 @@
-import { Pair } from './utils/Pair';
 import { Action } from './Action';
-import { EnvironmentState } from './EnvironmentState';
-import { StateProducer } from './lessons/StateProducer';
-import { EnvironmentActionResult } from './EnvironmentActionResult';
+import { Pair } from '../utils/Pair';
+import { Utils } from '../utils/Utils';
 import { GameUtils } from './GameUtils';
-import { Utils } from './utils/Utils';
+import { EnvironmentState } from './EnvironmentState';
+import { StateProducer } from '../lessons/StateProducer';
+import { EnvironmentActionResult } from './EnvironmentActionResult';
 
 export class Environment {
     private state: EnvironmentState;

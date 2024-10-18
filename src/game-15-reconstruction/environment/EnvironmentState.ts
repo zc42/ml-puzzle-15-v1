@@ -1,4 +1,4 @@
-import { StateProducer } from './lessons/StateProducer';
+import { StateProducer } from '../lessons/StateProducer';
 
 export class EnvironmentState {
     private state: number[];

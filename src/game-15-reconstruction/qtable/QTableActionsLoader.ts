@@ -1,6 +1,6 @@
-import { Action } from './Action';
-import { EnvironmentState } from './EnvironmentState';
-import { FileLoader } from './utils/FileLoader';
+import { Action } from '../environment/Action';
+import { FileLoader } from '../utils/FileLoader';
+import { EnvironmentState } from '../environment/EnvironmentState';
 
 export class PretrainedDataLoader {
 

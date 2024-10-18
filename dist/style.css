@@ -193,6 +193,15 @@ button:hover {
     white-space: pre-wrap;
 }
 
+.console-text {
+    /* padding-left: 10px; */
+    color: #949292;
+    font-family: monospace;
+    /* padding: 10px; */
+    border-radius: 5px;
+    white-space: pre-wrap;
+}
+
 .console {
     /* background-color: #1e1e1e; */
     color: #dcdcdc;
