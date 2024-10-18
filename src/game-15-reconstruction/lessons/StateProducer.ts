@@ -1,6 +1,6 @@
-import { Utils } from './utils/Utils';
-import { StateShuffle } from './StateShuffle';
-import { Lesson, LessonsLoader } from './LessonsLoader';
+import { Utils } from '../utils/Utils';
+import { StateShuffle } from '../StateShuffle';
+import { Lesson, LessonsLoader } from '../LessonsLoader';
 
 export class StateProducer {
     private goals: number[];

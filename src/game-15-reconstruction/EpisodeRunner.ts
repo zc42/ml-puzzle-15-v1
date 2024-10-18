@@ -1,6 +1,6 @@
 import { QTableRow } from './QTableRow';
 import { Environment } from './Environment';
-import { StateProducer } from './StateProducer';
+import { StateProducer } from './lessons/StateProducer';
 import { ExperienceRecord } from './ExperienceRecord';
 import { QTableUpdater } from './QTableUpdater';
 import { Action } from './Action';
