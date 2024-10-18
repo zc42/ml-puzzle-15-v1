@@ -13,8 +13,8 @@ export class EnvironmentActionResult {
         reward: number = 0,
         isTerminal: boolean = false
     ) {
-        this.state = state; // Initialize with a default if not provided
-        this.action = action; // Assuming Action has a default like NONE
+        this.state = state; 
+        this.action = action; 
         this.reward = reward;
         this.isTerminal = isTerminal;
     }

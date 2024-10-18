@@ -1,25 +1,30 @@
+import { Utils } from '../utils/Utils';
 import { QTableRow } from './QTableRow';
-import { StateProducer } from './lessons/StateProducer';
-import { StateShuffle } from './StateShuffle';
-import { Environment } from './Environment';
-import { EnvironmentState } from './EnvironmentState';
-import { Action } from './Action';
-import { GameUtils } from './GameUtils';
+import { Action } from '../environment/Action';
+import { Semaphore } from '../utils/Semaphore';
 import { QTableUpdater } from './QTableUpdater';
-import { Utils } from './utils/Utils';
-import { ConsoleUtils } from './utils/ConsoleUtils';
 import { QTableGenerator } from './QTableGenerator';
-import { Semaphore } from './utils/Semaphore';
+import { ConsoleUtils } from '../utils/ConsoleUtils';
+import { GameUtils } from '../environment/GameUtils';
+import { StateShuffle } from '../lessons/StateShuffle';
+import { StateProducer } from '../lessons/StateProducer';
+import { Environment } from '../environment/Environment';
 import { PretrainedDataLoader } from './QTableActionsLoader';
+import { EnvironmentState } from '../environment/EnvironmentState';
+import { ConfigLoader, Config } from '../configuration/ConfigLoader';
 
 export class EpisodeTester {
 
     public static semaphore: Semaphore = new Semaphore();
     private semaphoreId: number | null = null;
-    public static usePreloadedActions: boolean = true;
+    public static usePreloadedActions: boolean;
     private static actionMap: Map<string, Action> | null = null;
 
     public async test() {
+
+        const config: Config = await ConfigLoader.getConfig();
+        EpisodeTester.usePreloadedActions = config.use_pretrained_data_while_testing;
+
         if (EpisodeTester.usePreloadedActions && EpisodeTester.actionMap === null)
             EpisodeTester.actionMap = await PretrainedDataLoader.getQTableActionMap();
 
@@ -123,16 +128,21 @@ export class EpisodeTester {
                     ? GameUtils.getFirstPossibleActionOrD(state, reverseAction)
                     : action;
             }
+        } else {
+            const state0Hash = state.getHashCodeV2();
+            QTableUpdater.addStateWithZeroValuesToQTableIfStateNotExist(qTable, state);
+            const qTableRow = qTable.get(state0Hash);
+            if (qTableRow) {
+                return qTableRow.getActionWithMaxValue(reverseAction);
+            }
+            else {
+                if (!GameUtils.zenGardenOn) Utils.prnt('no action found');
+                return GameUtils.getFirstPossibleActionOrD(state, reverseAction);
+            }
         }
-
-        const state0Hash = state.getHashCodeV2();
-        QTableUpdater.addStateWithZeroValuesToQTableIfStateNotExist(qTable, state);
-        const qTableRow = qTable.get(state0Hash);
-        if (qTableRow) return qTableRow.getActionWithMaxValue(reverseAction);
-        else {
-            if (!GameUtils.zenGardenOn) Utils.prnt('no action found');
-            return GameUtils.getFirstPossibleActionOrD(state, reverseAction);
-        }
+        //nesamone kazkokia .. kad sito butinai reikia, 
+        //yra gi tas returnas.. paskutinis else unconditional .. :\
+        return Action.D;
     }
 
     private static prntState(state: EnvironmentState): void {

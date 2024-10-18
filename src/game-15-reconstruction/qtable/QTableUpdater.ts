@@ -1,6 +1,6 @@
-import { Action } from './Action'; // Adjust the import according to your project structure
-import { EnvironmentState } from './EnvironmentState'; // Adjust the import according to your project structure
-import { QTableRow } from './QTableRow'; // Adjust the import according to your project structure
+import { QTableRow } from './QTableRow'; 
+import { Action } from '../environment/Action'; 
+import { EnvironmentState } from '../environment/EnvironmentState';
 
 export class QTableUpdater {
 

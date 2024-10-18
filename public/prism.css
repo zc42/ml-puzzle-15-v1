@@ -81,30 +81,43 @@
      opacity: .7;
  }
 
- .token.property,
+ .token.string {
+     color: #A01417;
+ }
+
+ .token {
+     font-family: monospace;
+ }
+
+
+ .token.boolean {
+     color: #0038FA;
+ }
+
+ .token.number {
+     color: #24855A;
+ }
+
+
+ .token.property {
+     /* color: #0056A3 */
+     color: #0452a5da;
+ }
+
  .token.tag,
- .token.boolean,
- .token.number,
  .token.constant,
  .token.symbol,
  .token.deleted {
      color: #0452a5da;
-     font-family: monospace;
  }
 
- .token.number {
-     color: #065236;
-     font-family: monospace;
- }
 
  .token.selector,
  .token.attr-name,
- .token.string,
  .token.char,
  .token.builtin,
  .token.inserted {
      color: rgba(32, 22, 146, 0.788);
-     font-family: monospace;
  }
 
  .token.operator,

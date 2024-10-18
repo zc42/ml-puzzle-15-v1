@@ -1,15 +1,14 @@
-import { QTableRow } from './QTableRow';
-import { Environment } from './Environment';
-import { StateProducer } from './lessons/StateProducer';
-import { ExperienceRecord } from './ExperienceRecord';
-import { QTableUpdater } from './QTableUpdater';
-import { Action } from './Action';
-import { EnvironmentActionResult } from './EnvironmentActionResult';
-import { Utils } from './utils/Utils';
-import { ConsoleUtils } from './utils/ConsoleUtils';
-import { GameUtils } from './GameUtils';
 import { Trainer } from './Trainer';
-
+import { Utils } from '../utils/Utils';
+import { QTableRow } from './QTableRow';
+import { Action } from '../environment/Action';
+import { QTableUpdater } from './QTableUpdater';
+import { GameUtils } from '../environment/GameUtils';
+import { ConsoleUtils } from '../utils/ConsoleUtils';
+import { ExperienceRecord } from './ExperienceRecord';
+import { Environment } from '../environment/Environment';
+import { StateProducer } from '../lessons/StateProducer';
+import { EnvironmentActionResult } from '../environment/EnvironmentActionResult';
 
 export class EpisodeRunner {
     public static experience: Set<ExperienceRecord> = new Set();

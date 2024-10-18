@@ -1,9 +1,9 @@
-import { Pair } from './utils/Pair';
-import { QTableRow } from './QTableRow';
+import { Pair } from '../utils/Pair';
+import { QTableRow } from '../qtable/QTableRow';
 import { Environment } from './Environment';
 import { EnvironmentState } from './EnvironmentState';
 import { Action } from './Action';
-import { ConsoleUtils } from './utils/ConsoleUtils';
+import { ConsoleUtils } from '../utils/ConsoleUtils';
 
 export class GameUtils {
     public static zenGardenOn: boolean = false;

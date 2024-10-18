@@ -1,4 +1,5 @@
 import { FileLoader } from '../utils/FileLoader';
+import { JsonUpdateStatus } from '../utils/JsonEditor';
 
 export interface Lesson {
     lesson: number;
@@ -6,11 +7,6 @@ export interface Lesson {
     lockedElements?: number[];
     freeCellStartingPositions?: number[];
     lessonsToGenerate?: number;
-}
-
-export interface LessonsUpdateStatus {
-    updated: boolean;
-    messgae: string;
 }
 
 export class LessonsLoader {
@@ -21,7 +17,6 @@ export class LessonsLoader {
     public static async getLessons(): Promise<Lesson[]> {
         if (this.lessons !== undefined) return this.lessons;
         let jsonString = await this.getLessonsJson();
-        console.log('lessons loaded')
         try {
             this.lessons = JSON.parse(jsonString);
             this.lessons.sort((o1, o2) => o1.lesson - o2.lesson);
@@ -42,7 +37,7 @@ export class LessonsLoader {
             : this.lessonsJson;
     }
 
-    public static updateLessonsJson(jsonString: string): LessonsUpdateStatus {
+    public static updateLessonsJson(jsonString: string): JsonUpdateStatus {
         try {
             let lessons: Lesson[] = JSON.parse(jsonString);
             lessons.sort((o1, o2) => o1.lesson - o2.lesson);
@@ -50,14 +45,14 @@ export class LessonsLoader {
             this.lessons = lessons;
 
             return {
-                updated: true,
+                success: true,
                 messgae: 'Lessons updated successfully.'
             };
 
         } catch (error) {
             console.error('Invalid JSON string:', error);
             return {
-                updated: false,
+                success: false,
                 messgae: 'Invalid JSON string: ' + error
             };
 
