@@ -1,6 +1,6 @@
 import { Utils } from '../utils/Utils';
 import { StateShuffle } from '../StateShuffle';
-import { Lesson, LessonsLoader } from '../LessonsLoader';
+import { Lesson, LessonsLoader } from './LessonsLoader';
 
 export class StateProducer {
     private goals: number[];
@@ -214,8 +214,18 @@ export class StateProducer {
         o.state = [...lockedStateElements, ...v0];
     }
 
-    public resetState(): void {
+    //old .. biski nesamone kad .. generuoju auksciau .. o poto environment'e vel is naujo ta pati darau
+    public resetStateV0(): void {
         const o = StateProducer.generateLessons()[this.lessonNb];
+        this.goals = [...o.goals];
+        this.lockedStateElements = [...o.lockedStateElements];
+        this.state = [...o.state];
+    }
+
+    // ~ .. biski nesamone kad .. generuoju auksciau .. o poto environment'e vel is naujo ta pati darau
+    public async resetState(): Promise<void> {
+        const stateProducers = await StateProducer.getStateProducersFromJson();
+        const o = stateProducers[this.lessonNb];
         this.goals = [...o.goals];
         this.lockedStateElements = [...o.lockedStateElements];
         this.state = [...o.state];

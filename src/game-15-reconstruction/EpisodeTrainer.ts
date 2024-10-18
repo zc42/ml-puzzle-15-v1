@@ -14,7 +14,7 @@ import { Trainer } from './Trainer';
 export class EpisodeRunner {
     public static experience: Set<ExperienceRecord> = new Set();
 
-    public async runEpisode(
+    public async train(
         stateProducer: StateProducer,
         qTable: Map<number, QTableRow>,
         discount: number,

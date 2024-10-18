@@ -1,12 +1,12 @@
 import { QTableRow } from './QTableRow';
 import { StateProducer } from './lessons/StateProducer';
-import { EpisodeRunner } from './EpisodeRunner';
+import { EpisodeRunner as EpisodeTrainer } from './EpisodeTrainer';
 import { Utils } from './utils/Utils';
 import { Semaphore } from './utils/Semaphore';
 
 export class Trainer {
 
-    private episodeRunner: EpisodeRunner = new EpisodeRunner();
+    private episodeTrainer: EpisodeTrainer = new EpisodeTrainer();
     public static semaphore: Semaphore = new Semaphore();
     private semaphoreId: number | null = null;
 
@@ -17,15 +17,14 @@ export class Trainer {
         if (!Trainer.semaphore.goodToGo(this.semaphoreId)) return;
         //----------------------------------
 
-        EpisodeRunner.experience.clear();
+        EpisodeTrainer.experience.clear();
 
         const discount = 0.9;
         const learningRate = 0.1;
-        // const lessons = StateProducer.generateLessons();
         const lessons = await StateProducer.getStateProducersFromJson();
 
         const episodeRunnerF = async (stateProducer: StateProducer, trainerInfo: string): Promise<void> => {
-            await this.episodeRunner.runEpisode(stateProducer, qTable, discount, learningRate, trainerInfo, this.semaphoreId);
+            await this.episodeTrainer.train(stateProducer, qTable, discount, learningRate, trainerInfo, this.semaphoreId);
         };
 
         const stateProducerConsumer = async (stateProducer: StateProducer, trainerInfo: string): Promise<void> => {

@@ -21,7 +21,7 @@ export class Environment {
     constructor(stateProducer: StateProducer) {
         Environment.stateProducer = stateProducer;
 
-        Environment.stateProducer.resetState();
+        Environment.stateProducer.resetState().then();
         const state = Environment.stateProducer.getState();
         this.goals = Environment.stateProducer.getGoals();
         this.state = new EnvironmentState(state, Environment.stateProducer);
