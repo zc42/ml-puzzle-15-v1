@@ -50,7 +50,7 @@ export class EpisodeTester {
         //----------------------------------
 
         let lessonNo = 0;
-        const lessons = StateProducer.generateLessons();
+        const lessons = await StateProducer.getStateProducersFromJson();
         const lessonCount = lessons.length;
         let stateProducer = lessons[lessonNo];
         let v = StateShuffle.shuffle(StateProducer.stateDone, [], 1000);
