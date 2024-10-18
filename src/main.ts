@@ -3,7 +3,7 @@ import { ConsoleUtils } from './game-15-reconstruction/utils/ConsoleUtils';
 import { QTableGenerator } from './game-15-reconstruction/QTableGenerator';
 import { GameUtils } from './game-15-reconstruction/GameUtils';
 import { EpisodeTester } from './game-15-reconstruction/EpisodeTester';
-import { LessonsEditor } from './game-15-reconstruction/utils/LessonsEditor';
+import { LessonsEditor } from './game-15-reconstruction/lessons/LessonsEditor';
 
 export class ToolBox {
 

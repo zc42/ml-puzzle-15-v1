@@ -1,4 +1,4 @@
-import { StateProducer } from './StateProducer';
+import { StateProducer } from './lessons/StateProducer';
 import { GameUtils } from './GameUtils';
 import { Utils } from './utils/Utils';
 // import { Action } from './Action';

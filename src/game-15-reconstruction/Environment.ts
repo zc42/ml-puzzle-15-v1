@@ -1,7 +1,7 @@
 import { Pair } from './utils/Pair';
 import { Action } from './Action';
 import { EnvironmentState } from './EnvironmentState';
-import { StateProducer } from './StateProducer';
+import { StateProducer } from './lessons/StateProducer';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
 import { GameUtils } from './GameUtils';
 import { Utils } from './utils/Utils';

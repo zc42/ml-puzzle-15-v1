@@ -1,5 +1,5 @@
 import { QTableRow } from './QTableRow';
-import { StateProducer } from './StateProducer';
+import { StateProducer } from './lessons/StateProducer';
 import { EpisodeRunner } from './EpisodeRunner';
 import { Utils } from './utils/Utils';
 import { Semaphore } from './utils/Semaphore';

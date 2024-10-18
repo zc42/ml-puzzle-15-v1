@@ -1,5 +1,5 @@
 import { QTableRow } from './QTableRow';
-import { StateProducer } from './StateProducer';
+import { StateProducer } from './lessons/StateProducer';
 import { StateShuffle } from './StateShuffle';
 import { Environment } from './Environment';
 import { EnvironmentState } from './EnvironmentState';
