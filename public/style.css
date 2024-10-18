@@ -203,3 +203,7 @@ button:hover {
     overflow-y: auto;
     white-space: pre-wrap;
 }
+
+#lessonsTextarea {
+  spellcheck: false; /* Disable spell check */
+}

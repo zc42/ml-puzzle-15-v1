@@ -79,10 +79,10 @@ export class GameUtils {
     
     public static stateAsString(state: number[], goals: number[]): string {
         if (this.zenGardenOn) return this.getStateAsZenStoneGarden(state, goals);
-        else return this._stateAsString(state, goals);
+        else return this.getStateAsString(state, goals);
     }
 
-    public static _stateAsString(state: number[], goals: number[]): string {
+    public static getStateAsString(state: number[], goals: number[]): string {
         return Array.from({ length: 16 }, (_, e) => {
             let v: string;
             const o = state[e];
@@ -105,15 +105,15 @@ export class GameUtils {
             let v: string;
             const o = state[e];
 
-            // if (o === -1) v = ".";
+            // if (o === -1) v = "::";
             // else 
-            if (goals.includes(o)) v = "x";
-            else if (goals.includes(e + 1)) v = "o";
-            else v = "";
+            if (goals.includes(o)) v = 'x';
+            else if (goals.includes(e + 1)) v = 'o';
+            else v = '';
 
-            v += "\t";
+            v += '\t';
             if (e !== 0 && (e + 1) % 4 === 0) {
-                v += "\n";
+                v += '\n';
             }
             return v;
         }).join('');

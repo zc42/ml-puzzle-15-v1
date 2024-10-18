@@ -17,9 +17,12 @@ export class Trainer {
         if (!Trainer.semaphore.goodToGo(this.semaphoreId)) return;
         //----------------------------------
 
+        EpisodeRunner.experience.clear();
+
         const discount = 0.9;
         const learningRate = 0.1;
-        const lessons = StateProducer.generateLessons();
+        // const lessons = StateProducer.generateLessons();
+        const lessons = await StateProducer.getStateProducersFromJson();
 
         const episodeRunnerF = async (stateProducer: StateProducer, trainerInfo: string): Promise<void> => {
             await this.episodeRunner.runEpisode(stateProducer, qTable, discount, learningRate, trainerInfo, this.semaphoreId);
