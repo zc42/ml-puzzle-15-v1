@@ -1,7 +1,7 @@
-import { GameUtils } from './game-15-reconstruction/environment/GameUtils';
 import { Tester } from './game-15-reconstruction/qtable/Tester';
+import { EntryPoint } from './game-15-reconstruction/qtable/EntryPoint';
+import { GameUtils } from './game-15-reconstruction/environment/GameUtils';
 import { ConsoleUtils } from './game-15-reconstruction/utils/ConsoleUtils';
-import { QTableGenerator } from './game-15-reconstruction/qtable/QTableGenerator';
 import { LessonsEditor } from './game-15-reconstruction/lessons/LessonsEditor';
 import { ConfigEditor } from './game-15-reconstruction/configuration/ConfigEditor';
 
@@ -18,16 +18,16 @@ export class ToolBox {
   }
 
   private static async startTraining() {
-    QTableGenerator.stopTester();
+    EntryPoint.stopTester();
     ConsoleUtils.clearScreen();
-    await QTableGenerator.train();
+    await EntryPoint.train();
     await ToolBox.startTesting();
   }
 
   private static async startTesting() {
-    QTableGenerator.stopTrainer();
+    EntryPoint.stopTrainer();
     ConsoleUtils.clearScreen();
-    await QTableGenerator.test();
+    await EntryPoint.test();
   }
 
   private static async configOnOff() {

@@ -8,7 +8,7 @@ export class Semaphore {
         return this.id;
     }
 
-    public disable() {
+    public stop() {
         this.enabled = false;
     }
 

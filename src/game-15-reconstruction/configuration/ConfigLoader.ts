@@ -1,4 +1,6 @@
+import { Tester } from '../qtable/Tester';
 import { FileLoader } from '../utils/FileLoader';
+import { EntryPoint } from '../qtable/EntryPoint';
 import { JsonUpdateStatus } from '../utils/JsonEditor';
 
 export interface Config {
@@ -38,11 +40,13 @@ export class ConfigLoader {
             : this.configJson;
     }
 
-    public static updateLessonsJson(jsonString: string): JsonUpdateStatus {
+    public static async updateConfigJson(jsonString: string): Promise<JsonUpdateStatus> {
         try {
             let config: Config = JSON.parse(jsonString);
             this.configJson = jsonString;
             this.config = config;
+
+            await ConfigLoader.updateTester();
 
             return {
                 success: true,
@@ -55,7 +59,12 @@ export class ConfigLoader {
                 success: false,
                 messgae: 'Invalid JSON string: ' + error
             };
-
         }
+    }
+
+    private static async updateTester() {
+        const usePretrainedData = this.config.use_pretrained_data_while_testing;
+        if (Tester.usePreloadedActions === usePretrainedData) return;
+        await EntryPoint.restartIfIsRunning();
     }
 }

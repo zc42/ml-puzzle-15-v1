@@ -10,28 +10,18 @@ export class JsonEditor {
 
     private static divLine: string = '--------------------------------------------------------------------------------------------------';
 
-    // public static toggleJsonEditor(
-    //     show: boolean,
-    //     getJsonFn: () => string,
-    //     updateJsonFn: (jsonContent: string) => JsonUpdateStatus
-    // ): void {
-    //     if (show) this.show(getJsonFn, updateJsonFn);
-    //     else document.getElementById('jsonEditor')?.remove();
-    // }
-
     public static close(): void {
         document.getElementById('jsonEditor')?.remove();
     }
 
     public static show(
         jsonContent: string,
-        updateJsonFn: (jsonContent: string) => JsonUpdateStatus
+        updateJsonFn: (jsonContent: string) => Promise<JsonUpdateStatus>
     ): void {
 
         const toolsDiv = document.getElementById('tools');
         if (!toolsDiv) return;
 
-        // const jsonContent = getJsonFn();
         //remove preveios jsonEditor div, if there is one
         document.getElementById('jsonEditor')?.remove();
 
@@ -56,16 +46,17 @@ export class JsonEditor {
         beginLineDiv.textContent = this.divLine;
         endLineDiv.textContent = this.divLine;
 
-        const codeJar = CodeJar(contentDiv, e => this.update(jsonContent, e, statusDiv, updateJsonFn));
+        const fn = async (jsonElement: HTMLElement) => this.update(jsonContent, jsonElement, statusDiv, updateJsonFn)
+        const codeJar = CodeJar(contentDiv, fn);
         codeJar.updateCode(jsonContent);
     }
 
-    private static update(
+    private static async update(
         jsonContent: string,
         jsonElement: HTMLElement,
         updateStatusDiv: HTMLElement,
-        updateJsonFn: (jsonContent: string) => JsonUpdateStatus
-    ): void {
+        updateJsonFn: (jsonContent: string) => Promise<JsonUpdateStatus>
+    ): Promise<void> {
         if (jsonElement.textContent === null) return;
 
         let newJsonContent = jsonElement.textContent;
@@ -73,7 +64,7 @@ export class JsonEditor {
 
         if (newJsonContent === jsonContent) return;
 
-        let updateResult = updateJsonFn(newJsonContent);
+        let updateResult = await updateJsonFn(newJsonContent);
         updateStatusDiv.textContent = updateResult.messgae;
     }
 }

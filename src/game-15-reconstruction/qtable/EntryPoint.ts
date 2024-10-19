@@ -2,14 +2,14 @@ import { Trainer } from './Trainer';
 import { QTableRow } from './QTableRow';
 import { Tester } from './Tester';
 
-export class QTableGenerator {
+export class EntryPoint {
     public static qTable = new Map<number, QTableRow>();
     private static trainer: Trainer | null = null;
     private static tester: Tester | null = null;
 
     public static async train() {
         this.trainer = new Trainer();
-        await this.trainer.train(QTableGenerator.qTable, 10);
+        await this.trainer.train(EntryPoint.qTable, 10);
     }
 
     public static async test() {
@@ -23,5 +23,11 @@ export class QTableGenerator {
 
     public static async stopTester() {
         this.tester?.stop();
+    }
+
+    public static async restartIfIsRunning() {
+        if (!Tester.semaphore.isEnabled) return;
+        await this.stopTester();
+        await this.test();
     }
 }

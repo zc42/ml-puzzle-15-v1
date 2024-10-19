@@ -27,6 +27,7 @@ export class GameUtils {
         const v = newState[i1];
         newState[i0] = v;
         newState[i1] = hole;
+
         return newState;
     }
 
@@ -42,7 +43,7 @@ export class GameUtils {
 
     public static _getValidMoves(index: number): Action[] {
         const xy = this.getXY(index);
-        const moves = Object.values(Action).slice(); // Clone Action enum values
+        const moves = Object.values(Action).slice();
 
         if (xy.getKey() === 0) moves.splice(moves.indexOf(Action.L), 1);
         if (xy.getKey() === 3) moves.splice(moves.indexOf(Action.R), 1);
@@ -76,7 +77,7 @@ export class GameUtils {
         return fixedStateIndexes.includes(this.getIndex(x, y));
     }
 
-    
+
     public static stateAsString(state: number[], goals: number[]): string {
         if (this.zenGardenOn) return this.getStateAsZenStoneGarden(state, goals);
         else return this.getStateAsString(state, goals);
@@ -132,23 +133,28 @@ export class GameUtils {
                         : null;
     }
 
-    public static getAction(qTable: Map<number, QTableRow>, currentState: EnvironmentState, lastAction: Action | null): Action {
-        const hash = currentState.getHashCodeV2();
-        let possibleActions = Environment.getPossibleActions(currentState);
-        possibleActions = possibleActions.filter(action => action !== lastAction);
-        return qTable.has(hash)
-            ? qTable.get(hash)?.getActionWithMaxValue(lastAction) || Action.D
-            : this.getRandomAction(possibleActions);
+    public static getAction(qTable: Map<number, QTableRow>, state: EnvironmentState, lastAction: Action | null): Action {
+        const hash = state.getHashCodeV2();
+        if (qTable.has(hash)) {
+            let row: QTableRow | undefined = qTable.get(hash);
+            if (row === undefined) throw new Error('qTable.has(hash) == true, but get(..) returned row == undefined');
+            return row.getActionWithMaxValue(lastAction);
+        } else {
+            return this.getFirstPossibleAction(state, lastAction);
+        }
     }
 
     public static getRandomAction(possibleActions: Action[]): Action {
+        if (possibleActions.length === 0)
+            throw new Error('possibleActions.length === 0, there allways must be some action to go around.. need to debug.');
         return possibleActions.length > 0
             ? possibleActions[Math.floor(Math.random() * possibleActions.length)]
             : Action.D;
     }
 
-    public static getFirstPossibleActionOrD(state: EnvironmentState, reverseAction: Action | null): Action {
+    public static getFirstPossibleAction(state: EnvironmentState, reverseAction: Action | null): Action {
         const possibleActions = Environment.getPossibleActions(state).filter(action => action !== reverseAction);
-        return possibleActions.length > 0 ? possibleActions[0] : Action.D; // Default action
+        if (possibleActions.length === 0) throw new Error('possibleActions.length === 0, there allways must be some action to go around.. need to debug.');
+        return possibleActions[0];
     }
 }

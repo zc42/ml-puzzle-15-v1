@@ -1,9 +1,9 @@
 import { Utils } from '../utils/Utils';
 import { QTableRow } from './QTableRow';
+import { EntryPoint } from './EntryPoint';
 import { Action } from '../environment/Action';
 import { Semaphore } from '../utils/Semaphore';
 import { QTableUpdater } from './QTableUpdater';
-import { QTableGenerator } from './QTableGenerator';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { GameUtils } from '../environment/GameUtils';
 import { StateShuffle } from '../lessons/StateShuffle';
@@ -20,7 +20,7 @@ export class Tester {
     public static usePreloadedActions: boolean;
     private static actionMap: Map<string, Action> | null = null;
 
-    public async test() {
+    public async test(): Promise<void> {
 
         const config: Config = await ConfigLoader.getConfig();
         Tester.usePreloadedActions = config.use_pretrained_data_while_testing;
@@ -33,7 +33,7 @@ export class Tester {
         if (!Tester.semaphore.goodToGo(this.semaphoreId)) return;
         //----------------------------------
 
-        const qTable = QTableGenerator.qTable
+        const qTable = EntryPoint.qTable
         const stats = Tester.getStatistics(qTable);
         Utils.prnt(stats);
 
@@ -46,7 +46,7 @@ export class Tester {
     }
 
     public stop(): void {
-        Tester.semaphore.disable();
+        Tester.semaphore.stop();
     }
 
     private async testQTable(qTable: Map<number, QTableRow>) {
@@ -93,10 +93,6 @@ export class Tester {
                 lessonNo++;
                 stateProducer = lessons[lessonNo];
                 goals = stateProducer.getGoals();
-                // if (!GameUtils.zenGardenOn) {
-                //     Utils.prnt(`lesson change: ${lessonNo}`);
-                //     Utils.prnt(goals);
-                // }
                 state = new EnvironmentState(state.getState(), stateProducer);
             }
         }
@@ -123,11 +119,14 @@ export class Tester {
             let key = PretrainedDataLoader.getStateActionKey(state);
             if (Tester.actionMap?.has(key)) {
                 let action = Tester.actionMap.get(key);
-                if (!GameUtils.zenGardenOn && action === undefined) Utils.prnt('no action found');
+                if (action === undefined) ConsoleUtils.prntErrorMsg('no action found');
                 return action === undefined
-                    ? GameUtils.getFirstPossibleActionOrD(state, reverseAction)
+                    ? GameUtils.getFirstPossibleAction(state, reverseAction)
                     : action;
             }
+            let action = GameUtils.getFirstPossibleAction(state, reverseAction);
+            ConsoleUtils.prntErrorMsg('no action for current state was found, first posible action is: ' + action);
+            return action;
         } else {
             const state0Hash = state.getHashCodeV2();
             QTableUpdater.addStateWithZeroValuesToQTableIfStateNotExist(qTable, state);
@@ -136,13 +135,10 @@ export class Tester {
                 return qTableRow.getActionWithMaxValue(reverseAction);
             }
             else {
-                if (!GameUtils.zenGardenOn) Utils.prnt('no action found');
-                return GameUtils.getFirstPossibleActionOrD(state, reverseAction);
+                ConsoleUtils.prntErrorMsg('no action found');
+                return GameUtils.getFirstPossibleAction(state, reverseAction);
             }
         }
-        //nesamone kazkokia .. kad sito butinai reikia, 
-        //yra gi tas returnas.. paskutinis else unconditional .. :\
-        return Action.D;
     }
 
     private static prntState(state: EnvironmentState): void {

@@ -1,3 +1,5 @@
+import { GameUtils } from "../environment/GameUtils";
+
 export class ConsoleUtils {
 
     public static blue(text: string): string {
@@ -23,7 +25,17 @@ export class ConsoleUtils {
 
     public static prntStatsInfo(message: string) {
         const element = document.getElementById('statsInfo');
-        if (element) element.textContent = '\n' + message.toLowerCase().replace(", ", " | ");
+        if (!element) return;
+        element.setAttribute('class', "console-text");
+        element.textContent = '\n' + message.toLowerCase().replace(", ", " | ");
+    }
+
+    public static prntErrorMsg(message: string) {
+        if(GameUtils.zenGardenOn) return;
+        const element = document.getElementById('statsInfo');
+        if (!element) return;
+        element.setAttribute('class', "console-error-msg");
+        element.textContent = '\n' + message;
     }
 
     private static addElementToConsoleDiv(id: string, text: string) {
@@ -48,14 +60,6 @@ export class ConsoleUtils {
 
     public static warn(message: string) {
         this.prnt(message, "color: orange;");
-    }
-
-    public static testPrint() {
-        // Example usage of the printToUtils.prnt function
-        this.prnt("Hello, World!");
-        this.prnt("Error: Something went wrong!", "color: red;");
-        this.prnt("Info: This is some information.", "color: #00ff00;");
-        this.prnt("Warning: Be careful!", "color: orange;");
     }
 }
 

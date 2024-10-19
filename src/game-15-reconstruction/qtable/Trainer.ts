@@ -43,11 +43,10 @@ export class Trainer {
                 await stateProducerConsumer(lesson, lessonInfo, trainerInfo);
             }
         }
-
         Utils.prnt('training done');
     }
 
     public stop(): void {
-        Trainer.semaphore.disable();
+        Trainer.semaphore.stop();
     }
 }

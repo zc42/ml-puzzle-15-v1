@@ -30,7 +30,6 @@ export class EpisodeRunner {
         const environment = new Environment(stateProducer);
         environment.reset();
         let state0 = environment.getInitState();
-        // environment.prntInfo();
 
         const epsilon = 0.5;
         let isTerminal = false;
@@ -51,23 +50,13 @@ export class EpisodeRunner {
             }
 
             if (Math.random() < epsilon) { // Explore
-                // Utils.prnt("\nrndm move");
                 action = GameUtils.getRandomAction(possibleActions);
             } else { // Exploit
-                // Utils.prnt("\nqTable move");
                 action = GameUtils.getAction(qTable, state0, environment.reverseAction);
-
-                if (!possibleActions.includes(action)) {
-                    action = GameUtils.getAction(qTable, state0, environment.reverseAction);
-                }
             }
-
-            // Utils.prnt("\n\n------------------------------------------------------------------\n");
-            // Utils.prnt("\naction: " + action);
 
             const result: EnvironmentActionResult = environment.executeAction(state0, action);
             const state1 = result.state;
-            // environment.prntInfo();
 
             const reward = result.reward;
             isTerminal = result.isTerminal;
@@ -81,8 +70,7 @@ export class EpisodeRunner {
             state0 = result.state;
         }
 
-        // show progress some how
-        // one way ~ EpisodeTester. ??
+        //todo: show progress some how - .. EpisodeTester. ??
 
         EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, 10000);
         if (EpisodeRunner.experience.size > 10000) EpisodeRunner.experience.clear();
@@ -106,8 +94,8 @@ export class EpisodeRunner {
         sampleSize: number
     ): void {
         const sampledExperience = Array.from(experience)
-            .sort(() => Math.random() - 0.5) // Shuffle
-            .slice(0, sampleSize); // Limit to sampleSize
+            .sort(() => Math.random() - 0.5)
+            .slice(0, sampleSize);
 
         sampledExperience.forEach(e => {
             QTableUpdater.updateQTable(

@@ -32,12 +32,18 @@ export class QTableRow {
     }
 
     public getActionWithMaxValue(reverseAction: Action | null): Action {
-        const possibleActions = Environment.getPossibleActions(this.state).filter(action => action !== reverseAction);
+
         const actionOption = reverseAction === null ? null : this.getAction(reverseAction);
 
         if (actionOption === null || actionOption === undefined) {
-            // ConsoleUtils.warn("WARNING: no action found");
-            return possibleActions.length > 0 ? possibleActions[0] : Action.D; // Default action
+            const possibleActions = Environment
+                .getPossibleActions(this.state)
+                .filter(action => action !== reverseAction);
+
+            if (possibleActions.length === 0)
+                throw new Error('possibleActions.length === 0, there allways must be some action to go around.. need to debug.');
+
+            return possibleActions[0];
         } else {
             return actionOption;
         }

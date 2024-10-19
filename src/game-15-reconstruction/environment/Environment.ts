@@ -2,6 +2,7 @@ import { Action } from './Action';
 import { Pair } from '../utils/Pair';
 import { Utils } from '../utils/Utils';
 import { GameUtils } from './GameUtils';
+import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { EnvironmentState } from './EnvironmentState';
 import { StateProducer } from '../lessons/StateProducer';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
@@ -94,9 +95,13 @@ export class Environment {
     }
 
     public static _isTerminalSuccess(newState: number[], goals: number[]): boolean {
-        if (newState.length !== 16) throw new Error("newState.size() != 16");
-
-        return goals.filter(e => newState[e - 1] === e).length === goals.length;
+        if (newState.length !== 16) {
+            ConsoleUtils.prntErrorMsg("newState.size() != 16");
+            return false;
+        }
+        return goals
+            .filter(e => newState[e - 1] === e)
+            .length === goals.length;
     }
 
     public prntInfo(): void {
@@ -128,10 +133,6 @@ export class Environment {
         }
 
         const d1Sum = goals.reduce((acc, e) => acc + this.getDistance(GameUtils.getXY(state.indexOf(e)), xyh), 0);
-
-        // Utils.prnt(`d0Sum: ${d0Sum}`);
-        // Utils.prnt(`d1Sum: ${d1Sum}`);
-
         return 1 / (d0Sum + d1Sum);
     }
 
