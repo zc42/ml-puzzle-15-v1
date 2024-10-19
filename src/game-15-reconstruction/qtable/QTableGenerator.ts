@@ -1,11 +1,11 @@
 import { Trainer } from './Trainer';
 import { QTableRow } from './QTableRow';
-import { EpisodeTester } from './EpisodeTester';
+import { Tester } from './Tester';
 
 export class QTableGenerator {
     public static qTable = new Map<number, QTableRow>();
     private static trainer: Trainer | null = null;
-    private static tester: EpisodeTester | null = null;
+    private static tester: Tester | null = null;
 
     public static async train() {
         this.trainer = new Trainer();
@@ -13,7 +13,7 @@ export class QTableGenerator {
     }
 
     public static async test() {
-        this.tester = new EpisodeTester();
+        this.tester = new Tester();
         await this.tester.test();
     }
 

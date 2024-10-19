@@ -129,8 +129,8 @@ export class Environment {
 
         const d1Sum = goals.reduce((acc, e) => acc + this.getDistance(GameUtils.getXY(state.indexOf(e)), xyh), 0);
 
-        Utils.prnt(`d0Sum: ${d0Sum}`);
-        Utils.prnt(`d1Sum: ${d1Sum}`);
+        // Utils.prnt(`d0Sum: ${d0Sum}`);
+        // Utils.prnt(`d1Sum: ${d1Sum}`);
 
         return 1 / (d0Sum + d1Sum);
     }

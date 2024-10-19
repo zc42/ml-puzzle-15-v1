@@ -1,5 +1,5 @@
 import { GameUtils } from './game-15-reconstruction/environment/GameUtils';
-import { EpisodeTester } from './game-15-reconstruction/qtable/EpisodeTester';
+import { Tester } from './game-15-reconstruction/qtable/Tester';
 import { ConsoleUtils } from './game-15-reconstruction/utils/ConsoleUtils';
 import { QTableGenerator } from './game-15-reconstruction/qtable/QTableGenerator';
 import { LessonsEditor } from './game-15-reconstruction/lessons/LessonsEditor';
@@ -41,7 +41,7 @@ export class ToolBox {
   }
 
   private static async usePretrainedOnOff() {
-    this.btnOnOff('pretrainedBtn', 'use pretrained', e => EpisodeTester.usePreloadedActions = e)
+    this.btnOnOff('pretrainedBtn', 'use pretrained', e => Tester.usePreloadedActions = e)
   }
 
   private static async zenGardenOnOff() {

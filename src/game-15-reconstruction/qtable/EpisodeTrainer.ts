@@ -30,7 +30,7 @@ export class EpisodeRunner {
         const environment = new Environment(stateProducer);
         environment.reset();
         let state0 = environment.getInitState();
-        environment.prntInfo();
+        // environment.prntInfo();
 
         const epsilon = 0.5;
         let isTerminal = false;
@@ -51,10 +51,10 @@ export class EpisodeRunner {
             }
 
             if (Math.random() < epsilon) { // Explore
-                Utils.prnt("\nrndm move");
+                // Utils.prnt("\nrndm move");
                 action = GameUtils.getRandomAction(possibleActions);
             } else { // Exploit
-                Utils.prnt("\nqTable move");
+                // Utils.prnt("\nqTable move");
                 action = GameUtils.getAction(qTable, state0, environment.reverseAction);
 
                 if (!possibleActions.includes(action)) {
@@ -62,12 +62,12 @@ export class EpisodeRunner {
                 }
             }
 
-            Utils.prnt("\n\n------------------------------------------------------------------\n");
-            Utils.prnt("\naction: " + action);
+            // Utils.prnt("\n\n------------------------------------------------------------------\n");
+            // Utils.prnt("\naction: " + action);
 
             const result: EnvironmentActionResult = environment.executeAction(state0, action);
             const state1 = result.state;
-            environment.prntInfo();
+            // environment.prntInfo();
 
             const reward = result.reward;
             isTerminal = result.isTerminal;
@@ -81,17 +81,20 @@ export class EpisodeRunner {
             state0 = result.state;
         }
 
+        // show progress some how
+        // one way ~ EpisodeTester. ??
+
         EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, 10000);
         if (EpisodeRunner.experience.size > 10000) EpisodeRunner.experience.clear();
 
         const statsInfo = `QTable size: ${qTable.size}, experience size: ${EpisodeRunner.experience.size}`;
         Utils.prnt("\n");
-        await Utils.sleep(0);
+        // await Utils.sleep(0);
         Utils.prnt(trainerInfo);
         Utils.prnt(statsInfo);
         ConsoleUtils.prntStatsInfo(statsInfo);
 
-        await Utils.sleep(500);
+        await Utils.sleep(0);
         ConsoleUtils.clearScreen();
     }
 

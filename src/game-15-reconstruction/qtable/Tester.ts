@@ -13,7 +13,7 @@ import { PretrainedDataLoader } from './QTableActionsLoader';
 import { EnvironmentState } from '../environment/EnvironmentState';
 import { ConfigLoader, Config } from '../configuration/ConfigLoader';
 
-export class EpisodeTester {
+export class Tester {
 
     public static semaphore: Semaphore = new Semaphore();
     private semaphoreId: number | null = null;
@@ -23,35 +23,35 @@ export class EpisodeTester {
     public async test() {
 
         const config: Config = await ConfigLoader.getConfig();
-        EpisodeTester.usePreloadedActions = config.use_pretrained_data_while_testing;
+        Tester.usePreloadedActions = config.use_pretrained_data_while_testing;
 
-        if (EpisodeTester.usePreloadedActions && EpisodeTester.actionMap === null)
-            EpisodeTester.actionMap = await PretrainedDataLoader.getQTableActionMap();
+        if (Tester.usePreloadedActions && Tester.actionMap === null)
+            Tester.actionMap = await PretrainedDataLoader.getQTableActionMap();
 
-        this.semaphoreId = EpisodeTester.semaphore.enable();
+        this.semaphoreId = Tester.semaphore.enable();
         //-------------some hack------------
-        if (!EpisodeTester.semaphore.goodToGo(this.semaphoreId)) return;
+        if (!Tester.semaphore.goodToGo(this.semaphoreId)) return;
         //----------------------------------
 
         const qTable = QTableGenerator.qTable
-        const stats = EpisodeTester.getStatistics(qTable);
+        const stats = Tester.getStatistics(qTable);
         Utils.prnt(stats);
 
         while (true) {
             //-------------some hack------------
-            if (!EpisodeTester.semaphore.goodToGo(this.semaphoreId)) return;
+            if (!Tester.semaphore.goodToGo(this.semaphoreId)) return;
             //----------------------------------
             await this.testQTable(qTable);
         }
     }
 
     public stop(): void {
-        EpisodeTester.semaphore.disable();
+        Tester.semaphore.disable();
     }
 
     private async testQTable(qTable: Map<number, QTableRow>) {
         //-------------some hack------------
-        if (!EpisodeTester.semaphore.goodToGo(this.semaphoreId)) return;
+        if (!Tester.semaphore.goodToGo(this.semaphoreId)) return;
         //----------------------------------
 
         let lessonNo = 0;
@@ -64,7 +64,7 @@ export class EpisodeTester {
 
         ConsoleUtils.clearScreen();
         if (!GameUtils.zenGardenOn) Utils.prnt(`0\n----\n`);
-        EpisodeTester.prntState(state);
+        Tester.prntState(state);
 
         let gameOver = false;
         let step = 0;
@@ -72,7 +72,7 @@ export class EpisodeTester {
 
         while (!gameOver && step < 200) {
             //-------------some hack------------
-            if (!EpisodeTester.semaphore.goodToGo(this.semaphoreId)) return;
+            if (!Tester.semaphore.goodToGo(this.semaphoreId)) return;
             //----------------------------------
             step++;
 
@@ -87,7 +87,7 @@ export class EpisodeTester {
             await Utils.sleep(1000 / 2);
             ConsoleUtils.clearScreen();
             if (!GameUtils.zenGardenOn) Utils.prnt(`${step}\n----\n`);
-            EpisodeTester.prntState(state);
+            Tester.prntState(state);
 
             if (isTerminal && !gameOver && lessonNo < lessonCount - 1) {
                 lessonNo++;
@@ -116,13 +116,13 @@ export class EpisodeTester {
         reverseAction: Action | null
     ): Action {
 
-        if (EpisodeTester.usePreloadedActions
-            && EpisodeTester.actionMap !== null
-            && EpisodeTester.actionMap.size > 0) {
+        if (Tester.usePreloadedActions
+            && Tester.actionMap !== null
+            && Tester.actionMap.size > 0) {
 
             let key = PretrainedDataLoader.getStateActionKey(state);
-            if (EpisodeTester.actionMap?.has(key)) {
-                let action = EpisodeTester.actionMap.get(key);
+            if (Tester.actionMap?.has(key)) {
+                let action = Tester.actionMap.get(key);
                 if (!GameUtils.zenGardenOn && action === undefined) Utils.prnt('no action found');
                 return action === undefined
                     ? GameUtils.getFirstPossibleActionOrD(state, reverseAction)

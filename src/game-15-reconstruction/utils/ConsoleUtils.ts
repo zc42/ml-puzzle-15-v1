@@ -23,7 +23,7 @@ export class ConsoleUtils {
 
     public static prntStatsInfo(message: string) {
         const element = document.getElementById('statsInfo');
-        if (element) element.textContent = message.toLowerCase().replace(", ", " | ");
+        if (element) element.textContent = '\n' + message.toLowerCase().replace(", ", " | ");
     }
 
     private static addElementToConsoleDiv(id: string, text: string) {

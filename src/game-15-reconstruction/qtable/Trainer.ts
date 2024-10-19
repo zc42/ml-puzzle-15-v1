@@ -27,20 +27,24 @@ export class Trainer {
             await this.episodeTrainer.train(stateProducer, qTable, discount, learningRate, trainerInfo, this.semaphoreId);
         };
 
-        const stateProducerConsumer = async (stateProducer: StateProducer, trainerInfo: string): Promise<void> => {
+        const stateProducerConsumer = async (stateProducer: StateProducer, lessonInfo: string, trainerInfo: string): Promise<void> => {
             let episodesCount = stateProducer.getEpisodesToTrain();
             for (let episode = 0; episode < episodesCount; episode++) {
-                let infoMessage = "Episode: " + (episode + 1) + " of " + episodesCount + "\n" + trainerInfo;
+                let infoMessage = lessonInfo + 'Episode: ' + (episode + 1) + ' of ' + episodesCount + '\n' + trainerInfo;
                 await episodeRunnerF(stateProducer, infoMessage);
             }
         };
 
         for (let i = 0; i < n; i++) {
-            let trainerInfo = "Running training batch: " + (i + 1) + " of " + n;
-            for (const e of lessons) await stateProducerConsumer(e, trainerInfo);
+            for (let lessonNb = 0; lessonNb < lessons.length; lessonNb++) {
+                let lesson = lessons[lessonNb];
+                let lessonInfo = 'Lesson: ' + (lessonNb + 1) + ' of ' + lessons.length + '.\n';
+                let trainerInfo = 'Running training batch: ' + (i + 1) + ' of ' + n;
+                await stateProducerConsumer(lesson, lessonInfo, trainerInfo);
+            }
         }
 
-        Utils.prnt("training done");
+        Utils.prnt('training done');
     }
 
     public stop(): void {
