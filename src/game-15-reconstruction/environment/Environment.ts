@@ -55,12 +55,6 @@ export class Environment {
         return this.state;
     }
 
-    public static getPossibleActions(state: EnvironmentState): Action[] {
-        const io = state.getState().indexOf(-1);
-        const fixedStateIndexes = state.getFixedElements().map(e => e - 1);
-        return GameUtils.getValidMoves(io, fixedStateIndexes);
-    }
-
     public executeAction(state0: EnvironmentState, action: Action): EnvironmentActionResult {
         const newState = GameUtils.makeMove(state0.getState(), action);
         const environmentState = new EnvironmentState(newState, Environment.stateProducer);

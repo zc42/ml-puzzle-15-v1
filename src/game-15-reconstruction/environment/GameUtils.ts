@@ -1,9 +1,8 @@
+import { Action } from './Action';
 import { Pair } from '../utils/Pair';
 import { QTableRow } from '../qtable/QTableRow';
-import { Environment } from './Environment';
-import { EnvironmentState } from './EnvironmentState';
-import { Action } from './Action';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
+import { EnvironmentState } from './EnvironmentState';
 
 export class GameUtils {
     public static zenGardenOn: boolean = false;
@@ -146,15 +145,29 @@ export class GameUtils {
 
     public static getRandomAction(possibleActions: Action[]): Action {
         if (possibleActions.length === 0)
-            throw new Error('possibleActions.length === 0, there allways must be some action to go around.. need to debug.');
+            ConsoleUtils.prntErrorMsg('Check lessons configuration, for logic errors: The getPossibleActions function returned no action.');
         return possibleActions.length > 0
             ? possibleActions[Math.floor(Math.random() * possibleActions.length)]
             : Action.D;
     }
 
     public static getFirstPossibleAction(state: EnvironmentState, reverseAction: Action | null): Action {
-        const possibleActions = Environment.getPossibleActions(state).filter(action => action !== reverseAction);
-        if (possibleActions.length === 0) throw new Error('possibleActions.length === 0, there allways must be some action to go around.. need to debug.');
+        const actions = this.getPossibleActions(state);
+        if (actions.length === 1) {
+            ConsoleUtils.prntErrorMsg('Check lessons configuration, for logic errors: The getPossibleActions function returned only one action: ' + actions[0]);
+            return actions[0];
+        }
+        const possibleActions = actions.filter(action => action !== reverseAction);
+        if (possibleActions.length === 0) {
+            ConsoleUtils.prntErrorMsg('Check lessons configuration, for logic errors: The getPossibleActions function returned no action.');
+            return Action.D;
+        }
         return possibleActions[0];
+    }
+
+    public static getPossibleActions(state: EnvironmentState): Action[] {
+        const io = state.getState().indexOf(-1);
+        const fixedStateIndexes = state.getFixedElements().map(e => e - 1);
+        return GameUtils.getValidMoves(io, fixedStateIndexes);
     }
 }

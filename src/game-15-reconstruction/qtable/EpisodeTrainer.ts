@@ -43,7 +43,7 @@ export class EpisodeRunner {
             step++;
             let action: Action;
 
-            const possibleActions = Environment.getPossibleActions(state0);
+            const possibleActions = GameUtils.getPossibleActions(state0);
             if (environment.reverseAction !== null) {
                 const index = possibleActions.indexOf(environment.reverseAction);
                 possibleActions.splice(index, 1); // Remove reverse action

@@ -1,5 +1,5 @@
 import { Action } from '../environment/Action';
-import { Environment } from '../environment/Environment';
+import { GameUtils } from '../environment/GameUtils';
 import { EnvironmentState } from '../environment/EnvironmentState';
 
 export class QTableRow {
@@ -12,7 +12,7 @@ export class QTableRow {
     }
 
     public setValue(action: Action, qValue: number): void {
-        const moves = Environment.getPossibleActions(this.state);
+        const moves = GameUtils.getPossibleActions(this.state);
         if (this.qValues.size === 0) {
             moves.forEach(e => this.qValues.set(e, 0));
         }
@@ -32,20 +32,16 @@ export class QTableRow {
     }
 
     public getActionWithMaxValue(reverseAction: Action | null): Action {
-
-        const actionOption = reverseAction === null ? null : this.getAction(reverseAction);
-
-        if (actionOption === null || actionOption === undefined) {
-            const possibleActions = Environment
-                .getPossibleActions(this.state)
-                .filter(action => action !== reverseAction);
-
+        const action = reverseAction === null ? null : this.getAction(reverseAction);
+        if (action === null || action === undefined) {
+            let possibleActions = GameUtils.getPossibleActions(this.state);
+            possibleActions = possibleActions.filter(action => action !== reverseAction);
             if (possibleActions.length === 0)
                 throw new Error('possibleActions.length === 0, there allways must be some action to go around.. need to debug.');
 
             return possibleActions[0];
         } else {
-            return actionOption;
+            return action;
         }
     }
 
