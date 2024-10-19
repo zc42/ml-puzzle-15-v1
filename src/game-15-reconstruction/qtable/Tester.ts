@@ -125,7 +125,7 @@ export class Tester {
                     : action;
             }
             let action = GameUtils.getFirstPossibleAction(state, reverseAction);
-            ConsoleUtils.prntErrorMsg('no action for current state was found, first posible action is: ' + action);
+            ConsoleUtils.prntErrorMsg('no action was found for state, first posible action is: ' + action);
             return action;
         } else {
             const state0Hash = state.getHashCodeV2();

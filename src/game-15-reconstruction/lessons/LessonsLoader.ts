@@ -5,7 +5,7 @@ export interface Lesson {
     lesson: number;
     goals: number[];
     lockedElements?: number[];
-    freeCellStartingPositions?: number[];
+    startPositions?: number[];
     lessonsToGenerate?: number;
 }
 

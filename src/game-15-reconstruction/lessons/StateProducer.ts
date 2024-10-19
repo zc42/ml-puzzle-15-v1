@@ -54,8 +54,8 @@ export class StateProducer {
         stateProducer.state = [...StateProducer.stateDone];
         StateProducer.shuffle(stateProducer, stateProducer.lockedStateElements);
 
-        return lesson.freeCellStartingPositions !== undefined
-            ? StateProducer.shuffleFreeCellStarPosition(stateProducer, lesson.freeCellStartingPositions.map(e => e - 1))
+        return lesson.startPositions !== undefined
+            ? StateProducer.shuffleFreeCellStarPosition(stateProducer, lesson.startPositions.map(e => e - 1))
             : stateProducer;
     }
 
