@@ -20,12 +20,13 @@ export class EpisodeRunner {
         learningRate: number,
         trainerInfo: string,
         semaphoreId: number | null
-    ) {
+    ): Promise<void> {
+
+
         //-------------some hack------------
         if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
         //----------------------------------
 
-        const random = new Random();
         const environment = new Environment(stateProducer);
         environment.reset();
         let state0 = environment.getInitState();
@@ -49,7 +50,7 @@ export class EpisodeRunner {
                 possibleActions.splice(index, 1); // Remove reverse action
             }
 
-            if (random.nextDouble() < epsilon) { // Explore
+            if (Math.random() < epsilon) { // Explore
                 Utils.prnt("\nrndm move");
                 action = GameUtils.getRandomAction(possibleActions);
             } else { // Exploit
@@ -84,8 +85,8 @@ export class EpisodeRunner {
         if (EpisodeRunner.experience.size > 10000) EpisodeRunner.experience.clear();
 
         const statsInfo = `QTable size: ${qTable.size}, experience size: ${EpisodeRunner.experience.size}`;
-
         Utils.prnt("\n");
+        await Utils.sleep(0);
         Utils.prnt(trainerInfo);
         Utils.prnt(statsInfo);
         ConsoleUtils.prntStatsInfo(statsInfo);
@@ -117,12 +118,5 @@ export class EpisodeRunner {
                 discount
             );
         });
-    }
-}
-
-// Random class to handle random number generation
-class Random {
-    public nextDouble(): number {
-        return Math.random();
     }
 }

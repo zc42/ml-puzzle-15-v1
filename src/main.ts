@@ -1,4 +1,3 @@
-import { Utils } from './game-15-reconstruction/utils/Utils';
 import { GameUtils } from './game-15-reconstruction/environment/GameUtils';
 import { EpisodeTester } from './game-15-reconstruction/qtable/EpisodeTester';
 import { ConsoleUtils } from './game-15-reconstruction/utils/ConsoleUtils';
@@ -21,22 +20,17 @@ export class ToolBox {
   private static async startTraining() {
     QTableGenerator.stopTester();
     ConsoleUtils.clearScreen();
-    Utils.prnt("starting training session ... ");
-    await Utils.sleep(0);
-    QTableGenerator.train()
-      .then(() => ToolBox.startTesting().then());
+    await QTableGenerator.train();
+    await ToolBox.startTesting();
   }
 
   private static async startTesting() {
     QTableGenerator.stopTrainer();
     ConsoleUtils.clearScreen();
-    Utils.prnt("start testing ... ");
-    await Utils.sleep(0);
-    QTableGenerator.test().then();
+    await QTableGenerator.test();
   }
 
   private static async configOnOff() {
-
     this.btnOff('lessonsBtn', 'training lessons', show => LessonsEditor.toggleLessonsDisplay(show));
     this.btnOnOff('configBtn', 'configuration', show => ConfigEditor.toggleConfigurationDisplay(show));
   }

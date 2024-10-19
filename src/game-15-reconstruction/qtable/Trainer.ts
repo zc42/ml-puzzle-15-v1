@@ -37,7 +37,7 @@ export class Trainer {
 
         for (let i = 0; i < n; i++) {
             let trainerInfo = "Running training batch: " + (i + 1) + " of " + n;
-            await Promise.all(lessons.map(e => stateProducerConsumer(e, trainerInfo)));
+            for (const e of lessons) await stateProducerConsumer(e, trainerInfo);
         }
 
         Utils.prnt("training done");
