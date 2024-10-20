@@ -63,34 +63,17 @@ export class EpisodeRunner {
             state0 = result.state;
         }
 
-        //todo: show progress some how - .. EpisodeTester. ??
-
         EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, this.maxExperienceSize);
         if (EpisodeRunner.experience.size > this.maxExperienceSize) EpisodeRunner.experience.clear();
-
         const statsInfo = `QTable size: ${qTable.size}, experience size: ${EpisodeRunner.experience.size}`;
-
-        // Utils.prnt("\n");
-        // Utils.prnt(trainerInfo);
-        // Utils.prnt(statsInfo);
 
         let episodeTrainerMsg = '\n' + trainerInfo + '\n' + statsInfo;
         ConsoleUtils.prntAtSomeElement('episodeTrainer', episodeTrainerMsg);
 
 
-        // setTimeout(() => {
-        //     let lastPrnt = this.shadowTester.makeMove();
-        //     ConsoleUtils.prntAtSomeElement('lastPrnt', lastPrnt);
-        // }, 2000);
-
-
-        // let lastPrnt = this.shadowTester.makeMove();
-        // ConsoleUtils.prntAtSomeElement('lastPrnt', lastPrnt);
-
-        ConsoleUtils.prntStatsInfo(statsInfo);
+        ConsoleUtils.prntStatsInfo(statsInfo+'\nit will start to show some intelligence when the qtable size is around 8,500 .. ;)');
 
         await Utils.sleep(0);
-        // ConsoleUtils.clearScreen();
     }
 
     public static replayExperience(
