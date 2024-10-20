@@ -1,6 +1,7 @@
 import { Trainer } from './Trainer';
 import { Utils } from '../utils/Utils';
 import { QTableRow } from './QTableRow';
+import { EntryPoint } from './EntryPoint';
 import { Action } from '../environment/Action';
 import { QTableUpdater } from './QTableUpdater';
 import { GameUtils } from '../environment/GameUtils';
@@ -15,17 +16,16 @@ export class EpisodeRunner {
 
     public async train(
         stateProducer: LessonProducer,
-        qTable: Map<number, QTableRow>,
         discount: number,
         learningRate: number,
         trainerInfo: string,
         semaphoreId: number | null
     ): Promise<void> {
-        //-------------some hack------------
+        // //-------------some hack------------
         if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
-        //----------------------------------
+        // //----------------------------------
 
-
+        const qTable = EntryPoint.qTable;
         const environment = new Environment(stateProducer);
         environment.reset();
         let state0 = environment.getInitState();
@@ -35,9 +35,9 @@ export class EpisodeRunner {
         let step = 0;
 
         while (!isTerminal && step < 50) {
-            //-------------some hack------------
+            // //-------------some hack------------
             if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
-            //----------------------------------
+            // //----------------------------------
 
             step++;
             if (Environment._isTerminalSuccess(state0.getBoardState(), state0.getGoals())) break;
@@ -71,7 +71,7 @@ export class EpisodeRunner {
         ConsoleUtils.prntAtSomeElement('episodeTrainer', episodeTrainerMsg);
 
 
-        ConsoleUtils.prntStatsInfo(statsInfo+'\nit will start to show some intelligence when the qtable size is around 8500 .. ;)');
+        ConsoleUtils.prntStatsInfo(statsInfo + '\nit will start to show some intelligence when the qtable size is around 8500 .. ;)');
 
         await Utils.sleep(0);
     }

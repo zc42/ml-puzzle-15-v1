@@ -14,7 +14,7 @@ export class ConsoleUtils {
         return '<span style="color: red;">' + text + '</span>'; // Color by red
     }
 
-    public static clearScreenX() {
+    public static clearScreen() {
         const consoleDiv = document.getElementById('console');
         if (consoleDiv) consoleDiv.innerHTML = '';
     }

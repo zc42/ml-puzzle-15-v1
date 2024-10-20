@@ -50,7 +50,7 @@ export class ConfigLoader {
 
             return {
                 success: true,
-                messgae: 'Configuration updated successfully. Please toggle the \'test\', \'train\' or other button to apply the changes.'
+                messgae: 'Configuration updated successfully.'
             };
 
         } catch (error) {

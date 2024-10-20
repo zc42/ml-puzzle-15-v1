@@ -1,33 +1,31 @@
-import { Utils } from '../utils/Utils';
-import { QTableRow } from './QTableRow';
+import { TesterEntryPoint } from './Tester';
 import { Semaphore } from '../utils/Semaphore';
 import { LessonProducer } from '../lessons/LessonProducer';
 import { EpisodeRunner as EpisodeTrainer } from './EpisodeTrainer';
-import { ShadowTester } from './ShadowTester';
 
 export class Trainer {
 
     private episodeTrainer: EpisodeTrainer = new EpisodeTrainer();
     public static semaphore: Semaphore = new Semaphore();
     private semaphoreId: number | null = null;
-    private shadowTesterIntervalId: number | null = null;
+    private tester: TesterEntryPoint | null = null;
+    private trainingBachCount: number = 10;
 
-    public async train(qTable: Map<number, QTableRow>, n: number) {
+    public async train(): Promise<void> {
         this.semaphoreId = Trainer.semaphore.enable();
 
         //-------------some hack------------
         if (!Trainer.semaphore.goodToGo(this.semaphoreId)) return;
         //----------------------------------
-        await this.runShadowTester();
+        await this.runTester();
         EpisodeTrainer.experience.clear();
 
         const discount = 0.9;
         const learningRate = 0.1;
         const lessons = await LessonProducer.getLessonProducersFromJson();
 
-        const episodeRunnerF = async (stateProducer: LessonProducer, trainerInfo: string): Promise<void> => {
-            await this.episodeTrainer.train(stateProducer, qTable, discount, learningRate, trainerInfo, this.semaphoreId);
-        };
+        const episodeRunnerF = async (stateProducer: LessonProducer, trainerInfo: string): Promise<void> =>
+            await this.episodeTrainer.train(stateProducer, discount, learningRate, trainerInfo, this.semaphoreId);
 
         const stateProducerConsumer = async (stateProducer: LessonProducer, lessonInfo: string, trainerInfo: string): Promise<void> => {
             let episodesCount = stateProducer.getEpisodesToTrain();
@@ -37,29 +35,26 @@ export class Trainer {
             }
         };
 
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; i < this.trainingBachCount; i++) {
             for (let lessonNb = 0; lessonNb < lessons.length; lessonNb++) {
                 let lesson = lessons[lessonNb];
                 let lessonInfo = 'Lesson: ' + (lessonNb + 1) + ' of ' + lessons.length + '.\n';
-                let trainerInfo = 'Running training batch: ' + (i + 1) + ' of ' + n;
+                let trainerInfo = 'Running training batch: ' + (i + 1) + ' of ' + this.trainingBachCount;
                 await stateProducerConsumer(lesson, lessonInfo, trainerInfo);
             }
         }
-        Utils.prnt('training done');
     }
 
-    private async runShadowTester() {
-        const shadowTester = new ShadowTester();
-        await shadowTester.init();
-        shadowTester.makeMove();
-        this.shadowTesterIntervalId = setInterval(() => shadowTester.makeMove(), 500);
+
+    private async runTester() {
+        this.tester = new TesterEntryPoint();
+        await this.tester.test(false);
     }
 
     public stop(): void {
         Trainer.semaphore.stop();
-        if (this.shadowTesterIntervalId !== null) {
-            clearInterval(this.shadowTesterIntervalId);
-            this.shadowTesterIntervalId = null;
-        }
+        this.tester?.stop();
+        this.tester = null;
     }
 }
+
