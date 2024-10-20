@@ -33,6 +33,6 @@
         "You can change the 'use_pretrained_data_while_testing' property value from true to false.",
         "When set to false, the q-table data learned in this session will be used.",
         "If the value is changed to true, the puzzle will attempt to solve itself, while using pretrained data.",
-        "----------------------------------------------------------------------------------------------------",
+        "----------------------------------------------------------------------------------------------------"
     ]
 }
