@@ -1,4 +1,4 @@
-import { StateProducer } from '../lessons/StateProducer';
+import { LessonProducer } from '../lessons/LessonProducer';
 
 export interface EnvironmentStateI {
   boardState: number[];
@@ -26,8 +26,8 @@ export class EnvironmentState {
 
   constructor(state: EnvironmentState);
   constructor(state: EnvironmentStateI);
-  constructor(boardState: number[], stateProducer: StateProducer);
-  constructor(boardState: number[] | EnvironmentState | EnvironmentStateI, stateProducer?: StateProducer) {
+  constructor(boardState: number[], stateProducer: LessonProducer);
+  constructor(boardState: number[] | EnvironmentState | EnvironmentStateI, stateProducer?: LessonProducer) {
     if ('boardState' in boardState && 'goals' in boardState && 'fixedElements' in boardState) {
       // Handling EnvironmentStateI and the boolean flag
       this.boardState = [...boardState.boardState];

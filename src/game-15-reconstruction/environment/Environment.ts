@@ -3,12 +3,12 @@ import { Pair } from '../utils/Pair';
 import { Utils } from '../utils/Utils';
 import { GameUtils } from './GameUtils';
 import { EnvironmentState } from './EnvironmentState';
-import { StateProducer } from '../lessons/StateProducer';
+import { LessonProducer } from '../lessons/LessonProducer';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
 
 export class Environment {
     private state: EnvironmentState;
-    private static stateProducer: StateProducer;
+    private static stateProducer: LessonProducer;
     private goals: number[];
 
     public reverseAction: Action | null = null;
@@ -18,7 +18,7 @@ export class Environment {
     private smallCircleAction2: Action[] = [];
     private circleAction: Action[] = [];
 
-    constructor(stateProducer: StateProducer) {
+    constructor(stateProducer: LessonProducer) {
         Environment.stateProducer = stateProducer;
 
         Environment.stateProducer.resetState().then();

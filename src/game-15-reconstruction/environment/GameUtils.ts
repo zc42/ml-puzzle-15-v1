@@ -39,7 +39,7 @@ export class GameUtils {
     public static getXY(index: number): Pair<number, number> {
         const x = index % 4;
         const y = Math.floor(index / 4);
-        return Pair.P(x, y);
+        return Pair.from(x, y);
     }
 
     public static getIndex(x: number, y: number): number {

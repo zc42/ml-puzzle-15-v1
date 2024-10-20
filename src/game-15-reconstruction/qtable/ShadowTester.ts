@@ -6,7 +6,7 @@ import { QTableUpdater } from './QTableUpdater';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { GameUtils } from '../environment/GameUtils';
 import { StateShuffle } from '../lessons/StateShuffle';
-import { StateProducer } from '../lessons/StateProducer';
+import { LessonProducer } from '../lessons/LessonProducer';
 import { Environment } from '../environment/Environment';
 import { EnvironmentState } from '../environment/EnvironmentState';
 
@@ -14,9 +14,9 @@ import { EnvironmentState } from '../environment/EnvironmentState';
 export class ShadowTesterCtx {
 
     lessonNo: number = 0;
-    lessons: StateProducer[];
+    lessons: LessonProducer[];
     lessonCount: number;
-    stateProducer: StateProducer;
+    stateProducer: LessonProducer;
 
     state: EnvironmentState;
     goals: number[];
@@ -25,59 +25,48 @@ export class ShadowTesterCtx {
     step: number = 0;
     reverseAction: Action | null = null;
 
-    lastMoveTime: number;
-    lastPrnt: string = '';
-
-    constructor(lessons: StateProducer[]) {
+    constructor(lessons: LessonProducer[]) {
         this.lessons = lessons;
         this.lessonCount = lessons.length;
         this.stateProducer = lessons[this.lessonNo];
 
-        let v = StateShuffle.shuffle(StateProducer.stateDone, [], 1000);
+        let v = StateShuffle.shuffle(LessonProducer.stateDone, [], 1000);
         this.state = new EnvironmentState(v, this.stateProducer);
         this.goals = this.stateProducer.getGoals();
-
-        this.lastMoveTime = new Date().getTime();
     }
 
     public resetIfGameIsOver() {
         if (!this.gameOver) return;
 
         this.lessonNo = 0;
-        let boardState = StateShuffle.shuffle(StateProducer.stateDone, [], 1000);
+        this.stateProducer = this.lessons[this.lessonNo];
+        let boardState = StateShuffle.shuffle(LessonProducer.stateDone, [], 1000);
         this.state = new EnvironmentState(boardState, this.stateProducer);
         this.goals = this.stateProducer.getGoals();
 
         this.gameOver = false;
         this.step = 0;
         this.reverseAction = null;
-
-        console.log('resetIfGameIsOver');
     }
 }
 
 export class ShadowTester {
 
     ctx: ShadowTesterCtx | null = null;
-    lessons: StateProducer[] | null = null;
+    lessons: LessonProducer[] | null = null;
     pauseBetweenMoves: number = 1;
+    maxEpisodeSteps: number = 200;
 
     public async init() {
-        const lessons = await StateProducer.getStateProducersFromJson();
+        const lessons = await LessonProducer.getLessonProducersFromJson();
         this.ctx = new ShadowTesterCtx(lessons);
     }
 
     public makeMove(): void {
 
-        console.log('ShadowTester .. ');
-
-        if (this.ctx === null) return ;
+        if (this.ctx === null) return;
+        this.ctx.gameOver = this.isGameDone(this.ctx.state);
         this.ctx.resetIfGameIsOver();
-
-        // let timePassed = this.getTimePassedInSeconds(this.ctx.lastMoveTime);
-        // console.log('timePassed: ', timePassed)
-        // if (timePassed < this.pauseBetweenMoves) return this.ctx.lastPrnt;
-        // this.ctx.lastMoveTime = new Date().getTime();
 
         this.ctx.step++;
         const qTable = EntryPoint.qTable
@@ -88,14 +77,10 @@ export class ShadowTester {
         const isTerminal = Environment._isTerminalSuccess(newState, this.ctx.goals);
 
         this.ctx.state = new EnvironmentState(newState, this.ctx.stateProducer);
-        this.ctx.gameOver = Utils.equalArrays(this.ctx.state.getBoardState(), StateProducer.stateDone);
+        this.ctx.gameOver = this.isGameDone(this.ctx.state);
+        this.ctx.gameOver = this.ctx.step > this.maxEpisodeSteps;
 
-        // await Utils.sleep(1000 / 2);
-        // ConsoleUtils.clearScreen();
-
-        // if (!GameUtils.zenGardenOn) Utils.prnt(`${this.ctx.step}\n----\n`);
         this.prntState(this.ctx.state, this.ctx.step);
-        // await Utils.sleep(500);
 
         if (isTerminal && !this.ctx.gameOver && this.ctx.lessonNo < this.ctx.lessonCount - 1) {
             this.ctx.lessonNo++;
@@ -108,20 +93,11 @@ export class ShadowTester {
             const terminalMessage = Environment.isTerminalSuccess(this.ctx.state)
                 ? 'success'
                 : 'failed';
-            // if (!GameUtils.zenGardenOn) Utils.prnt(`----\n${terminalMessage}`);
             this.prntTerminalState(this.ctx.state, this.ctx.step, terminalMessage);
         }
 
-        // this.ctx.lastPrnt = GameUtils.getStateAsString(this.ctx.state.getBoardState(), this.ctx.state.getGoals());
-        // return this.ctx.lastPrnt;
+        this.ctx.resetIfGameIsOver();
     }
-
-    // private getTimePassedInSeconds(startTime: number): number {
-    //     const endTime = new Date().getTime();
-    //     const timePassed = (endTime - startTime) / 1000; // Convert milliseconds to seconds
-    //     return timePassed;
-    // }
-
 
     private getAction(
         qTable: Map<number, QTableRow>,
@@ -140,6 +116,11 @@ export class ShadowTester {
             return GameUtils.getFirstPossibleAction(state, reverseAction);
         }
     }
+
+    private isGameDone(state: EnvironmentState) {
+        return Utils.equalArrays(state.getBoardState(), LessonProducer.stateDone);
+    }
+
     private prntState(state: EnvironmentState, step: number): void {
         this.prntTerminalState(state, step, null);
     }

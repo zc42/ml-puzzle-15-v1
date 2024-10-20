@@ -1,6 +1,6 @@
 // utils/Pair.ts
 export class Pair<K, V> {
-    constructor(private key: K, private value: V) {}
+    constructor(private key: K, private value: V) { }
 
     public getKey(): K {
         return this.key;
@@ -10,7 +10,11 @@ export class Pair<K, V> {
         return this.value;
     }
 
-    public static P<K, V>(key: K, value: V): Pair<K, V> {
+    public static from<K, V>(key: K, value: V): Pair<K, V> {
         return new Pair(key, value);
+    }
+
+    public toString(): string {
+        return '[' + this.getKey() + ', ' + this.getValue() + ']'
     }
 }

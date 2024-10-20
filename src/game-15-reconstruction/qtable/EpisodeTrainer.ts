@@ -7,14 +7,14 @@ import { GameUtils } from '../environment/GameUtils';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { ExperienceRecord } from './ExperienceRecord';
 import { Environment } from '../environment/Environment';
-import { StateProducer } from '../lessons/StateProducer';
+import { LessonProducer } from '../lessons/LessonProducer';
 
 export class EpisodeRunner {
     public static experience: Set<ExperienceRecord> = new Set();
     private maxExperienceSize = 2000;
 
     public async train(
-        stateProducer: StateProducer,
+        stateProducer: LessonProducer,
         qTable: Map<number, QTableRow>,
         discount: number,
         learningRate: number,

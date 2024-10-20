@@ -1,7 +1,7 @@
 import { Utils } from '../utils/Utils';
 import { QTableRow } from './QTableRow';
 import { Semaphore } from '../utils/Semaphore';
-import { StateProducer } from '../lessons/StateProducer';
+import { LessonProducer } from '../lessons/LessonProducer';
 import { EpisodeRunner as EpisodeTrainer } from './EpisodeTrainer';
 import { ShadowTester } from './ShadowTester';
 
@@ -23,13 +23,13 @@ export class Trainer {
 
         const discount = 0.9;
         const learningRate = 0.1;
-        const lessons = await StateProducer.getStateProducersFromJson();
+        const lessons = await LessonProducer.getLessonProducersFromJson();
 
-        const episodeRunnerF = async (stateProducer: StateProducer, trainerInfo: string): Promise<void> => {
+        const episodeRunnerF = async (stateProducer: LessonProducer, trainerInfo: string): Promise<void> => {
             await this.episodeTrainer.train(stateProducer, qTable, discount, learningRate, trainerInfo, this.semaphoreId);
         };
 
-        const stateProducerConsumer = async (stateProducer: StateProducer, lessonInfo: string, trainerInfo: string): Promise<void> => {
+        const stateProducerConsumer = async (stateProducer: LessonProducer, lessonInfo: string, trainerInfo: string): Promise<void> => {
             let episodesCount = stateProducer.getEpisodesToTrain();
             for (let episode = 0; episode < episodesCount; episode++) {
                 let infoMessage = lessonInfo + 'Episode: ' + (episode + 1) + ' of ' + episodesCount + '\n' + trainerInfo;

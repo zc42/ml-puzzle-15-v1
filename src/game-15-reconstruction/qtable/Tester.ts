@@ -7,7 +7,7 @@ import { QTableUpdater } from './QTableUpdater';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { GameUtils } from '../environment/GameUtils';
 import { StateShuffle } from '../lessons/StateShuffle';
-import { StateProducer } from '../lessons/StateProducer';
+import { LessonProducer } from '../lessons/LessonProducer';
 import { Environment } from '../environment/Environment';
 import { PretrainedDataLoader } from './QTableActionsLoader';
 import { EnvironmentState } from '../environment/EnvironmentState';
@@ -55,10 +55,10 @@ export class Tester {
         //----------------------------------
 
         let lessonNo = 0;
-        const lessons = await StateProducer.getStateProducersFromJson();
+        const lessons = await LessonProducer.getLessonProducersFromJson();
         const lessonCount = lessons.length;
         let stateProducer = lessons[lessonNo];
-        let v = StateShuffle.shuffle(StateProducer.stateDone, [], 1000);
+        let v = StateShuffle.shuffle(LessonProducer.stateDone, [], 1000);
         let state = new EnvironmentState(v, stateProducer);
         let goals = stateProducer.getGoals();
 
@@ -83,7 +83,7 @@ export class Tester {
             const isTerminal = Environment._isTerminalSuccess(newState, goals);
 
             state = new EnvironmentState(newState, stateProducer);
-            gameOver = Utils.equalArrays(state.getBoardState(), StateProducer.stateDone);
+            gameOver = Utils.equalArrays(state.getBoardState(), LessonProducer.stateDone);
 
             await Utils.sleep(1000 / 2);
             // ConsoleUtils.clearScreen();
@@ -155,21 +155,21 @@ export class Tester {
         ConsoleUtils.prntAtSomeElement('shadowTester', s0 + s1 + s2);
     }
 
-    private static getStatistics(qTable: Map<number, QTableRow>): Stats {
-        const values = Array.from(qTable.values()).flatMap(row => Array.from(row.qValues.values()));
-        const sum = values.reduce((a, b) => a + b, 0);
-        const count = values.length;
-        const average = count ? sum / count : 0;
-        const stats = new Stats();
-        stats.count = count;
-        stats.sum = sum;
-        stats.average = average;
-        return stats;
-    }
+    // private static getStatistics(qTable: Map<number, QTableRow>): Stats {
+    //     const values = Array.from(qTable.values()).flatMap(row => Array.from(row.qValues.values()));
+    //     const sum = values.reduce((a, b) => a + b, 0);
+    //     const count = values.length;
+    //     const average = count ? sum / count : 0;
+    //     const stats = new Stats();
+    //     stats.count = count;
+    //     stats.sum = sum;
+    //     stats.average = average;
+    //     return stats;
+    // }
 }
 
-class Stats {
-    public count: number = 0;
-    public sum: number = 0;
-    public average: number = 0;
-}
+// class Stats {
+//     public count: number = 0;
+//     public sum: number = 0;
+//     public average: number = 0;
+// }
