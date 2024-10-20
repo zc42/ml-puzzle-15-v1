@@ -3,12 +3,14 @@ import { QTableRow } from './QTableRow';
 import { Semaphore } from '../utils/Semaphore';
 import { StateProducer } from '../lessons/StateProducer';
 import { EpisodeRunner as EpisodeTrainer } from './EpisodeTrainer';
+import { ShadowTester } from './ShadowTester';
 
 export class Trainer {
 
     private episodeTrainer: EpisodeTrainer = new EpisodeTrainer();
     public static semaphore: Semaphore = new Semaphore();
     private semaphoreId: number | null = null;
+    private shadowTesterIntervalId: number | null = null;
 
     public async train(qTable: Map<number, QTableRow>, n: number) {
         this.semaphoreId = Trainer.semaphore.enable();
@@ -16,7 +18,7 @@ export class Trainer {
         //-------------some hack------------
         if (!Trainer.semaphore.goodToGo(this.semaphoreId)) return;
         //----------------------------------
-
+        await this.runShadowTester();
         EpisodeTrainer.experience.clear();
 
         const discount = 0.9;
@@ -46,7 +48,18 @@ export class Trainer {
         Utils.prnt('training done');
     }
 
+    private async runShadowTester() {
+        const shadowTester = new ShadowTester();
+        await shadowTester.init();
+        shadowTester.makeMove();
+        this.shadowTesterIntervalId = setInterval(() => shadowTester.makeMove(), 500);
+    }
+
     public stop(): void {
         Trainer.semaphore.stop();
+        if (this.shadowTesterIntervalId !== null) {
+            clearInterval(this.shadowTesterIntervalId);
+            this.shadowTesterIntervalId = null;
+        }
     }
 }

@@ -1,19 +1,19 @@
 import { StateProducer } from '../lessons/StateProducer';
 
 export interface EnvironmentStateI {
-  state: number[];
+  boardState: number[];
   goals: number[];
   fixedElements: number[];
 }
 
 export class EnvironmentState {
-  public state: number[];
+  public boardState: number[];
   public goals: number[];
   public fixedElements: number[];
 
   public static getTestCase(): EnvironmentState {
-    let a: EnvironmentStateI = {
-      state: [
+    let testCase: EnvironmentStateI = {
+      boardState: [
         1, 2, 3, 4,
         5, 6, 7, 8,
         9, 10, 11, -1,
@@ -21,37 +21,37 @@ export class EnvironmentState {
       goals: [12],
       fixedElements: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15]
     }
-    return new EnvironmentState(a);
+    return new EnvironmentState(testCase);
   }
 
   constructor(state: EnvironmentState);
   constructor(state: EnvironmentStateI);
-  constructor(state: number[], stateProducer: StateProducer);
-  constructor(state: number[] | EnvironmentState | EnvironmentStateI, stateProducer?: StateProducer) {
-    if ('state' in state && 'goals' in state && 'fixedElements' in state) {
+  constructor(boardState: number[], stateProducer: StateProducer);
+  constructor(boardState: number[] | EnvironmentState | EnvironmentStateI, stateProducer?: StateProducer) {
+    if ('boardState' in boardState && 'goals' in boardState && 'fixedElements' in boardState) {
       // Handling EnvironmentStateI and the boolean flag
-      this.state = [...state.state];
-      this.goals = [...state.goals];
-      this.fixedElements = [...state.fixedElements];
-    } else if (state instanceof EnvironmentState) {
+      this.boardState = [...boardState.boardState];
+      this.goals = [...boardState.goals];
+      this.fixedElements = [...boardState.fixedElements];
+    } else if (boardState instanceof EnvironmentState) {
       // Copy constructor logic
-      this.state = [...state.getState()];
-      this.goals = [...state.getGoals()];
-      this.fixedElements = [...state.getFixedElements()];
+      this.boardState = [...boardState.getBoardState()];
+      this.goals = [...boardState.getGoals()];
+      this.fixedElements = [...boardState.getFixedElements()];
     } else {
       // Regular constructor logic
-      this.state = [...state];
+      this.boardState = [...boardState];
       this.goals = [...(stateProducer?.getGoals() ?? [])];
       this.fixedElements = [...(stateProducer?.getLockedStateElements() ?? [])];
     }
   }
 
-  public getState(): number[] {
-    return this.state;
+  public getBoardState(): number[] {
+    return this.boardState;
   }
 
-  public setState(state: number[]): void {
-    this.state = state;
+  public setBoardState(state: number[]): void {
+    this.boardState = state;
   }
 
   public getGoals(): number[] {
@@ -78,7 +78,7 @@ export class EnvironmentState {
   public getHashCodeV3__(): string {
     return Array.from({ length: 16 }, (_, e) => {
       let v: string;
-      const o = this.state[e];
+      const o = this.boardState[e];
       if (o === -1) v = "*";
       else if (this.goals.includes(o)) v = String(o);
       else if (this.goals.includes(e + 1)) v = "o";
@@ -90,7 +90,7 @@ export class EnvironmentState {
   }
 
   public getHashCode(): number {
-    const a = this.state.map(String).join(",");
+    const a = this.boardState.map(String).join(",");
     return this.hashString(a);
   }
 

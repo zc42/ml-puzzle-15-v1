@@ -75,12 +75,14 @@ export class GameUtils {
     }
 
 
-    public static stateAsString(state: number[], goals: number[]): string {
-        if (this.zenGardenOn) return this.getStateAsZenStoneGarden(state, goals);
-        else return this.getStateAsString(state, goals);
+    public static getStateAsString(state: EnvironmentState): string {
+        let boardState = state.getBoardState();
+        let goals = state.getGoals();
+        if (this.zenGardenOn) return this.getStateAsZenStoneGarden(boardState, goals);
+        else return this.__getStateAsString(boardState, goals);
     }
 
-    public static getStateAsString(state: number[], goals: number[]): string {
+    private static __getStateAsString(state: number[], goals: number[]): string {
         return Array.from({ length: 16 }, (_, e) => {
             let v: string;
             const o = state[e];
@@ -98,7 +100,7 @@ export class GameUtils {
         }).join('');
     }
 
-    public static getStateAsZenStoneGarden(state: number[], goals: number[]): string {
+    private static getStateAsZenStoneGarden(state: number[], goals: number[]): string {
         return Array.from({ length: 16 }, (_, e) => {
             let v: string;
             const o = state[e];
@@ -117,9 +119,14 @@ export class GameUtils {
         }).join('');
     }
 
-    public static prntState(state: number[], goals: number[]): void {
-        let s = this.stateAsString(state, goals);
+    public static prntState(state: EnvironmentState): void {
+        let s = this.getStateAsString(state);
         ConsoleUtils.prnt(s);
+    }
+
+    public static prntStateV0(state: EnvironmentState): void {
+        let stateAsString = this.getStateAsString(state);
+        ConsoleUtils.prntAtSomeElement('shadowTester', stateAsString);
     }
 
     public static getReverseAction(action: Action): Action | null {
@@ -164,7 +171,7 @@ export class GameUtils {
     }
 
     public static getPossibleActions(state: EnvironmentState): Action[] {
-        const io = state.getState().indexOf(-1);
+        const io = state.getBoardState().indexOf(-1);
         const fixedStateIndexes = state.getFixedElements().map(e => e - 1);
         return GameUtils.getValidMoves(io, fixedStateIndexes);
     }

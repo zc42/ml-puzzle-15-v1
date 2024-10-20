@@ -22,7 +22,7 @@ export class PretrainedDataLoader {
     }
 
     public static getStateActionKey(envState: EnvironmentState): string {
-        const state = envState.getState();
+        const state = envState.getBoardState();
         const goals = envState.getGoals();
         const key = Array.from({ length: 16 }, (_, e) => {
             let v: string;

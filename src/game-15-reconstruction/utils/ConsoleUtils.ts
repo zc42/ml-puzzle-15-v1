@@ -14,13 +14,17 @@ export class ConsoleUtils {
         return '<span style="color: red;">' + text + '</span>'; // Color by red
     }
 
-    public static clearScreen() {
+    public static clearScreenX() {
         const consoleDiv = document.getElementById('console');
         if (consoleDiv) consoleDiv.innerHTML = '';
     }
 
     public static prntTestStep(text: string) {
         this.addElementToConsoleDiv('testGameStep', text);
+    }
+
+    public static prntAtSomeElement(elementId: string, textContent: string) {
+        this.addElementToConsoleDiv(elementId, textContent);
     }
 
     public static prntStatsInfo(message: string) {
@@ -31,7 +35,7 @@ export class ConsoleUtils {
     }
 
     public static prntErrorMsg(message: string) {
-        if(GameUtils.zenGardenOn) return;
+        if (GameUtils.zenGardenOn) return;
         const element = document.getElementById('statsInfo');
         if (!element) return;
         element.setAttribute('class', "console-error-msg");

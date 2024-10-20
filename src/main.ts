@@ -19,14 +19,14 @@ export class ToolBox {
 
   private static async startTraining() {
     EntryPoint.stopTester();
-    ConsoleUtils.clearScreen();
+    ConsoleUtils.clearScreenX();
     await EntryPoint.train();
     await ToolBox.startTesting();
   }
 
   private static async startTesting() {
     EntryPoint.stopTrainer();
-    ConsoleUtils.clearScreen();
+    ConsoleUtils.clearScreenX();
     await EntryPoint.test();
   }
 

@@ -34,8 +34,8 @@ export class Tester {
         //----------------------------------
 
         const qTable = EntryPoint.qTable
-        const stats = Tester.getStatistics(qTable);
-        Utils.prnt(stats);
+        // const stats = Tester.getStatistics(qTable);
+        // Utils.prnt(stats);
 
         while (true) {
             //-------------some hack------------
@@ -62,15 +62,16 @@ export class Tester {
         let state = new EnvironmentState(v, stateProducer);
         let goals = stateProducer.getGoals();
 
-        ConsoleUtils.clearScreen();
-        if (!GameUtils.zenGardenOn) Utils.prnt(`0\n----\n`);
-        Tester.prntState(state);
+        // ConsoleUtils.clearScreen();
+        // if (!GameUtils.zenGardenOn) Utils.prnt(`0\n----\n`);
+        Tester.prntState(state, 0);
 
         let gameOver = false;
         let step = 0;
         let reverseAction: Action | null = null;
 
         while (!gameOver && step < 200) {
+            console.log('tester .. ');
             //-------------some hack------------
             if (!Tester.semaphore.goodToGo(this.semaphoreId)) return;
             //----------------------------------
@@ -78,29 +79,31 @@ export class Tester {
 
             let action = this.getAction(qTable, state, reverseAction);
             reverseAction = GameUtils.getReverseAction(action);
-            const newState = GameUtils.makeMove(state.getState(), action);
+            const newState = GameUtils.makeMove(state.getBoardState(), action);
             const isTerminal = Environment._isTerminalSuccess(newState, goals);
 
             state = new EnvironmentState(newState, stateProducer);
-            gameOver = Utils.equalArrays(state.getState(), StateProducer.stateDone);
+            gameOver = Utils.equalArrays(state.getBoardState(), StateProducer.stateDone);
 
             await Utils.sleep(1000 / 2);
-            ConsoleUtils.clearScreen();
-            if (!GameUtils.zenGardenOn) Utils.prnt(`${step}\n----\n`);
-            Tester.prntState(state);
+            // ConsoleUtils.clearScreen();
+            // if (!GameUtils.zenGardenOn) Utils.prnt(`${step}\n----\n`);
+            Tester.prntState(state, step);
 
             if (isTerminal && !gameOver && lessonNo < lessonCount - 1) {
                 lessonNo++;
                 stateProducer = lessons[lessonNo];
                 goals = stateProducer.getGoals();
-                state = new EnvironmentState(state.getState(), stateProducer);
+                state = new EnvironmentState(state.getBoardState(), stateProducer);
             }
         }
 
         const terminalMessage = Environment.isTerminalSuccess(state)
             ? 'success'
             : 'failed';
-        if (!GameUtils.zenGardenOn) Utils.prnt(`----\n${terminalMessage}`);
+        // if (!GameUtils.zenGardenOn) Utils.prnt(`----\n${terminalMessage}`);
+        Tester.prntTerminalState(state, step, terminalMessage);
+
         await Utils.sleep(3000);
     }
 
@@ -141,8 +144,15 @@ export class Tester {
         }
     }
 
-    private static prntState(state: EnvironmentState): void {
-        GameUtils.prntState(state.getState(), state.getGoals());
+    private static prntState(state: EnvironmentState, step: number): void {
+        this.prntTerminalState(state, step, null);
+    }
+
+    private static prntTerminalState(state: EnvironmentState, step: number, terminalMessage: string | null): void {
+        let s0 = GameUtils.zenGardenOn ? '' : `${step}\n----\n`;
+        let s1 = GameUtils.getStateAsString(state);
+        let s2 = GameUtils.zenGardenOn || terminalMessage === null ? '' : `\n----\n${terminalMessage}`;
+        ConsoleUtils.prntAtSomeElement('shadowTester', s0 + s1 + s2);
     }
 
     private static getStatistics(qTable: Map<number, QTableRow>): Stats {

@@ -28,7 +28,7 @@ export class Environment {
     }
 
     public static isTerminalSuccess(state: EnvironmentState): boolean {
-        return Environment._isTerminalSuccess(state.getState(), state.getGoals());
+        return Environment._isTerminalSuccess(state.getBoardState(), state.getGoals());
     }
 
     public reset(): void {
@@ -55,7 +55,7 @@ export class Environment {
     }
 
     public executeAction(state0: EnvironmentState, action: Action): EnvironmentActionResult {
-        const newState = GameUtils.makeMove(state0.getState(), action);
+        const newState = GameUtils.makeMove(state0.getBoardState(), action);
         const environmentState = new EnvironmentState(newState, Environment.stateProducer);
 
         let isTerminal = Environment._isTerminalSuccess(newState, this.goals);
@@ -74,7 +74,7 @@ export class Environment {
             isTerminal = true;
         }
 
-        const io = this.state.getState().indexOf(-1);
+        const io = this.state.getBoardState().indexOf(-1);
         if (Environment.stateProducer.isLockedIndex(io)) {
             isTerminal = true;
             r = -1;
@@ -95,18 +95,18 @@ export class Environment {
     public prntInfo(): void {
         Utils.prnt("\n\n------------------------------------------------------------------\n");
 
-        const state = this.state.getState();
-        const io = state.indexOf(-1);
+        const boardState = this.state.getBoardState();
+        const io = boardState.indexOf(-1);
         const xy = GameUtils.getXY(io);
         Utils.prnt(xy.getKey() + ' - ' + xy.getValue());
         const indx = GameUtils.getIndex(xy.getKey(), xy.getValue());
         Utils.prnt(`${io} - ${indx}`);
         const moves = GameUtils._getValidMoves(io);
         Utils.prnt(moves);
-        const r = this.getReward(state, this.goals);
+        const r = this.getReward(boardState, this.goals);
         Utils.prnt('reward: ' + r);
         Utils.prnt('\n');
-        GameUtils.prntState(state, this.goals);
+        GameUtils.prntState(this.state);
     }
 
     private getReward(state: number[], goals: number[]): number {

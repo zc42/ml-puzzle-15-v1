@@ -25,6 +25,7 @@ export class EpisodeRunner {
         if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
         //----------------------------------
 
+
         const environment = new Environment(stateProducer);
         environment.reset();
         let state0 = environment.getInitState();
@@ -37,8 +38,9 @@ export class EpisodeRunner {
             //-------------some hack------------
             if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
             //----------------------------------
+
             step++;
-            if (Environment._isTerminalSuccess(state0.getState(), state0.getGoals())) break;
+            if (Environment._isTerminalSuccess(state0.getBoardState(), state0.getGoals())) break;
             let action: Action;
             const possibleActions = GameUtils.getPossibleActions(state0);
             if (environment.reverseAction !== null) {
@@ -67,14 +69,28 @@ export class EpisodeRunner {
         if (EpisodeRunner.experience.size > this.maxExperienceSize) EpisodeRunner.experience.clear();
 
         const statsInfo = `QTable size: ${qTable.size}, experience size: ${EpisodeRunner.experience.size}`;
-        Utils.prnt("\n");
-        // await Utils.sleep(0);
-        Utils.prnt(trainerInfo);
-        Utils.prnt(statsInfo);
+
+        // Utils.prnt("\n");
+        // Utils.prnt(trainerInfo);
+        // Utils.prnt(statsInfo);
+
+        let episodeTrainerMsg = '\n' + trainerInfo + '\n' + statsInfo;
+        ConsoleUtils.prntAtSomeElement('episodeTrainer', episodeTrainerMsg);
+
+
+        // setTimeout(() => {
+        //     let lastPrnt = this.shadowTester.makeMove();
+        //     ConsoleUtils.prntAtSomeElement('lastPrnt', lastPrnt);
+        // }, 2000);
+
+
+        // let lastPrnt = this.shadowTester.makeMove();
+        // ConsoleUtils.prntAtSomeElement('lastPrnt', lastPrnt);
+
         ConsoleUtils.prntStatsInfo(statsInfo);
 
         await Utils.sleep(0);
-        ConsoleUtils.clearScreen();
+        // ConsoleUtils.clearScreen();
     }
 
     public static replayExperience(
