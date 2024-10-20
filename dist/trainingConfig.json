@@ -1,56 +1,83 @@
-[
-    {
-        "lesson": 1,
-        "goals": [1, 2],
-        "lessonsToGenerate": 200
+{
+    "help":[
+        "----------------------------------------------------------------------------------------------------",
+        "basicTrainerConfig:",
+        "",
+        "learningRate - the learning rate determines how much new information overrides old knowledge.",
+        "discount - discount factor influences how future rewards are valued relative to immediate ones.",
+        "trainingBatchCount - the number of training cycles that will be executed in each batch.",
+        "lessonsToGenerate - default number of episodes for training each lesson,",
+        "used if a specific lesson does not have its ownlessonsToGenerate value set.",
+        "----------------------------------------------------------------------------------------------------",
+        "lessons:",
+        "",
+        "lesson - the number of the lesson.",
+        "goals - the target positions for this lesson.",
+        "startPositions - starting positions for the empty tile.",
+        "lockedElements - tiles that are fixed and cannot be moved, usually representing the goals from previous lessons.",
+        "lessonsToGenerate - the number of episodes that will be generated for this particular lesson in each training cycle.",
+        "----------------------------------------------------------------------------------------------------"
+    ],
+    "basicTrainerConfig":{
+        "learningRate": 0.1,
+        "discount": 0.9,
+        "trainingBachCount": 10,
+        "lessonsToGenerate": 100
     },
-    {
-        "lesson": 2,
-        "goals": [3, 4],
-        "startPositions": [3, 5, 6],
-        "lockedElements": [1, 2],
-        "lessonsToGenerate": 200
-    },
-    {
-        "lesson": 3,
-        "goals": [5, 6],
-        "startPositions": [7, 8],
-        "lockedElements": [1, 2, 3, 4]
-    },
-    {
-        "lesson": 4,
-        "goals": [7, 8],
-        "startPositions": [7, 9, 10],
-        "lockedElements": 
-                            [1, 2, 3, 4, 
-                             5, 6]
-    },
-    {
-        "lesson": 5,
-        "goals": [9, 13],
-        "startPositions": [11, 12],
-        "lockedElements": 
-                            [1, 2, 3, 4,
-                             5, 6, 7, 8]
-    },
-    {
-        "lesson": 6,
-        "goals": [10, 11, 14, 15],
-        "startPositions": [10, 14],
-        "lockedElements": 
-                            [1, 2, 3, 4,
-                             5, 6, 7, 8,
-                             9,
-                             13]
-    },
-    {
-        "lesson": 7,
-        "goals": [12],
-        "lessonsToGenerate": 10,
-        "lockedElements": 
-                            [1,  2,  3,  4,
-                             5,  6,  7,  8,
-                             9,  10, 11, 
-                             13, 14, 15    ]
-    }
-]
+    "lessons": [
+        {
+            "lesson": 1,
+            "goals": [1, 2],
+            "lessonsToGenerate": 200
+        },
+        {
+            "lesson": 2,
+            "goals": [3, 4],
+            "startPositions": [3, 5, 6],
+            "lockedElements": [1, 2],
+            "lessonsToGenerate": 200
+        },
+        {
+            "lesson": 3,
+            "goals": [5, 6],
+            "startPositions": [7, 8],
+            "lockedElements": [1, 2, 3, 4]
+        },
+        {
+            "lesson": 4,
+            "goals": [7, 8],
+            "startPositions": [7, 9, 10],
+            "lockedElements": 
+                                [1, 2, 3, 4, 
+                                 5, 6]
+        },
+        {
+            "lesson": 5,
+            "goals": [9, 13],
+            "startPositions": [11, 12],
+            "lockedElements": 
+                                [1, 2, 3, 4,
+                                 5, 6, 7, 8]
+        },
+        {
+            "lesson": 6,
+            "goals": [10, 11, 14, 15],
+            "startPositions": [10, 14],
+            "lockedElements": 
+                                [1, 2, 3, 4,
+                                 5, 6, 7, 8,
+                                 9,
+                                 13]
+        },
+        {
+            "lesson": 7,
+            "goals": [12],
+            "lessonsToGenerate": 10,
+            "lockedElements": 
+                                [1,  2,  3,  4,
+                                 5,  6,  7,  8,
+                                 9,  10, 11, 
+                                 13, 14, 15    ]
+        }
+    ]
+}
