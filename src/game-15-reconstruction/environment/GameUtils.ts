@@ -21,6 +21,12 @@ export class GameUtils {
 
         const i1 = this.getIndex(x, y);
 
+        if (i1 > 15) {
+            console.log(state)
+            console.log(action)
+            throw new Error('i1 > 15');
+        }
+
         // Clone state array and perform swap
         const newState = [...state];
         const v = newState[i1];
@@ -42,32 +48,24 @@ export class GameUtils {
 
     public static _getValidMoves(index: number): Action[] {
         const xy = this.getXY(index);
-        const moves = Object.values(Action).slice();
+        let moves = Object.values(Action).slice();
 
-        if (xy.getKey() === 0) moves.splice(moves.indexOf(Action.L), 1);
-        if (xy.getKey() === 3) moves.splice(moves.indexOf(Action.R), 1);
-        if (xy.getValue() === 0) moves.splice(moves.indexOf(Action.U), 1);
-        if (xy.getValue() === 3) moves.splice(moves.indexOf(Action.D), 1);
+        if (xy.getKey() === 0) moves = moves.filter(e => e !== Action.L);
+        if (xy.getKey() === 3) moves = moves.filter(e => e !== Action.R);
+        if (xy.getValue() === 0) moves = moves.filter(e => e !== Action.U);
+        if (xy.getValue() === 3) moves = moves.filter(e => e !== Action.D);
 
         return moves;
     }
 
     public static getValidMoves(i: number, fixedStateIndexes: number[]): Action[] {
-        const moves = this._getValidMoves(i);
+        let moves = this._getValidMoves(i);
         const xy = this.getXY(i);
 
-        if (this.contains(fixedStateIndexes, xy.getKey() - 1, xy.getValue())) {
-            moves.splice(moves.indexOf(Action.L), 1);
-        }
-        if (this.contains(fixedStateIndexes, xy.getKey() + 1, xy.getValue())) {
-            moves.splice(moves.indexOf(Action.R), 1);
-        }
-        if (this.contains(fixedStateIndexes, xy.getKey(), xy.getValue() - 1)) {
-            moves.splice(moves.indexOf(Action.U), 1);
-        }
-        if (this.contains(fixedStateIndexes, xy.getKey(), xy.getValue() + 1)) {
-            moves.splice(moves.indexOf(Action.D), 1);
-        }
+        if (this.contains(fixedStateIndexes, xy.getKey() - 1, xy.getValue())) moves = moves.filter(e => e != Action.L);
+        if (this.contains(fixedStateIndexes, xy.getKey() + 1, xy.getValue())) moves = moves.filter(e => e != Action.R);
+        if (this.contains(fixedStateIndexes, xy.getKey(), xy.getValue() - 1)) moves = moves.filter(e => e != Action.U);
+        if (this.contains(fixedStateIndexes, xy.getKey(), xy.getValue() + 1)) moves = moves.filter(e => e != Action.D);
 
         return moves;
     }

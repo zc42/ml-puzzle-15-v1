@@ -2,7 +2,6 @@ import { Action } from './Action';
 import { Pair } from '../utils/Pair';
 import { Utils } from '../utils/Utils';
 import { GameUtils } from './GameUtils';
-import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { EnvironmentState } from './EnvironmentState';
 import { StateProducer } from '../lessons/StateProducer';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
@@ -88,14 +87,9 @@ export class Environment {
         return new EnvironmentActionResult(environmentState, action, r, isTerminal);
     }
 
-    public static _isTerminalSuccess(newState: number[], goals: number[]): boolean {
-        if (newState.length !== 16) {
-            ConsoleUtils.prntErrorMsg("newState.size() != 16");
-            return false;
-        }
-        return goals
-            .filter(e => newState[e - 1] === e)
-            .length === goals.length;
+    public static _isTerminalSuccess(state: number[], goals: number[]): boolean {
+        const goalsInCorrectPositions = goals.filter(e => state[e - 1] === e);
+        return goalsInCorrectPositions.length === goals.length;
     }
 
     public prntInfo(): void {

@@ -1,13 +1,15 @@
 [
     {
         "lesson": 1,
-        "goals": [1, 2]
+        "goals": [1, 2],
+        "lessonsToGenerate": 200
     },
     {
         "lesson": 2,
         "goals": [3, 4],
         "startPositions": [3, 5, 6],
-        "lockedElements": [1, 2]
+        "lockedElements": [1, 2],
+        "lessonsToGenerate": 200
     },
     {
         "lesson": 3,
@@ -46,9 +48,9 @@
         "goals": [12],
         "lessonsToGenerate": 10,
         "lockedElements": 
-                            [1, 2, 3, 4,
-                             5, 6, 7, 8,
-                             9, 10, 11, 13,
-                             14, 15]
+                            [1,  2,  3,  4,
+                             5,  6,  7,  8,
+                             9,  10, 11, 
+                             13, 14, 15    ]
     }
 ]

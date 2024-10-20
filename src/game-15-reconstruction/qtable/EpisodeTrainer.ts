@@ -8,10 +8,10 @@ import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { ExperienceRecord } from './ExperienceRecord';
 import { Environment } from '../environment/Environment';
 import { StateProducer } from '../lessons/StateProducer';
-import { EnvironmentActionResult } from '../environment/EnvironmentActionResult';
 
 export class EpisodeRunner {
     public static experience: Set<ExperienceRecord> = new Set();
+    private maxExperienceSize = 2000;
 
     public async train(
         stateProducer: StateProducer,
@@ -21,8 +21,6 @@ export class EpisodeRunner {
         trainerInfo: string,
         semaphoreId: number | null
     ): Promise<void> {
-
-
         //-------------some hack------------
         if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
         //----------------------------------
@@ -39,10 +37,9 @@ export class EpisodeRunner {
             //-------------some hack------------
             if (!Trainer.semaphore.goodToGo(semaphoreId)) return;
             //----------------------------------
-
             step++;
+            if (Environment._isTerminalSuccess(state0.getState(), state0.getGoals())) break;
             let action: Action;
-
             const possibleActions = GameUtils.getPossibleActions(state0);
             if (environment.reverseAction !== null) {
                 const index = possibleActions.indexOf(environment.reverseAction);
@@ -55,16 +52,10 @@ export class EpisodeRunner {
                 action = GameUtils.getAction(qTable, state0, environment.reverseAction);
             }
 
-            const result: EnvironmentActionResult = environment.executeAction(state0, action);
+            const result = environment.executeAction(state0, action);
             const state1 = result.state;
-
             const reward = result.reward;
             isTerminal = result.isTerminal;
-
-            if (isTerminal) {
-                isTerminal = true;
-            }
-
             const record = new ExperienceRecord(state0, action, reward, isTerminal, state1);
             EpisodeRunner.experience.add(record);
             state0 = result.state;
@@ -72,8 +63,8 @@ export class EpisodeRunner {
 
         //todo: show progress some how - .. EpisodeTester. ??
 
-        EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, 10000);
-        if (EpisodeRunner.experience.size > 10000) EpisodeRunner.experience.clear();
+        EpisodeRunner.replayExperience(EpisodeRunner.experience, qTable, learningRate, discount, this.maxExperienceSize);
+        if (EpisodeRunner.experience.size > this.maxExperienceSize) EpisodeRunner.experience.clear();
 
         const statsInfo = `QTable size: ${qTable.size}, experience size: ${EpisodeRunner.experience.size}`;
         Utils.prnt("\n");

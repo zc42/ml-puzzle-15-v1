@@ -48,11 +48,13 @@ export class StateProducer {
     private static from(lesson: Lesson, lessonNb: number): StateProducer {
         const stateProducer = new StateProducer(lessonNb);
         stateProducer.goals = lesson.goals;
+
         stateProducer.lockedStateElements = lesson.lockedElements !== undefined ? lesson.lockedElements : [];
         stateProducer.episodesToTrain = lesson.lessonsToGenerate !== undefined ? lesson.lessonsToGenerate : 100;
 
         stateProducer.state = [...StateProducer.stateDone];
         StateProducer.shuffle(stateProducer, stateProducer.lockedStateElements);
+        stateProducer.state = StateShuffle.shuffle([...StateProducer.stateDone], stateProducer.lockedStateElements, this.shufleSteps);
 
         return lesson.startPositions !== undefined
             ? StateProducer.shuffleFreeCellStarPosition(stateProducer, lesson.startPositions.map(e => e - 1))

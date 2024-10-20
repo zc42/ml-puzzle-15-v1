@@ -1,5 +1,6 @@
 import { Action } from '../environment/Action';
 import { GameUtils } from '../environment/GameUtils';
+import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { EnvironmentState } from '../environment/EnvironmentState';
 
 export class QTableRow {
@@ -36,9 +37,10 @@ export class QTableRow {
         if (action === null || action === undefined) {
             let possibleActions = GameUtils.getPossibleActions(this.state);
             possibleActions = possibleActions.filter(action => action !== reverseAction);
-            if (possibleActions.length === 0)
+            if (possibleActions.length === 0) {
+                ConsoleUtils.prntErrorMsg('possibleActions.length === 0, there allways must be some action to go around.. need to debug.')
                 throw new Error('possibleActions.length === 0, there allways must be some action to go around.. need to debug.');
-
+            }
             return possibleActions[0];
         } else {
             return action;
