@@ -1,8 +1,8 @@
 import { EntryPoint } from './game-15-reconstruction/qtable/EntryPoint';
+import { AboutLoader } from './game-15-reconstruction/about/AboutLoader';
 import { GameUtils } from './game-15-reconstruction/environment/GameUtils';
 import { ConsoleUtils } from './game-15-reconstruction/utils/ConsoleUtils';
-import { LessonsEditor } from './game-15-reconstruction/lessons/TrainingConfigEditor';
-import { ConfigEditor } from './game-15-reconstruction/configuration/ConfigEditor';
+import { LessonsEditor } from './game-15-reconstruction/configuration/ConfigEditor';
 
 export class ToolBox {
 
@@ -10,8 +10,8 @@ export class ToolBox {
     document.getElementById('startTrainingBtn')?.addEventListener('click', () => ToolBox.startTraining().then());
     document.getElementById('startTestingBtn')?.addEventListener('click', () => ToolBox.startTesting().then());
     document.getElementById('zenGardenBtn')?.addEventListener('click', () => ToolBox.zenGardenOnOff().then());
-    document.getElementById('lessonsBtn')?.addEventListener('click', () => ToolBox.lessonsOnOff().then());
-    document.getElementById('configBtn')?.addEventListener('click', () => ToolBox.configOnOff().then());
+    document.getElementById('configurationBtn')?.addEventListener('click', () => ToolBox.configurationOnOff().then());
+    document.getElementById('aboutBtn')?.addEventListener('click', () => ToolBox.configOnOff().then());
   }
 
   private static async startTraining() {
@@ -28,13 +28,13 @@ export class ToolBox {
   }
 
   private static async configOnOff() {
-    this.btnOff('lessonsBtn', 'training lessons', show => LessonsEditor.toggleLessonsDisplay(show));
-    this.btnOnOff('configBtn', 'configuration', show => ConfigEditor.toggleConfigurationDisplay(show));
+    this.btnOff('configurationBtn', 'configuration', show => LessonsEditor.toggleLessonsDisplay(show));
+    this.btnOnOff('aboutBtn', 'about', show => AboutLoader.toggleConfigurationDisplay(show));
   }
 
-  private static async lessonsOnOff() {
-    this.btnOff('configBtn', 'configuration', show => ConfigEditor.toggleConfigurationDisplay(show));
-    this.btnOnOff('lessonsBtn', 'training lessons', show => LessonsEditor.toggleLessonsDisplay(show));
+  private static async configurationOnOff() {
+    this.btnOff('aboutBtn', 'about', show => AboutLoader.toggleConfigurationDisplay(show));
+    this.btnOnOff('configurationBtn', 'configuration', show => LessonsEditor.toggleLessonsDisplay(show));
   }
 
   private static async zenGardenOnOff() {

@@ -1,52 +1,67 @@
+import { EntryPoint } from '../qtable/EntryPoint';
 import { Tester } from '../qtable/Tester';
 import { FileLoader } from '../utils/FileLoader';
-import { EntryPoint } from '../qtable/EntryPoint';
 import { JsonUpdateStatus } from '../utils/JsonEditor';
 
-export interface Config {
-    version?: string;
-    use_pretrained_data_while_testing: boolean,
-    info?: string[]
+export interface Configuration {
+    info?: string,
+    basicTrainerConfig?: BasicTrainerConfiguration
+    usePretrainedDataWhileTesting?: boolean
+    lessons?: Lesson[];
 }
 
+export interface BasicTrainerConfiguration {
+    learningRate: number,
+    discount: number,
+    trainingBachCount: number,
+    lessonsToGenerate: number
+}
 
-export class ConfigLoader {
+export interface Lesson {
+    lesson: number;
+    goals: number[];
+    lockedElements?: number[];
+    startPositions?: number[];
+    lessonsToGenerate?: number;
+}
 
-    private static configJson: string;
-    private static config: Config;
+export class ConfigurationLoader {
 
-    public static async getConfig(): Promise<Config> {
-        if (this.config !== undefined) return this.config;
-        let jsonString = await this.getConfigJson();
+    private static configurationJson: string;
+    private static configuration: Configuration;
+
+    public static async getConfiguration(): Promise<Configuration> {
+        if (this.configuration !== undefined) return this.configuration;
+        let jsonString = await this.getConfigurationJson();
         try {
-            return JSON.parse(jsonString);
+            this.configuration = JSON.parse(jsonString);
+            this.configuration.lessons = this.configuration.lessons?.sort((o1, o2) => o1.lesson - o2.lesson);
+            return this.configuration;
         } catch (error) {
-            const errorMsg = 'Invalid JSON string: ' + error;
-            console.error(errorMsg);
-            return this.config = {
-                version: '-1',
-                use_pretrained_data_while_testing: true
-            };
+            console.error("Invalid JSON string:", error);
+            return this.configuration = {};
         }
     }
 
-    public static async getConfigJson(): Promise<string> {
-        if (this.configJson !== undefined) return this.configJson;
-        const path1 = 'dist/config.json';
-        const path2 = '/public/config.json';
-        this.configJson = await FileLoader.getFile(path1);
-        return this.configJson === ''
+    public static async getConfigurationJson(): Promise<string> {
+        if (this.configurationJson !== undefined) return this.configurationJson;
+        const path1 = 'dist/configuration.json';
+        const path2 = '/public/configuration.json';
+        this.configurationJson = await FileLoader.getFile(path1);
+        return this.configurationJson === ''
             ? await FileLoader.getFile(path2)
-            : this.configJson;
+            : this.configurationJson;
     }
 
-    public static async updateConfigJson(jsonString: string): Promise<JsonUpdateStatus> {
+    public static async updateConfigurationJson(jsonString: string): Promise<JsonUpdateStatus> {
         try {
-            let config: Config = JSON.parse(jsonString);
-            this.configJson = jsonString;
-            this.config = config;
+            let configuration: Configuration = JSON.parse(jsonString);
+            this.configuration.lessons = this.configuration.lessons?.sort((o1, o2) => o1.lesson - o2.lesson);
+            this.configurationJson = jsonString;
+            this.configuration = configuration;
 
-            await ConfigLoader.updateTester();
+            await ConfigurationLoader.updateTester();
+            await EntryPoint.restartTrainerIfIsRunning();
 
             return {
                 success: true,
@@ -63,8 +78,8 @@ export class ConfigLoader {
     }
 
     private static async updateTester() {
-        const usePretrainedData = this.config.use_pretrained_data_while_testing;
+        const usePretrainedData = this.configuration.usePretrainedDataWhileTesting;
         if (Tester.usePreloadedActions === usePretrainedData) return;
-        await EntryPoint.restartIfIsRunning();
+        await EntryPoint.restartTesterIfIsRunning();
     }
 }

@@ -1,6 +1,6 @@
 import { Utils } from '../utils/Utils';
 import { StateShuffle } from './StateShuffle';
-import { Lesson, TrainingConfigLoader } from './TrainingConfigLoader';
+import { Lesson, ConfigurationLoader } from './ConfigLoader';
 
 export class LessonProducer {
     private goals: number[];
@@ -41,16 +41,17 @@ export class LessonProducer {
     }
 
     public static async getLessonProducersFromJson(): Promise<LessonProducer[]> {
-        let config = await TrainingConfigLoader.getTraningConfiguration();
+        let config = await ConfigurationLoader.getConfiguration();
         if (config.lessons === undefined) return [];
-        return config.lessons.map((e, i) => LessonProducer.from(e, i));
+        const defaultEpisdeCount = config.basicTrainerConfig?.lessonsToGenerate ?? 100;
+        return config.lessons.map((e, i) => LessonProducer.from(e, i, defaultEpisdeCount));
     }
 
-    private static from(lesson: Lesson, lessonNb: number): LessonProducer {
+    private static from(lesson: Lesson, lessonNb: number, defaultEpisdeCount: number): LessonProducer {
         const stateProducer = new LessonProducer(lessonNb);
         stateProducer.goals = lesson.goals;
         stateProducer.lockedStateElements = lesson.lockedElements !== undefined ? lesson.lockedElements : [];
-        stateProducer.episodesToTrain = lesson.lessonsToGenerate !== undefined ? lesson.lessonsToGenerate : 100;
+        stateProducer.episodesToTrain = lesson.lessonsToGenerate !== undefined ? lesson.lessonsToGenerate : defaultEpisdeCount;
         stateProducer.state = StateShuffle.shuffleForTraining(stateProducer.lockedStateElements);
         if (lesson.startPositions === undefined) return stateProducer;
         return LessonProducer.shuffleFreeCellStarPosition(stateProducer, lesson.startPositions.map(e => e - 1));

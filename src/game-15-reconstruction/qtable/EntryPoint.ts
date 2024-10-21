@@ -19,7 +19,7 @@ export class EntryPoint {
 
     public static async stopTrainer() {
         this.trainer?.stop();
-        // this.trainer = null;
+        this.trainer = null;
     }
 
     public static async stopTester() {
@@ -27,9 +27,15 @@ export class EntryPoint {
         this.tester = null;
     }
 
-    public static async restartIfIsRunning() {
+    public static async restartTesterIfIsRunning() {
         if (this.tester === null) return;
         await this.stopTester();
         await this.test();
+    }
+
+    public static async restartTrainerIfIsRunning() {
+        if (this.trainer === null) return;
+        await this.stopTrainer();
+        await this.train();
     }
 }

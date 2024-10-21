@@ -8,7 +8,7 @@ import { GameUtils } from '../environment/GameUtils';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { ExperienceRecord } from './ExperienceRecord';
 import { Environment } from '../environment/Environment';
-import { LessonProducer } from '../lessons/LessonProducer';
+import { LessonProducer } from '../configuration/LessonProducer';
 
 export class EpisodeRunner {
     public static experience: Set<ExperienceRecord> = new Set();

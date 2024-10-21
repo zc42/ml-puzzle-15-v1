@@ -3,7 +3,7 @@ import { Pair } from '../utils/Pair';
 import { Utils } from '../utils/Utils';
 import { GameUtils } from './GameUtils';
 import { EnvironmentState } from './EnvironmentState';
-import { LessonProducer } from '../lessons/LessonProducer';
+import { LessonProducer } from '../configuration/LessonProducer';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
 
 export class Environment {

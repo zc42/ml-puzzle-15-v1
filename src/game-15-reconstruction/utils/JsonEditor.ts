@@ -16,7 +16,8 @@ export class JsonEditor {
 
     public static show(
         jsonContent: string,
-        updateJsonFn: (jsonContent: string) => Promise<JsonUpdateStatus>
+        updateJsonFn: (jsonContent: string) => Promise<JsonUpdateStatus>,
+        editable: boolean = true
     ): void {
 
         const toolsDiv = document.getElementById('tools');
@@ -41,12 +42,11 @@ export class JsonEditor {
         //--------------------------------------
 
         editorDiv.id = 'jsonEditor';
-        // contentDiv.setAttribute('class', 'editor');
         statusDiv.setAttribute('class', 'console-text');
         beginLineDiv.textContent = this.divLine;
         endLineDiv.textContent = this.divLine;
 
-        const fn = async (jsonElement: HTMLElement) => this.update(jsonContent, jsonElement, statusDiv, updateJsonFn)
+        const fn = async (jsonElement: HTMLElement) => this.update(jsonContent, jsonElement, statusDiv, updateJsonFn, editable)
         const codeJar = CodeJar(contentDiv, fn);
         codeJar.updateCode(jsonContent);
     }
@@ -55,11 +55,12 @@ export class JsonEditor {
         jsonContent: string,
         jsonElement: HTMLElement,
         updateStatusDiv: HTMLElement,
-        updateJsonFn: (jsonContent: string) => Promise<JsonUpdateStatus>
+        updateJsonFn: (jsonContent: string) => Promise<JsonUpdateStatus>,
+        editable: boolean
     ): Promise<void> {
         if (jsonElement.textContent === null) return;
 
-        let newJsonContent = jsonElement.textContent;
+        let newJsonContent = editable ? jsonElement.textContent : jsonContent;
         jsonElement.innerHTML = highlight(newJsonContent, languages.js, 'js');
 
         if (newJsonContent === jsonContent) return;

@@ -1,7 +1,8 @@
 import { TesterEntryPoint } from './Tester';
 import { Semaphore } from '../utils/Semaphore';
-import { LessonProducer } from '../lessons/LessonProducer';
+import { LessonProducer } from '../configuration/LessonProducer';
 import { EpisodeRunner as EpisodeTrainer } from './EpisodeTrainer';
+import { ConfigurationLoader } from '../configuration/ConfigLoader';
 
 export class Trainer {
 
@@ -9,7 +10,6 @@ export class Trainer {
     public static semaphore: Semaphore = new Semaphore();
     private semaphoreId: number | null = null;
     private tester: TesterEntryPoint | null = null;
-    private trainingBachCount: number = 10;
 
     public async train(): Promise<void> {
         this.semaphoreId = Trainer.semaphore.enable();
@@ -20,8 +20,11 @@ export class Trainer {
         await this.runTester();
         EpisodeTrainer.experience.clear();
 
-        const discount = 0.9;
-        const learningRate = 0.1;
+        const configuration = await ConfigurationLoader.getConfiguration();
+        const trainerConfig = configuration.basicTrainerConfig;
+        const discount = trainerConfig?.discount ?? 0.9;
+        const learningRate = trainerConfig?.learningRate ?? 0.1;
+        const trainingBachCount = trainerConfig?.trainingBachCount ?? 10;
         const lessons = await LessonProducer.getLessonProducersFromJson();
 
         const episodeRunnerF = async (stateProducer: LessonProducer, trainerInfo: string): Promise<void> =>
@@ -35,11 +38,11 @@ export class Trainer {
             }
         };
 
-        for (let i = 0; i < this.trainingBachCount; i++) {
+        for (let i = 0; i < trainingBachCount; i++) {
             for (let lessonNb = 0; lessonNb < lessons.length; lessonNb++) {
                 let lesson = lessons[lessonNb];
                 let lessonInfo = 'Lesson: ' + (lessonNb + 1) + ' of ' + lessons.length + '.\n';
-                let trainerInfo = 'Running training batch: ' + (i + 1) + ' of ' + this.trainingBachCount;
+                let trainerInfo = 'Running training batch: ' + (i + 1) + ' of ' + trainingBachCount;
                 await stateProducerConsumer(lesson, lessonInfo, trainerInfo);
             }
         }

@@ -4,15 +4,15 @@ import { Action } from '../environment/Action';
 import { QTableUpdater } from './QTableUpdater';
 import { GameUtils } from '../environment/GameUtils';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
-import { StateShuffle } from '../lessons/StateShuffle';
+import { StateShuffle } from '../configuration/StateShuffle';
 import { Environment } from '../environment/Environment';
-import { LessonProducer } from '../lessons/LessonProducer';
+import { LessonProducer } from '../configuration/LessonProducer';
 import { PretrainedDataLoader } from './QTableActionsLoader';
 import { EnvironmentState } from '../environment/EnvironmentState';
-import { ConfigLoader, Config } from '../configuration/ConfigLoader';
-
+import { ConfigurationLoader } from '../configuration/ConfigLoader';
 
 export class TesterEntryPoint {
+
 
     private static testerIntervalId: number | null = null;
 
@@ -85,8 +85,8 @@ export class Tester {
     }
 
     private async loadedActionMap(usePreloadedActionMap: boolean | undefined): Promise<void> {
-        const config: Config = await ConfigLoader.getConfig();
-        Tester.usePreloadedActions = usePreloadedActionMap ?? config.use_pretrained_data_while_testing;
+        const config = await ConfigurationLoader.getConfiguration();
+        Tester.usePreloadedActions = usePreloadedActionMap ?? config.usePretrainedDataWhileTesting ?? true;
         if (Tester.usePreloadedActions && Tester.actionMap === null)
             Tester.actionMap = await PretrainedDataLoader.getQTableActionMap();
     }

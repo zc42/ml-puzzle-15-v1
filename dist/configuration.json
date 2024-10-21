@@ -1,23 +1,9 @@
 {
-    "help":[
-        "----------------------------------------------------------------------------------------------------",
-        "basicTrainerConfig:",
-        "",
-        "learningRate - the learning rate determines how much new information overrides old knowledge.",
-        "discount - discount factor influences how future rewards are valued relative to immediate ones.",
-        "trainingBatchCount - the number of training cycles that will be executed in each batch.",
-        "lessonsToGenerate - default number of episodes for training each lesson,",
-        "used if a specific lesson does not have its ownlessonsToGenerate value set.",
-        "----------------------------------------------------------------------------------------------------",
-        "lessons:",
-        "",
-        "lesson - the number of the lesson.",
-        "goals - the target positions for this lesson.",
-        "startPositions - starting positions for the empty tile.",
-        "lockedElements - tiles that are fixed and cannot be moved, usually representing the goals from previous lessons.",
-        "lessonsToGenerate - the number of episodes that will be generated for this particular lesson in each training cycle.",
-        "----------------------------------------------------------------------------------------------------"
+    "info":[
+        "This configuration is editable.",
+        "The explanation of this file properties can be found in the 'about' section."
     ],
+    "usePretrainedDataWhileTesting": true,
     "basicTrainerConfig":{
         "learningRate": 0.1,
         "discount": 0.9,
