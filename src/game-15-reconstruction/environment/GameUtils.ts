@@ -107,8 +107,8 @@ export class GameUtils {
 
             // if (o === -1) v = "::";
             // else 
-            if (goals.includes(o)) v = 'x';
-            else if (goals.includes(e + 1)) v = 'o';
+            if (goals.includes(o)) v = 'o';
+            else if (goals.includes(e + 1)) v = 'O';
             else v = '';
 
             v += '\t';
