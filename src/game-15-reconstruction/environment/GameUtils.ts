@@ -24,6 +24,7 @@ export class GameUtils {
         if (i1 > 15) {
             console.log(state)
             console.log(action)
+            GameUtils.logBoardState(state);
             throw new Error('i1 > 15');
         }
 
@@ -71,7 +72,8 @@ export class GameUtils {
     }
 
     private static contains(fixedStateIndexes: number[], x: number, y: number): boolean {
-        return fixedStateIndexes.includes(this.getIndex(x, y));
+        const index = this.getIndex(x, y);
+        return fixedStateIndexes.includes(index);
     }
 
 
@@ -80,6 +82,22 @@ export class GameUtils {
         let goals = state.getGoals();
         if (this.zenGardenOn) return this.getStateAsZenStoneGarden(boardState, goals);
         else return this.__getStateAsString(boardState, goals);
+    }
+
+    public static logBoardState(boardState: number[]) {
+        const state = Array.from({ length: 16 }, (_, e) => {
+            let v: string;
+            const o = boardState[e];
+            v = o.toString();
+            v += "\t";
+            if (e !== 0 && (e + 1) % 4 === 0) {
+                v += "\n";
+            }
+            return v;
+        }).join('')
+
+        console.log(state);
+
     }
 
     private static __getStateAsString(state: number[], goals: number[]): string {

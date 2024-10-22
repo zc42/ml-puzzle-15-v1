@@ -2,12 +2,12 @@ import { Utils } from '../utils/Utils';
 import { EntryPoint } from './EntryPoint';
 import { Action } from '../environment/Action';
 import { QTableUpdater } from './QTableUpdater';
-import { GameUtils } from '../environment/GameUtils';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
-import { StateShuffle } from '../configuration/StateShuffle';
+import { GameUtils } from '../environment/GameUtils';
 import { Environment } from '../environment/Environment';
-import { LessonProducer } from '../configuration/LessonProducer';
+import { StateShuffle } from '../environment/StateShuffle';
 import { PretrainedDataLoader } from './QTableActionsLoader';
+import { LessonProducer } from '../environment/LessonProducer';
 import { EnvironmentState } from '../environment/EnvironmentState';
 import { ConfigurationLoader } from '../configuration/ConfigLoader';
 

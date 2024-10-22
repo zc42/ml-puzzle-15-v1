@@ -8,14 +8,14 @@ import { GameUtils } from '../environment/GameUtils';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { ExperienceRecord } from './ExperienceRecord';
 import { Environment } from '../environment/Environment';
-import { LessonProducer } from '../configuration/LessonProducer';
+import { LessonProducer } from '../environment/LessonProducer';
 
 export class EpisodeRunner {
     public static experience: Set<ExperienceRecord> = new Set();
     private maxExperienceSize = 2000;
 
     public async train(
-        stateProducer: LessonProducer,
+        lessonProducer: LessonProducer,
         discount: number,
         learningRate: number,
         trainerInfo: string,
@@ -26,7 +26,7 @@ export class EpisodeRunner {
         // //----------------------------------
 
         const qTable = EntryPoint.qTable;
-        const environment = new Environment(stateProducer);
+        const environment = new Environment(lessonProducer);
         environment.reset();
         let state0 = environment.getInitState();
 
@@ -42,10 +42,16 @@ export class EpisodeRunner {
             step++;
             if (Environment._isTerminalSuccess(state0.getBoardState(), state0.getGoals())) break;
             let action: Action;
-            const possibleActions = GameUtils.getPossibleActions(state0);
-            if (environment.reverseAction !== null) {
-                const index = possibleActions.indexOf(environment.reverseAction);
-                possibleActions.splice(index, 1); // Remove reverse action
+            let possibleActions = GameUtils.getPossibleActions(state0).filter(e => e !== environment.reverseAction);
+
+            if (possibleActions.length === 0) {
+                GameUtils.logBoardState(state0.boardState);
+                possibleActions = GameUtils.getPossibleActions(state0)
+                console.log('environment.reverseAction', environment.reverseAction);
+                console.log('possibleActions 1', possibleActions);
+                possibleActions = possibleActions.filter(e => e !== environment.reverseAction);
+                console.log('possibleActions 2', possibleActions);
+                throw new Error('possibleActions.length === 0');
             }
 
             if (Math.random() < epsilon) { // Explore

@@ -2,13 +2,13 @@ import { Action } from './Action';
 import { Pair } from '../utils/Pair';
 import { Utils } from '../utils/Utils';
 import { GameUtils } from './GameUtils';
+import { LessonProducer } from './LessonProducer';
 import { EnvironmentState } from './EnvironmentState';
-import { LessonProducer } from '../configuration/LessonProducer';
 import { EnvironmentActionResult } from './EnvironmentActionResult';
 
 export class Environment {
     private state: EnvironmentState;
-    private static stateProducer: LessonProducer;
+    private static lessonProducer: LessonProducer;
     private goals: number[];
 
     public reverseAction: Action | null = null;
@@ -18,13 +18,12 @@ export class Environment {
     private smallCircleAction2: Action[] = [];
     private circleAction: Action[] = [];
 
-    constructor(stateProducer: LessonProducer) {
-        Environment.stateProducer = stateProducer;
-
-        Environment.stateProducer.resetState().then();
-        const state = Environment.stateProducer.getState();
-        this.goals = Environment.stateProducer.getGoals();
-        this.state = new EnvironmentState(state, Environment.stateProducer);
+    constructor(lessonProducer: LessonProducer) {
+        Environment.lessonProducer = lessonProducer;
+        Environment.lessonProducer.shuffleBoardState();
+        const state = Environment.lessonProducer.getState();
+        this.goals = Environment.lessonProducer.getGoals();
+        this.state = new EnvironmentState(state, Environment.lessonProducer);
     }
 
     public static isTerminalSuccess(state: EnvironmentState): boolean {
@@ -47,19 +46,19 @@ export class Environment {
     }
 
     public getInitState(): EnvironmentState {
-        Environment.stateProducer.resetState();
-        const state = Environment.stateProducer.getState();
-        this.goals = Environment.stateProducer.getGoals();
-        this.state = new EnvironmentState(state, Environment.stateProducer);
+        Environment.lessonProducer.shuffleBoardState();
+        const state = Environment.lessonProducer.getState();
+        this.goals = Environment.lessonProducer.getGoals();
+        this.state = new EnvironmentState(state, Environment.lessonProducer);
         return this.state;
     }
 
     public executeAction(state0: EnvironmentState, action: Action): EnvironmentActionResult {
         const newState = GameUtils.makeMove(state0.getBoardState(), action);
-        const environmentState = new EnvironmentState(newState, Environment.stateProducer);
+        const environmentState = new EnvironmentState(newState, Environment.lessonProducer);
 
         let isTerminal = Environment._isTerminalSuccess(newState, this.goals);
-        this.state = new EnvironmentState(newState, Environment.stateProducer);
+        this.state = new EnvironmentState(newState, Environment.lessonProducer);
 
         let r: number = NaN;
 
@@ -75,7 +74,7 @@ export class Environment {
         }
 
         const io = this.state.getBoardState().indexOf(-1);
-        if (Environment.stateProducer.isLockedIndex(io)) {
+        if (Environment.lessonProducer.isLockedIndex(io)) {
             isTerminal = true;
             r = -1;
         }

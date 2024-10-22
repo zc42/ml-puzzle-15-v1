@@ -1,4 +1,4 @@
-import { LessonProducer } from '../configuration/LessonProducer';
+import { LessonProducer } from './LessonProducer';
 
 export interface EnvironmentStateI {
   boardState: number[];

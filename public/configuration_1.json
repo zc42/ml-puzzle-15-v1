@@ -1,0 +1,57 @@
+{
+    "info":[
+        "This configuration is editable.",
+        "The explanation of this file properties can be found in the 'about' section."
+    ],
+    "usePretrainedDataWhileTesting": true,
+    "basicTrainerConfig":{
+        "learningRate": 0.1,
+        "discount": 0.9,
+        "trainingBachCount": 10,
+        "lessonsToGenerate": 100
+    },
+"lessons": [
+        {
+            "lesson": 1,
+            "goals": [1, 4],
+            "lessonsToGenerate": 200
+        },
+        {
+            "lesson": 2,
+            "goals": [2, 3],
+            "startPositions": [2, 5, 3,6],
+            "lockedElements": [1, 4],
+            "lessonsToGenerate": 200
+        },
+        {
+            "lesson": 3,
+            "goals": [5, 8],
+            "startPositions": [6, 7],
+            "lockedElements": [1, 2, 3, 4]
+        },
+        {
+            "lesson": 4,
+            "goals": [6, 7],
+            "startPositions": [6, 9, 7, 12],
+            "lockedElements": 
+                                [1, 2, 3, 4, 
+                                 5,       8]
+        },
+        {
+            "lesson": 5,
+            "goals": [9, 10, 13, 14],
+            "lockedElements": 
+                                [1, 2, 3, 4,
+                                 5, 6, 7, 8]
+        },
+        {
+            "lesson": 6,
+            "goals": [11, 15, 12],
+            "lockedElements": 
+                                [1, 2, 3, 4,
+                                 5, 6, 7, 8,
+                                 9, 10,
+                                 13, 14  ]
+        }
+    ]
+}    

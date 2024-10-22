@@ -1,6 +1,6 @@
 import { TesterEntryPoint } from './Tester';
 import { Semaphore } from '../utils/Semaphore';
-import { LessonProducer } from '../configuration/LessonProducer';
+import { LessonProducer } from '../environment/LessonProducer';
 import { EpisodeRunner as EpisodeTrainer } from './EpisodeTrainer';
 import { ConfigurationLoader } from '../configuration/ConfigLoader';
 

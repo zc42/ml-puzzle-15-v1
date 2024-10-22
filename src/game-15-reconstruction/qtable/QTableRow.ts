@@ -38,6 +38,10 @@ export class QTableRow {
             let possibleActions = GameUtils.getPossibleActions(this.state);
             possibleActions = possibleActions.filter(action => action !== reverseAction);
             if (possibleActions.length === 0) {
+
+                console.log('reverseAction', reverseAction)
+                GameUtils.logBoardState(this.state.boardState);
+
                 ConsoleUtils.prntErrorMsg('possibleActions.length === 0, there allways must be some action to go around.. need to debug.')
                 throw new Error('possibleActions.length === 0, there allways must be some action to go around.. need to debug.');
             }
