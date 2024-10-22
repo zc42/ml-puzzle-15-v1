@@ -3,8 +3,6 @@ import { StateShuffle } from './StateShuffle';
 import { Lesson, ConfigurationLoader } from '../configuration/ConfigLoader';
 
 export class LessonProducer {
-    // private goals: number[];
-    // private lockedStateElements: number[];
     private boardState: number[];
     private episodesToTrain: number;
     private lesson: Lesson;
@@ -17,9 +15,7 @@ export class LessonProducer {
     ];
 
     private constructor(lesson: Lesson) {
-        // this.goals = [];
         this.boardState = [];
-        // this.lockedStateElements = [];
         this.lesson = lesson;
         this.episodesToTrain = 0;
     }
@@ -52,10 +48,9 @@ export class LessonProducer {
     private static from(lesson: Lesson, defaultEpisdeCount: number): LessonProducer {
         const lessonProducer = new LessonProducer(lesson);
         lessonProducer.lesson = lesson;
-
-        // lessonProducer.goals = lesson.goals;
-        // lessonProducer.lockedStateElements = lesson.lockedElements !== undefined ? lesson.lockedElements : [];
-        lessonProducer.episodesToTrain = lesson.lessonsToGenerate !== undefined ? lesson.lessonsToGenerate : defaultEpisdeCount;
+        lessonProducer.episodesToTrain = lesson.lessonsToGenerate !== undefined
+            ? lesson.lessonsToGenerate
+            : defaultEpisdeCount;
 
         lessonProducer.shuffleBoardState();
         return lessonProducer;
