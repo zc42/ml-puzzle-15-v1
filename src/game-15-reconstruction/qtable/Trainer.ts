@@ -21,7 +21,7 @@ export class Trainer {
         EpisodeTrainer.experience.clear();
 
         const configuration = await ConfigurationLoader.getConfiguration();
-        const trainerConfig = configuration.basicTrainerConfig;
+        const trainerConfig = configuration.trainerConfiguration;
         const discount = trainerConfig?.discount ?? 0.9;
         const learningRate = trainerConfig?.learningRate ?? 0.1;
         const trainingBachCount = trainerConfig?.trainingBachCount ?? 10;

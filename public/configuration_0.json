@@ -1,0 +1,37 @@
+{
+    "info":[
+        "This configuration is editable.",
+        "The explanation of this file properties can be found in the 'about' section."
+    ],
+    "usePretrainedDataWhileTesting": true,
+    "basicTrainerConfig":{
+        "learningRate": 0.1,
+        "discount": 0.9,
+        "trainingBachCount": 10,
+        "lessonsToGenerate": 100
+    },
+    "lessons": [
+        {
+            "goals": [1, 2]
+        },
+        {
+            "goals": [3, 4]
+        },
+        {
+            "goals": [5, 6]
+        },
+        {
+            "goals": [7, 8]
+        },
+        {
+            "goals": [9, 13]
+        },
+        {
+            "goals": [10, 11, 14, 15]
+        },
+        {
+            "goals": [12],
+            "lessonsToGenerate": 10
+        }
+    ]
+}

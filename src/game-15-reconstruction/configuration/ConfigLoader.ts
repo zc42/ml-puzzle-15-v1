@@ -5,23 +5,17 @@ import { JsonUpdateStatus } from '../utils/JsonEditor';
 
 export interface Configuration {
     info?: string,
-    basicTrainerConfig?: BasicTrainerConfiguration
+    trainerConfiguration?: BasicTrainerConfiguration
     usePretrainedDataWhileTesting?: boolean
-    lessons?: Lesson[];
 }
 
 export interface BasicTrainerConfiguration {
     learningRate: number,
     discount: number,
+
+    lessonsId: string,
     trainingBachCount: number,
     lessonsToGenerate: number
-}
-
-export interface Lesson {
-    goals: number[];
-    // lockedElements?: number[];
-    // startPositions?: number[];
-    lessonsToGenerate?: number;
 }
 
 export class ConfigurationLoader {
@@ -33,9 +27,7 @@ export class ConfigurationLoader {
         if (this.configuration !== undefined) return this.configuration;
         let jsonString = await this.getConfigurationJson();
         try {
-            this.configuration = JSON.parse(jsonString);
-            // this.configuration.lessons = this.configuration.lessons?.sort((o1, o2) => o1.lesson - o2.lesson);
-            return this.configuration;
+            return this.configuration = JSON.parse(jsonString);
         } catch (error) {
             console.error("Invalid JSON string:", error);
             return this.configuration = {};
@@ -55,7 +47,6 @@ export class ConfigurationLoader {
     public static async updateConfigurationJson(jsonString: string): Promise<JsonUpdateStatus> {
         try {
             let configuration: Configuration = JSON.parse(jsonString);
-            // this.configuration.lessons = this.configuration.lessons?.sort((o1, o2) => o1.lesson - o2.lesson);
             this.configurationJson = jsonString;
             this.configuration = configuration;
 

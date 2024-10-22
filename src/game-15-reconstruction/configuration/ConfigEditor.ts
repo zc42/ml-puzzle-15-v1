@@ -1,9 +1,9 @@
 import { ConfigurationLoader } from './ConfigLoader';
 import { JsonEditor } from '../utils/JsonEditor';
 
-export class LessonsEditor {
+export class ConfigurationEditor {
 
-    public static async toggleLessonsDisplay(show: boolean,): Promise<void> {
+    public static async toggleDisplay(show: boolean,): Promise<void> {
         if (show) {
             const jsonContent = await ConfigurationLoader.getConfigurationJson();
             let updateJsonFn = async (jsonContent: string) => ConfigurationLoader.updateConfigurationJson(jsonContent)

@@ -2,7 +2,8 @@ import { EntryPoint } from './game-15-reconstruction/qtable/EntryPoint';
 import { AboutLoader } from './game-15-reconstruction/about/AboutLoader';
 import { GameUtils } from './game-15-reconstruction/environment/GameUtils';
 import { ConsoleUtils } from './game-15-reconstruction/utils/ConsoleUtils';
-import { LessonsEditor } from './game-15-reconstruction/configuration/ConfigEditor';
+import { LessonsEditor } from './game-15-reconstruction/lessons/LessonsEditor';
+import { ConfigurationEditor } from './game-15-reconstruction/configuration/ConfigEditor';
 
 export class ToolBox {
 
@@ -11,10 +12,12 @@ export class ToolBox {
     document.getElementById('startTestingBtn')?.addEventListener('click', () => ToolBox.startTesting().then());
     document.getElementById('zenGardenBtn')?.addEventListener('click', () => ToolBox.zenGardenOnOff().then());
     document.getElementById('configurationBtn')?.addEventListener('click', () => ToolBox.configurationOnOff().then());
-    document.getElementById('aboutBtn')?.addEventListener('click', () => ToolBox.configOnOff().then());
+    document.getElementById('lessonsBtn')?.addEventListener('click', () => ToolBox.lessonsOnOff().then());
+    document.getElementById('aboutBtn')?.addEventListener('click', () => ToolBox.aboutOnOff().then());
   }
 
   private static async startTraining() {
+    ConsoleUtils.prntErrorMsg('');
     EntryPoint.stopTester();
     ConsoleUtils.clearScreen();
     await EntryPoint.train();
@@ -22,19 +25,29 @@ export class ToolBox {
   }
 
   public static async startTesting() {
+    ConsoleUtils.prntErrorMsg('');
     EntryPoint.stopTrainer();
     ConsoleUtils.clearScreen();
     await EntryPoint.test();
   }
 
-  private static async configOnOff() {
-    this.btnOff('configurationBtn', 'configuration', show => LessonsEditor.toggleLessonsDisplay(show));
-    this.btnOnOff('aboutBtn', 'about', show => AboutLoader.toggleConfigurationDisplay(show));
+  private static async aboutOnOff() {
+    this.btnOff('configurationBtn', 'configuration', show => ConfigurationEditor.toggleDisplay(show));
+    this.btnOff('lessonsBtn', 'lessons', show => AboutLoader.toggleDisplay(show));
+    this.btnOnOff('aboutBtn', 'about', show => AboutLoader.toggleDisplay(show));
+  }
+
+  private static async lessonsOnOff() {
+    LessonsEditor
+    this.btnOff('aboutBtn', 'about', show => AboutLoader.toggleDisplay(show));
+    this.btnOff('configurationBtn', 'configuration', show => ConfigurationEditor.toggleDisplay(show));
+    this.btnOnOff('lessonsBtn', 'lessons', show => LessonsEditor.toggleDisplay(show));
   }
 
   private static async configurationOnOff() {
-    this.btnOff('aboutBtn', 'about', show => AboutLoader.toggleConfigurationDisplay(show));
-    this.btnOnOff('configurationBtn', 'configuration', show => LessonsEditor.toggleLessonsDisplay(show));
+    this.btnOff('aboutBtn', 'about', show => AboutLoader.toggleDisplay(show));
+    this.btnOff('lessonsBtn', 'lessons', show => AboutLoader.toggleDisplay(show));
+    this.btnOnOff('configurationBtn', 'configuration', show => ConfigurationEditor.toggleDisplay(show));
   }
 
   private static async zenGardenOnOff() {
@@ -48,6 +61,7 @@ export class ToolBox {
   }
 
   private static async btnOnOff(btnId: string, text: string, fn: (input: boolean) => void) {
+    ConsoleUtils.prntErrorMsg('');
     let btn = document.getElementById(btnId);
     let value = btn?.getAttribute('value');
     if (value !== text + ' off') {

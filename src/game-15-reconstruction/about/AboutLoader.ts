@@ -8,7 +8,7 @@ export class AboutLoader {
     private static updateStatus: JsonUpdateStatus = { "success": false, 'messgae': 'Not editable.' };
 
 
-    public static async toggleConfigurationDisplay(show: boolean,): Promise<void> {
+    public static async toggleDisplay(show: boolean,): Promise<void> {
         if (show) {
             const jsonContent = await AboutLoader.getAboutJson();
             JsonEditor.show(jsonContent, async _ => AboutLoader.updateStatus, false);

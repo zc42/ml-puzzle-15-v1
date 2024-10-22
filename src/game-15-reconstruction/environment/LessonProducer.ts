@@ -1,10 +1,12 @@
 import { StateShuffle } from './StateShuffle';
-import { Lesson, ConfigurationLoader } from '../configuration/ConfigLoader';
+import { ConfigurationLoader } from '../configuration/ConfigLoader';
+import { LessonParams, LessonsLoader } from '../lessons/LessonsLoader';
+import { ConsoleUtils } from '../utils/ConsoleUtils';
 
 export class LessonProducer {
     private boardState: number[];
     private episodesToTrain: number;
-    private lesson: Lesson;
+    private lesson: LessonParams;
     private lockedElements: number[];
 
     public static readonly stateDone: number[] = [
@@ -14,7 +16,7 @@ export class LessonProducer {
         13, 14, 15, -1
     ];
 
-    private constructor(lesson: Lesson, lockedElements: number[]) {
+    private constructor(lesson: LessonParams, lockedElements: number[]) {
         this.boardState = [];
         this.lesson = lesson;
         this.episodesToTrain = 0;
@@ -39,35 +41,47 @@ export class LessonProducer {
 
     public static async getLessonProducersFromJson(): Promise<LessonProducer[]> {
         let config = await ConfigurationLoader.getConfiguration();
-        if (config.lessons === undefined) return [];
-        const defaultEpisdeCount = config.basicTrainerConfig?.lessonsToGenerate ?? 100;
-        let lessons = config.lessons;
-        return config.lessons
+        let lessonsConfig = await LessonsLoader.getLessonsConfiguration();
+        const trainerConfiguration = config.trainerConfiguration;
+
+        if (trainerConfiguration?.lessonsId === undefined) {
+            ConsoleUtils.prntErrorMsg('trainerConfiguration?.lessonsId === undefined')
+            throw new Error('trainerConfiguration?.lessonsId === undefined');
+        }
+
+        let lessonsId = undefined;
+        let lessons: LessonParams[] | null = null;
+        
+        if (config.usePretrainedDataWhileTesting === true) {
+            lessons = LessonsLoader.getOriginalLessonParams();
+        } else {
+            let lessonsId = trainerConfiguration?.lessonsId ?? '';
+            lessons = lessonsConfig.allLessons?.find(e => e.id === lessonsId)?.lessons ?? null;
+        }
+
+        if (lessons === null) {
+            ConsoleUtils.prntErrorMsg('no lessons found for lessonsId: \'' + lessonsId + '\'')
+            throw new Error('lessons === null');
+        }
+
+        const defaultEpisdeCount = trainerConfiguration?.lessonsToGenerate ?? 100;
+        return lessons
             .map((e, i0) => {
                 let fixedElements = lessons.filter((_, i1) => i1 < i0).flatMap(e => e.goals) ?? [];
                 return LessonProducer.from(e, fixedElements, defaultEpisdeCount);
             });
     }
 
-    private static from(lesson: Lesson, fixedElements: number[], defaultEpisdeCount: number): LessonProducer {
-        const lessonProducer = new LessonProducer(lesson, fixedElements);
-        lessonProducer.lesson = lesson;
-        lessonProducer.episodesToTrain = lesson.lessonsToGenerate !== undefined
-            ? lesson.lessonsToGenerate
+    private static from(lessonParams: LessonParams, fixedElements: number[], defaultEpisdeCount: number): LessonProducer {
+        const lessonProducer = new LessonProducer(lessonParams, fixedElements);
+        lessonProducer.lesson = lessonParams;
+        lessonProducer.episodesToTrain = lessonParams.lessonsToGenerate !== undefined
+            ? lessonParams.lessonsToGenerate
             : defaultEpisdeCount;
 
         lessonProducer.shuffleBoardState();
         return lessonProducer;
     }
-
-    // private static shuffleFreeCellStarPosition(stateProducer: LessonProducer, availableFreeCellIndexes: number[]): LessonProducer {
-    //     const newFreeCellIndex = Utils.shuffleArray(availableFreeCellIndexes)[0]
-    //     const oldFreeCellIndex = stateProducer.boardState.indexOf(-1);
-    //     const v = stateProducer.boardState[newFreeCellIndex];
-    //     stateProducer.boardState[newFreeCellIndex] = -1;
-    //     stateProducer.boardState[oldFreeCellIndex] = v;
-    //     return stateProducer;
-    // }
 
     public isLockedIndex(index: number): boolean {
         return this.getLockedStateElements().includes(index + 1);
