@@ -8,9 +8,9 @@
         "learningRate": 0.1,
         "discount": 0.9,
         "trainingBachCount": 10,
-        "lessonsToGenerate": 100
+        "lessonsToGenerate": 200
     },
-    "lessons": [
+   "lessons": [
         {
             "goals": [1, 2]
         },
@@ -24,14 +24,11 @@
             "goals": [7, 8]
         },
         {
-            "goals": [9, 13]
+            "goals": [9, 10, 13, 14]
         },
         {
-            "goals": [10, 11, 14, 15]
-        },
-        {
-            "goals": [12],
-            "lessonsToGenerate": 10
+            "goals": [11, 12, 15],
+            "lessonsToGenerate": 100
         }
     ]
 }

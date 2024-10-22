@@ -1,6 +1,6 @@
-import { EntryPoint } from '../qtable/EntryPoint';
 import { Tester } from '../qtable/Tester';
 import { FileLoader } from '../utils/FileLoader';
+import { EntryPoint } from '../qtable/EntryPoint';
 import { JsonUpdateStatus } from '../utils/JsonEditor';
 
 export interface Configuration {
@@ -18,10 +18,9 @@ export interface BasicTrainerConfiguration {
 }
 
 export interface Lesson {
-    lesson: number;
     goals: number[];
-    lockedElements?: number[];
-    startPositions?: number[];
+    // lockedElements?: number[];
+    // startPositions?: number[];
     lessonsToGenerate?: number;
 }
 
@@ -35,7 +34,7 @@ export class ConfigurationLoader {
         let jsonString = await this.getConfigurationJson();
         try {
             this.configuration = JSON.parse(jsonString);
-            this.configuration.lessons = this.configuration.lessons?.sort((o1, o2) => o1.lesson - o2.lesson);
+            // this.configuration.lessons = this.configuration.lessons?.sort((o1, o2) => o1.lesson - o2.lesson);
             return this.configuration;
         } catch (error) {
             console.error("Invalid JSON string:", error);
@@ -56,7 +55,7 @@ export class ConfigurationLoader {
     public static async updateConfigurationJson(jsonString: string): Promise<JsonUpdateStatus> {
         try {
             let configuration: Configuration = JSON.parse(jsonString);
-            this.configuration.lessons = this.configuration.lessons?.sort((o1, o2) => o1.lesson - o2.lesson);
+            // this.configuration.lessons = this.configuration.lessons?.sort((o1, o2) => o1.lesson - o2.lesson);
             this.configurationJson = jsonString;
             this.configuration = configuration;
 
