@@ -5,7 +5,7 @@ import { JsonUpdateStatus } from '../utils/JsonEditor';
 export interface Configuration {
     info?: string,
     usePretrainedDataWhileTesting?: boolean,
-    useLessonsIdWhileTraining?: string,
+    useLessonsWhileTraining?: string,
     trainerConfiguration?: TrainerConfiguration
     allLessons?: Lessons[];
 }
@@ -15,7 +15,7 @@ export interface TrainerConfiguration {
     discount: number,
 
     lessonsId: string,
-    trainingBachCount: number,
+    trainingBatchCount: number,
     lessonsToGenerate: number
 }
 

@@ -70,9 +70,9 @@ export class LessonProducer {
 
     private static getLessons(config: Configuration) {
 
-        if (config.useLessonsIdWhileTraining === undefined) {
-            ConsoleUtils.prntErrorMsg('config.useLessonsIdWhileTraining === undefined');
-            throw new Error('config.useLessonsIdWhileTraining === undefined');
+        if (config.useLessonsWhileTraining === undefined) {
+            ConsoleUtils.prntErrorMsg('config.useLessonsWhileTraining === undefined');
+            throw new Error('config.useLessonsWhileTraining === undefined');
         }
 
         let lessonsId = undefined;
@@ -81,7 +81,7 @@ export class LessonProducer {
         if (config.usePretrainedDataWhileTesting === true) {
             lessons = ConfigurationLoader.getOriginalLessonParams();
         } else {
-            let lessonsId = config.useLessonsIdWhileTraining ?? '';
+            let lessonsId = config.useLessonsWhileTraining ?? '';
             lessons = config.allLessons?.find(e => e.id === lessonsId)?.lessons ?? null;
         }
 

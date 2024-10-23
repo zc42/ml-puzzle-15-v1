@@ -1,0 +1,18 @@
+[
+    "About this project",
+    "",
+    "----------------------------------------------------------------------------------------------------",
+    "This project involves using model-based reinforcement learning to solve the 15-puzzle problem, ",
+    "a sliding puzzle where the goal is to arrange numbered tiles in the correct order. The approach ",
+    "relies on a Q-Table, a tabular data structure that stores values representing the expected utility of ",
+    "taking specific actions in each possible state. The Q-Table helps the learning agent make decisions ",
+    "by providing a way to evaluate which actions lead to more favorable outcomes over time.",
+    "----------------------------------------------------------------------------------------------------",
+    "",
+    "About puzzle - https://en.wikipedia.org/wiki/15_puzzle",
+    "Project source code - https://github.com/zc42/ml-puzzle-15-v1",
+    "Java port - https://github.com/zc42/game_15_java/blob/main/README.md",
+    "Python port for kaggle - https://www.kaggle.com/code/zilvinasc/reinforced-learning-qtable-puzzle-15",
+    "Development history - https://github.com/zc42/stuff",
+    "----------------------------------------------------------------------------------------------------"
+]

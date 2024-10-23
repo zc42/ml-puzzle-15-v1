@@ -24,7 +24,7 @@ export class Trainer {
         const trainerConfig = configuration.trainerConfiguration;
         const discount = trainerConfig?.discount ?? 0.9;
         const learningRate = trainerConfig?.learningRate ?? 0.1;
-        const trainingBachCount = trainerConfig?.trainingBachCount ?? 10;
+        const trainingBachCount = trainerConfig?.trainingBatchCount ?? 10;
         const lessons = await LessonProducer.getLessonProducersFromJson();
 
         const episodeRunnerF = async (stateProducer: LessonProducer, trainerInfo: string): Promise<void> =>

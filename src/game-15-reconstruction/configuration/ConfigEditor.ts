@@ -1,5 +1,5 @@
-import { ConfigurationLoader } from './ConfigLoader';
 import { JsonEditor } from '../utils/JsonEditor';
+import { ConfigurationLoader } from './ConfigLoader';
 
 export class ConfigurationEditor {
 

@@ -1,0 +1,31 @@
+{   
+    "usePretrainedDataWhileTesting": false, 
+    "useLessonsWhileTraining": "fastest training",
+    "trainerConfiguration":{ "learningRate": 0.1, "discount": 0.9, "trainingBachCount": 10, "lessonsToGenerate": 100 },
+    
+    "allLessons":[
+        { 
+            "id": "original lessons",
+            "lessons":[
+                {"goals": [1,2]},
+                {"goals": [3,4],            "startPositions": [3,5,6]},
+                {"goals": [5,6],            "startPositions": [7,8]},
+                {"goals": [7,8],            "startPositions": [7,9,10]},
+                {"goals": [9,13],           "startPositions": [11,12]},
+                {"goals": [10,11,14,15],    "startPositions": [10,14]},
+                {"goals": [12],             "lessonsToGenerate": 10}
+            ]
+        },
+        {
+            "id": "lessons x 2",
+            "lessons":[
+                {"goals": [1,5]},
+                {"goals": [9,13]},
+                {"goals": [2,6]},
+                {"goals": [10,14]},
+                {"goals": [3,4,7,8]},
+                {"goals": [11,12,15]}
+            ]
+        }
+    ]
+}
