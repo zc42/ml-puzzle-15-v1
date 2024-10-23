@@ -1,21 +1,33 @@
-import { Tester } from '../qtable/Tester';
 import { FileLoader } from '../utils/FileLoader';
 import { EntryPoint } from '../qtable/EntryPoint';
 import { JsonUpdateStatus } from '../utils/JsonEditor';
 
 export interface Configuration {
     info?: string,
-    trainerConfiguration?: BasicTrainerConfiguration
-    usePretrainedDataWhileTesting?: boolean
+    usePretrainedDataWhileTesting?: boolean,
+    useLessonsIdWhileTraining?: string,
+    trainerConfiguration?: TrainerConfiguration
+    allLessons?: Lessons[];
 }
 
-export interface BasicTrainerConfiguration {
+export interface TrainerConfiguration {
     learningRate: number,
     discount: number,
 
     lessonsId: string,
     trainingBachCount: number,
     lessonsToGenerate: number
+}
+
+export interface Lessons {
+    id: string;
+    lessons: LessonParams[];
+}
+
+export interface LessonParams {
+    goals: number[];
+    startPositions?: number[];
+    lessonsToGenerate?: number;
 }
 
 export class ConfigurationLoader {
@@ -50,8 +62,9 @@ export class ConfigurationLoader {
             this.configurationJson = jsonString;
             this.configuration = configuration;
 
-            await ConfigurationLoader.updateTester();
+            await EntryPoint.restartTesterIfIsRunning();
             await EntryPoint.restartTrainerIfIsRunning();
+
 
             return {
                 success: true,
@@ -67,9 +80,16 @@ export class ConfigurationLoader {
         }
     }
 
-    private static async updateTester() {
-        const usePretrainedData = this.configuration.usePretrainedDataWhileTesting;
-        if (Tester.usePreloadedActions === usePretrainedData) return;
-        await EntryPoint.restartTesterIfIsRunning();
+    public static getOriginalLessonParams(): LessonParams[] {
+        return [
+            { "goals": [1, 2] },
+            { "goals": [3, 4] },
+            { "goals": [5, 6] },
+            { "goals": [7, 8] },
+            { "goals": [9, 13] },
+            { "goals": [10, 11, 14, 15] },
+            { "goals": [12] }
+        ];
     }
+
 }

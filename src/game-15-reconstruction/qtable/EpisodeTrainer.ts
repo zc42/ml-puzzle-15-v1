@@ -77,7 +77,7 @@ export class EpisodeRunner {
         ConsoleUtils.prntAtSomeElement('episodeTrainer', episodeTrainerMsg);
 
 
-        ConsoleUtils.prntStatsInfo(statsInfo + '\nit will start to show some intelligence when the qtable size is around 8500 .. ;)');
+        ConsoleUtils.prntStatsInfo(statsInfo + '\nfor original lessons - it will start to show some intelligence\nwhen the qtable size is around 8500 .. ;)');
 
         await Utils.sleep(0);
     }

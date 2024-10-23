@@ -1,15 +1,81 @@
 {
     "info":[
-        "This configuration is editable.",
-        "The explanation of this file properties can be found in the 'about' section."
+        "This configuration is editable. Explanation -> 'about'.",
+        "Solved puzzle board state (for reference): ",
+        "1, 2, 3, 4 ",
+        "5, 6, 7, 8 ",
+        "9, 10,11,12",
+        "13,14,15   "
     ],
     "usePretrainedDataWhileTesting": false,
-    "trainerConfiguration":{
-        "learningRate": 0.1,
-        "discount": 0.9,
+    "useLessonsIdWhileTraining": "fastest training",
+    "trainerConfiguration":{ "learningRate": 0.1, "discount": 0.9, "trainingBachCount": 10, "lessonsToGenerate": 100 },
 
-        "lessonsId": "lessons nb 3",
-        "trainingBachCount": 10,
-        "lessonsToGenerate": 100
-    }
+    "allLessons":[
+        { 
+            "id": "original lessons",
+            "lessons":[
+                {"goals": [1,2]},
+                {"goals": [3,4],            "startPositions": [3,5,6]},
+                {"goals": [5,6],            "startPositions": [7,8]},
+                {"goals": [7,8],            "startPositions": [7,9,10]},
+                {"goals": [9,13],           "startPositions": [11,12]},
+                {"goals": [10,11,14,15],    "startPositions": [10,14]},
+                {"goals": [12],             "lessonsToGenerate": 10}
+            ]
+        },
+        {
+            "id": "fast training",
+            "lessons":[
+                {"goals": [1]},
+                {"goals": [2],               "startPositions": [2,5]},
+                {"goals": [3,4],             "startPositions": [3,6]},
+                {"goals": [5],               "startPositions": [7,8]},
+                {"goals": [6],               "startPositions": [6,9]},
+                {"goals": [7,8],             "startPositions": [7,10]},
+                {"goals": [9,13],            "startPositions": [11,12]},
+                {"goals": [10,11,14,15],     "startPositions": [10,14]},
+                {"goals": [12],              "lessonsToGenerate": [10]}
+            ]
+        },
+        {
+            "id": "fastest training",
+            "lessons":[
+                {"goals": [1]},
+                {"goals": [2],               "startPositions": [2,5]},
+                {"goals": [3],               "startPositions": [3,6]},
+                {"goals": [3,4],             "startPositions": [4,7]},
+                {"goals": [5],               "startPositions": [7,8]},
+                {"goals": [6],               "startPositions": [6,9]},
+                {"goals": [7],               "startPositions": [7,10]},
+                {"goals": [7,8],             "startPositions": [8,11]},
+                {"goals": [9],               "startPositions": [11,12]},
+                {"goals": [9,13],            "startPositions": [10,13]},
+                {"goals": [10,11,14,15],     "startPositions": [10,14]},
+                {"goals": [12],              "lessonsToGenerate": [10]}
+            ]
+        },        
+        {
+            "id": "lessons x 1",
+            "lessons":[
+                {"goals": [1,2]},
+                {"goals": [3,4]},
+                {"goals": [5,6]},
+                {"goals": [7,8]},
+                {"goals": [9,10,13,14]},
+                {"goals": [11,12,15],       "lessonsToGenerate": 100}
+            ]
+        },
+        {
+            "id": "lessons x 2",
+            "lessons":[
+                {"goals": [1,5]},
+                {"goals": [9,13]},
+                {"goals": [2,6]},
+                {"goals": [10,14]},
+                {"goals": [3,4,7,8]},
+                {"goals": [11,12,15]}
+            ]
+        }
+    ]
 }

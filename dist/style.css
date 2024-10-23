@@ -188,7 +188,6 @@ button:hover {
     padding-left: 10px;
     color: #949292;
     font-family: monospace;
-    /* padding: 10px; */
     border-radius: 5px;
     white-space: pre-wrap;
 }

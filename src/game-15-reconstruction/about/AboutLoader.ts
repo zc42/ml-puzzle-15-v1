@@ -1,23 +1,27 @@
+import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { FileLoader } from '../utils/FileLoader';
-import { JsonEditor, JsonUpdateStatus } from '../utils/JsonEditor';
+// import { JsonEditor, JsonUpdateStatus } from '../utils/JsonEditor';
 
 export class AboutLoader {
 
     private static aboutJson: string;
     private static about: string[];
-    private static updateStatus: JsonUpdateStatus = { "success": false, 'messgae': 'Not editable.' };
+    // private static updateStatus: JsonUpdateStatus = { "success": false, 'messgae': 'Not editable.' };
 
 
     public static async toggleDisplay(show: boolean,): Promise<void> {
         if (show) {
-            const jsonContent = await AboutLoader.getAboutJson();
-            JsonEditor.show(jsonContent, async _ => AboutLoader.updateStatus, false);
+            let about = await this.getAbout();
+            let aboutContent = about.reduce((a, b) => a + '<br/>' + b);
+            ConsoleUtils.prntAbout(aboutContent);
+
+            // JsonEditor.show(jsonContent, async _ => AboutLoader.updateStatus, false);
         } else {
-            JsonEditor.close();
+            ConsoleUtils.clearAbout();
         }
     }
 
-    public static async getAbout(): Promise<string[]> {
+    private static async getAbout(): Promise<string[]> {
         if (this.about !== undefined) return this.about;
         let jsonString = await this.getAboutJson();
         try {
@@ -29,7 +33,7 @@ export class AboutLoader {
         }
     }
 
-    public static async getAboutJson(): Promise<string> {
+    private static async getAboutJson(): Promise<string> {
         if (this.aboutJson !== undefined) return this.aboutJson;
         const path1 = 'dist/about.json';
         const path2 = '/public/about.json';
