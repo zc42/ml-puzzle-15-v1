@@ -4,12 +4,16 @@ import { JsonUpdateStatus } from '../utils/JsonEditor';
 
 export interface Configuration {
     info?: string,
+    //todo: kai pakeiti i true ir paleidi training'a naudoja getOriginalLessonParams 
+    //pataisyt/permastyt ... nes ten biski briedas .. visai gal atsisakyt ..?.. ;/
     usePretrainedDataWhileTesting?: boolean,
     useLessonsWhileTraining?: string,
     trainerConfiguration?: TrainerConfiguration
     allLessons?: Lessons[];
 }
 
+
+//todo: kai pakeiti 
 export interface TrainerConfiguration {
     learningRate: number,
     discount: number,
