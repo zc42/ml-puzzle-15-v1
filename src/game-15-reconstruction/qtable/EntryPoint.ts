@@ -3,16 +3,21 @@ import { QTableRow } from './QTableRow';
 import { TesterEntryPoint } from './Tester';
 
 export class EntryPoint {
+
     public static qTable = new Map<number, QTableRow>();
+    public static isTestingMode: boolean = true;
+
     private static trainer: Trainer | null = null;
     private static tester: TesterEntryPoint | null = null;
 
     public static async train() {
+        this.isTestingMode = false;
         this.trainer = new Trainer();
         await this.trainer.train();
     }
 
     public static async test() {
+        this.isTestingMode = true;
         this.tester = new TesterEntryPoint();
         await this.tester.test(undefined);
     }

@@ -66,15 +66,6 @@ export class ConfigurationLoader {
             this.configurationJson = jsonString;
             this.configuration = configuration;
 
-            await EntryPoint.restartTesterIfIsRunning();
-            await EntryPoint.restartTrainerIfIsRunning();
-
-
-            return {
-                success: true,
-                messgae: 'Configuration updated successfully.'
-            };
-
         } catch (error) {
             console.error('Invalid JSON string:', error);
             return {
@@ -82,6 +73,19 @@ export class ConfigurationLoader {
                 messgae: 'Invalid JSON string: ' + error
             };
         }
+
+        try {
+            await EntryPoint.restartTesterIfIsRunning();
+            await EntryPoint.restartTrainerIfIsRunning();
+        } catch (error) {
+            console.error('error occured restarting tester or traner');
+            console.error(error);
+        }
+
+        return {
+            success: true,
+            messgae: 'Configuration updated successfully.'
+        };
     }
 
     public static getOriginalLessonParams(): LessonParams[] {

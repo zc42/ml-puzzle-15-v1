@@ -18,10 +18,10 @@ export class TesterEntryPoint {
 
     public async test(usePreloadedActionMap: boolean | undefined): Promise<void> {
         this.stop();
-        const shadowTester = new Tester();
-        await shadowTester.init(usePreloadedActionMap);
-        shadowTester.makeMove();
-        TesterEntryPoint.testerIntervalId = setInterval(() => shadowTester.makeMove(), 500);
+        const tester = new Tester();
+        await tester.init(usePreloadedActionMap);
+        tester.makeMove();
+        TesterEntryPoint.testerIntervalId = setInterval(() => tester.makeMove(), 500);
     }
 
     public stop(): void {
@@ -50,8 +50,8 @@ export class TesterCtx {
         this.lessonCount = lessons.length;
         this.stateProducer = lessons[this.lessonNo];
 
-        let v = StateShuffle.shuffle(LessonProducer.stateDone, [], 1000);
-        this.state = new EnvironmentState(v, this.stateProducer);
+        let boardState = StateShuffle.shuffle(LessonProducer.stateDone, [], 1000);
+        this.state = new EnvironmentState(boardState, this.stateProducer);
         this.goals = this.stateProducer.getGoals();
     }
 

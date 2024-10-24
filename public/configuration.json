@@ -7,7 +7,7 @@
         "9, 10,11,12",
         "13,14,15   "
     ],
-    "usePretrainedDataWhileTesting": false,
+    "usePretrainedDataWhileTesting": true,
     "useLessonsWhileTraining": "fastest training",
     "trainerConfiguration":{ "learningRate": 0.1, "discount": 0.9, "trainingBachCount": 10, "lessonsToGenerate": 100 },
 

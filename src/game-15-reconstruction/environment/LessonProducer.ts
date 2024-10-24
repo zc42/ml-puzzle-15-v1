@@ -2,6 +2,8 @@ import { Utils } from '../utils/Utils';
 import { StateShuffle } from './StateShuffle';
 import { ConsoleUtils } from '../utils/ConsoleUtils';
 import { ConfigurationLoader, LessonParams, Configuration } from '../configuration/ConfigLoader';
+import { EntryPoint } from '../qtable/EntryPoint';
+
 
 export class LessonProducer {
     private boardState: number[];
@@ -48,7 +50,7 @@ export class LessonProducer {
         this.boardState = StateShuffle.shuffleForTraining(lockedElements);
         if (this.lesson?.startPositions === undefined) return;
         LessonProducer.shuffleFreeCellStarPosition(this, this.lesson.startPositions.map(e => e - 1));
-    }    
+    }
 
     public static async getLessonProducersFromJson(): Promise<LessonProducer[]> {
         let config = await ConfigurationLoader.getConfiguration();
@@ -75,19 +77,18 @@ export class LessonProducer {
             throw new Error('config.useLessonsWhileTraining === undefined');
         }
 
-        let lessonsId = undefined;
+        let lessonsId = config.useLessonsWhileTraining ?? '';
         let lessons: LessonParams[] | null = null;
 
-        if (config.usePretrainedDataWhileTesting === true) {
+        if (config.usePretrainedDataWhileTesting === true && EntryPoint.isTestingMode) {
             lessons = ConfigurationLoader.getOriginalLessonParams();
         } else {
-            let lessonsId = config.useLessonsWhileTraining ?? '';
             lessons = config.allLessons?.find(e => e.id === lessonsId)?.lessons ?? null;
         }
 
         if (lessons === null) {
             ConsoleUtils.prntErrorMsg('no lessons found for lessonsId: \'' + lessonsId + '\'');
-            throw new Error('lessons === null');
+            throw new Error('no lessons found for lessonsId: \'' + lessonsId + '\'');
         }
         return lessons;
     }
@@ -101,7 +102,7 @@ export class LessonProducer {
 
         lessonProducer.shuffleBoardState();
         return lessonProducer;
-    }   
+    }
 
     private static shuffleFreeCellStarPosition(stateProducer: LessonProducer, availableFreeCellIndexes: number[]): LessonProducer {
         const newFreeCellIndex = Utils.shuffleArray(availableFreeCellIndexes)[0]
